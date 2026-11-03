@@ -1,0 +1,41 @@
+.tc-reise { background: var(--tc-white); }
+
+.tc-reise-hero { padding-block: 36px; background: linear-gradient(135deg, var(--tc-brand-soft), #fff 72%); border-bottom: 1px solid var(--tc-line); }
+.tc-reise-hero__inner { display: grid; gap: 24px; }
+.tc-reise-eyebrow, .tc-reise-heading > p { margin: 0 0 5px; color: var(--tc-brand); font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.tc-reise-hero h1 { max-width: 760px; margin: 0; font-size: var(--tc-step-3); line-height: 1.08; letter-spacing: -.035em; }
+.tc-reise-hero h1 + p { max-width: 720px; margin: 14px 0 0; color: var(--tc-muted); }
+.tc-reise-hero ul { display: grid; gap: 9px; margin: 0; padding: 16px; list-style: none; border: 1px solid #c9dddb; border-radius: var(--tc-radius); background: rgba(255,255,255,.78); }
+.tc-reise-hero li { position: relative; padding-left: 27px; font-weight: 700; }
+.tc-reise-hero li::before { content: "✓"; position: absolute; left: 0; color: var(--tc-brand); font-weight: 900; }
+.tc-reise-widget .tc-comparison-widget { margin-top: 26px; }
+
+.tc-operators, .tc-reise-benefits, .tc-reise-content { padding-block: 28px; }
+.tc-reise-heading h2 { margin: 0; font-size: var(--tc-step-2); line-height: 1.15; letter-spacing: -.025em; }
+.tc-reise-heading--center { text-align: center; }
+.tc-operators__track { display: flex; gap: 10px; margin-top: 16px; padding-bottom: 7px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.tc-operator { display: flex; flex: 0 0 170px; min-height: 70px; padding: 10px 14px; align-items: center; gap: 11px; border: 1px solid var(--tc-line); border-radius: 13px; background: var(--tc-white); scroll-snap-align: start; }
+.tc-operator > span { display: grid; width: 34px; height: 34px; flex: 0 0 34px; place-items: center; color: var(--tc-white); border-radius: 10px; background: var(--tc-brand); font-weight: 800; }
+.tc-operator strong { font-size: 13px; line-height: 1.15; }
+
+.tc-reise-benefits { padding-block: 38px; }
+.tc-reise-benefits__grid { display: grid; gap: 12px; margin-top: 20px; }
+.tc-reise-benefits__grid > div { position: relative; padding: 20px 18px 18px 54px; border: 1px solid var(--tc-line); border-radius: var(--tc-radius); background: var(--tc-surface); }
+.tc-reise-benefits__grid span { position: absolute; top: 18px; left: 18px; display: grid; width: 27px; height: 27px; place-items: center; color: var(--tc-white); border-radius: 50%; background: var(--tc-brand); font-weight: 900; }
+.tc-reise-benefits__grid strong { display: block; line-height: 1.25; }
+.tc-reise-benefits__grid p { margin: 7px 0 0; color: var(--tc-muted); font-size: var(--tc-step--1); line-height: 1.5; }
+
+.tc-reise-content { display: grid; gap: 34px; max-width: 820px; }
+.tc-reise-content section { scroll-margin-top: 20px; }
+.tc-reise-content h2 { margin: 0 0 10px; font-size: var(--tc-step-2); line-height: 1.2; }
+.tc-reise-content p { margin: 0; color: #39494b; }
+.tc-reise-faq details { border-bottom: 1px solid var(--tc-line); }
+.tc-reise-faq summary { padding: 16px 30px 16px 0; font-weight: 800; cursor: pointer; }
+.tc-reise-faq details p { padding: 0 0 17px; }
+
+@media (min-width: 768px) {
+  .tc-reise-hero { padding-block: 30px; }
+  .tc-reise-hero__inner { grid-template-columns: minmax(0, 1.5fr) minmax(280px, .7fr); align-items: center; }
+  .tc-reise-benefits__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .tc-reise-content { padding-block: 30px; }
+}

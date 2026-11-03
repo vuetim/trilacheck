@@ -1,0 +1,91 @@
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  color: var(--tc-ink);
+  background: var(--tc-white);
+  font-family: var(--tc-font);
+  font-size: var(--tc-step-0);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+body.tc-menu-open { overflow: hidden; }
+
+img, svg { max-width: 100%; }
+img { height: auto; }
+a { color: var(--tc-brand); }
+button, input { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+
+:focus-visible {
+  outline: 3px solid var(--tc-accent);
+  outline-offset: 3px;
+}
+
+.screen-reader-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.tc-skip-link {
+  position: fixed;
+  z-index: 10000;
+  top: 8px;
+  left: 8px;
+  padding: 10px 14px;
+  color: var(--tc-white);
+  background: var(--tc-brand-dark);
+  transform: translateY(-150%);
+}
+
+.tc-skip-link:focus { transform: none; }
+
+.tc-container {
+  width: min(calc(100% - 32px), var(--tc-container));
+  margin-inline: auto;
+}
+
+.tc-site-main { min-height: 55vh; }
+.tc-content-layout { padding-block: 30px; }
+.tc-entry__title { font-size: var(--tc-step-3); line-height: 1.15; }
+.tc-entry__title a { color: inherit; text-decoration: none; }
+.tc-entry__content { max-width: 760px; }
+.tc-home-intro:empty { display: none; }
+
+.tc-site-footer {
+  padding-block: 28px;
+  color: rgba(255,255,255,.82);
+  background: var(--tc-brand-dark);
+}
+
+.tc-site-footer .tc-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.tc-site-footer ul { display: flex; flex-wrap: wrap; gap: 16px; margin: 0; padding: 0; list-style: none; }
+.tc-site-footer a { color: var(--tc-white); }
+
+@media (min-width: 768px) {
+  .tc-container { width: min(calc(100% - 48px), var(--tc-container)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}

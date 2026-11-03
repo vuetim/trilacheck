@@ -1,0 +1,100 @@
+name: Theme CI and Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: PHP ${{ matrix.php }} and theme checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        php: ['8.2', '8.3']
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: shivammathur/setup-php@d52fc211a0436f8839a587b3b5b8efddab4744ea # v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+      - name: Check PHP syntax
+        run: find . -path './.git' -prune -o -name '*.php' -print0 | xargs -0 -n1 php -l
+      - name: Check JavaScript syntax
+        run: find assets -name '*.js' -print0 | xargs -0 -r -n1 node --check
+      - name: Check theme structure
+        run: php .github/tests/theme-package.php
+      - name: Check deployment script syntax
+        run: bash -n .github/scripts/deploy.sh
+
+  package:
+    needs: check
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Build installable WordPress theme
+        run: |
+          mkdir -p build
+          git archive --format=zip --prefix=trilacheck/ --output=build/trilacheck-theme.zip HEAD
+          python3 .github/tests/check-package.py build/trilacheck-theme.zip
+          sha256sum build/trilacheck-theme.zip > build/trilacheck-theme.zip.sha256
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: trilacheck-theme
+          path: build/trilacheck-theme.zip
+          retention-days: 14
+          if-no-files-found: error
+
+  deploy:
+    needs: package
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: production
+    concurrency:
+      group: trilacheck-production
+      cancel-in-progress: false
+    env:
+      SSH_HOST: 92.113.18.156
+      SSH_PORT: '65002'
+      SSH_USERNAME: u360970731
+      SSH_TARGET_DIR: /home/u360970731/domains/trilacheck.de/public_html/wp-content/themes/trilacheck
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: trilacheck-theme
+          path: build
+      - name: Configure SSH with pinned server identity
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          test -n "$SSH_PRIVATE_KEY" || { echo 'Missing repository secret SSH_PRIVATE_KEY'; exit 1; }
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/trilacheck
+          chmod 600 ~/.ssh/trilacheck
+          cp .github/known_hosts ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+          ssh-keygen -lf ~/.ssh/known_hosts
+      - name: Stage tested theme package
+        run: |
+          set -euo pipefail
+          unzip -q build/trilacheck-theme.zip -d build/release
+          release="/home/$SSH_USERNAME/trilacheck-deploy/releases/$GITHUB_SHA"
+          ssh -i ~/.ssh/trilacheck -p "$SSH_PORT" -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes "$SSH_USERNAME@$SSH_HOST" "mkdir -p '$release'"
+          rsync -az -e "ssh -i ~/.ssh/trilacheck -p $SSH_PORT -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes" build/release/trilacheck/ "$SSH_USERNAME@$SSH_HOST:$release/"
+      - name: Back up and deploy only the Trilacheck theme
+        run: |
+          set -euo pipefail
+          ssh -i ~/.ssh/trilacheck -p "$SSH_PORT" -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes "$SSH_USERNAME@$SSH_HOST" \
+            "bash -s -- '$GITHUB_SHA' '$SSH_TARGET_DIR'" < .github/scripts/deploy.sh
+      - name: Remove local SSH credential
+        if: always()
+        run: rm -f ~/.ssh/trilacheck

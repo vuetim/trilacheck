@@ -1,0 +1,49 @@
+.tc-mobile-page { background: var(--tc-white); }
+.tc-mobile-hero { overflow: hidden; background: linear-gradient(135deg, #e5f2f1, #fff 72%); border-bottom: 1px solid var(--tc-line); }
+.tc-mobile-hero__inner { display: grid; }
+.tc-mobile-hero__content { position: relative; z-index: 2; padding-block: 36px 24px; }
+.tc-mobile-eyebrow, .tc-mobile-heading > p { margin: 0 0 5px; color: var(--tc-brand); font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.tc-mobile-hero h1 { margin: 0; font-size: var(--tc-step-3); line-height: 1.08; letter-spacing: -.035em; }
+.tc-mobile-hero h1 + p { max-width: 680px; margin: 13px 0 18px; color: var(--tc-muted); }
+.tc-mobile-hero ul { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.tc-mobile-hero li { position: relative; padding-left: 27px; font-weight: 700; }
+.tc-mobile-hero li::before { content: "✓"; position: absolute; left: 0; color: var(--tc-brand); font-weight: 900; }
+.tc-mobile-hero__media { min-height: 220px; margin-inline: -16px; }
+.tc-mobile-hero__media img { display: block; width: 100%; height: 100%; min-height: 220px; object-fit: cover; object-position: 72% center; }
+.tc-mobile-widget .tc-comparison-widget { margin-top: 26px; }
+
+.tc-data-shortcuts, .tc-mobile-content { padding-block: 30px; }
+.tc-mobile-heading h2 { margin: 0; font-size: var(--tc-step-2); line-height: 1.15; }
+.tc-data-shortcuts__grid { display: grid; gap: 11px; margin-top: 17px; }
+.tc-data-shortcuts__grid a { display: grid; grid-template-columns: 88px minmax(0, 1fr) auto; min-height: 78px; padding: 12px 14px; align-items: center; gap: 12px; color: var(--tc-ink); border: 1px solid var(--tc-line); border-radius: 14px; background: var(--tc-surface); text-decoration: none; }
+.tc-data-shortcuts__grid strong { color: var(--tc-brand); font-size: 25px; }
+.tc-data-shortcuts__grid span { font-weight: 700; }
+.tc-data-shortcuts__grid em { color: var(--tc-brand); font-size: 12px; font-style: normal; font-weight: 800; }
+
+.tc-mobile-content { display: grid; max-width: 840px; gap: 30px; padding-bottom: 30px; }
+.tc-mobile-content h2 { margin: 0 0 11px; font-size: var(--tc-step-2); line-height: 1.18; }
+.tc-mobile-content h3 { margin: 0; font-size: var(--tc-step-1); }
+.tc-mobile-content p { margin: 0 0 12px; color: #39494b; }
+.tc-mobile-content ol { display: grid; gap: 10px; padding-left: 22px; }
+.tc-mobile-criteria { display: grid; gap: 11px; }
+.tc-mobile-criteria > div { padding: 17px; border: 1px solid var(--tc-line); border-radius: 14px; background: var(--tc-surface); }
+.tc-mobile-criteria p { margin: 6px 0 0; font-size: var(--tc-step--1); }
+.tc-mobile-faq details { border-bottom: 1px solid var(--tc-line); }
+.tc-mobile-faq summary { padding: 16px 28px 16px 0; font-weight: 800; cursor: pointer; }
+.tc-mobile-faq details p { padding-bottom: 16px; }
+.tc-mobile-final-cta { display: flex; padding: 22px; flex-direction: column; align-items: flex-start; gap: 16px; color: var(--tc-white); border-radius: var(--tc-radius-lg); background: var(--tc-brand); }
+.tc-mobile-final-cta strong { font-size: var(--tc-step-1); }
+.tc-mobile-final-cta p { margin: 3px 0 0; color: rgba(255,255,255,.8); }
+.tc-mobile-final-cta a { display: inline-flex; min-height: 44px; padding: 9px 15px; align-items: center; gap: 14px; color: var(--tc-brand-dark); border-radius: 999px; background: var(--tc-accent); font-weight: 800; text-decoration: none; }
+
+@media (min-width: 760px) {
+  .tc-mobile-hero__inner { grid-template-columns: minmax(0, 1.05fr) minmax(360px, .95fr); align-items: stretch; }
+  .tc-mobile-hero__content { padding-block: 58px; }
+  .tc-mobile-hero__media { min-height: 390px; margin: 0 calc((var(--tc-container) - 100vw) / 2) 0 0; }
+  .tc-mobile-hero__media img { min-height: 390px; }
+  .tc-data-shortcuts { padding-block: 46px; }
+  .tc-data-shortcuts__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .tc-data-shortcuts__grid a { grid-template-columns: 1fr; align-content: center; text-align: center; }
+  .tc-mobile-criteria { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tc-mobile-final-cta { padding: 28px; flex-direction: row; align-items: center; justify-content: space-between; }
+}

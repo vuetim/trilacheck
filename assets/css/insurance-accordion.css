@@ -1,0 +1,22 @@
+.tc-insurance-calculator summary { padding: 17px 50px 17px 18px; color: #fff; }
+.tc-insurance-calculator summary::after { color: #fff; font-size: 27px; }
+.tc-insurance-calculator summary small { color: rgba(255,255,255,.78); }
+.tc-insurance-calculator--car summary { background: linear-gradient(110deg,#23783c,#17592c); }
+.tc-insurance-calculator--motorcycle summary { background: linear-gradient(110deg,#315b91,#173a72); }
+.tc-insurance-calculator[open] summary { border-bottom-color: rgba(255,255,255,.25); background: inherit; filter: brightness(.94); }
+.tc-insurance-calculator--car[open] summary { background: linear-gradient(110deg,#23783c,#17592c); }
+.tc-insurance-calculator--motorcycle[open] summary { background: linear-gradient(110deg,#315b91,#173a72); }
+
+/* One shared accordion component; only category colors change. */
+.tc-provision-calculator summary,
+.tc-health-calculator summary,
+.tc-property-calculator summary { min-height: 74px; justify-content: center; border-radius: 0; }
+.tc-provision-calculator:nth-of-type(4n+1) summary { background: linear-gradient(110deg,#a75b68,#713943) !important; }
+.tc-provision-calculator:nth-of-type(4n+2) summary { background: linear-gradient(110deg,#7b587e,#503553) !important; }
+.tc-provision-calculator:nth-of-type(4n+3) summary { background: linear-gradient(110deg,#98603d,#693c24) !important; }
+.tc-provision-calculator:nth-of-type(4n) summary { background: linear-gradient(110deg,#3c7181,#28505c) !important; }
+.tc-health-calculator:nth-of-type(odd) summary { background: linear-gradient(110deg,#247ca5,#155774) !important; }
+.tc-health-calculator:nth-of-type(even) summary { background: linear-gradient(110deg,#397b8f,#245564) !important; }
+.tc-property-calculator:nth-of-type(3n+1) summary { background: linear-gradient(110deg,#315f72,#1d4658) !important; }
+.tc-property-calculator:nth-of-type(3n+2) summary { background: linear-gradient(110deg,#3e765f,#285341) !important; }
+.tc-property-calculator:nth-of-type(3n) summary { background: linear-gradient(110deg,#6e5a84,#493a5b) !important; }

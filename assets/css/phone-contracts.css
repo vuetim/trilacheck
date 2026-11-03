@@ -1,0 +1,31 @@
+.tc-phone-contracts { padding-block: 8px 30px; }
+.tc-phone-contracts__head { display: flex; margin-bottom: 17px; align-items: flex-end; justify-content: space-between; gap: 16px; }
+.tc-phone-contracts__head p { margin: 0 0 3px; color: var(--tc-brand); font-size: 11px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
+.tc-phone-contracts__head h2 { margin: 0; font-size: var(--tc-step-2); line-height: 1.15; letter-spacing: -.025em; }
+.tc-phone-contracts__head > a { display: none; color: var(--tc-brand); font-size: var(--tc-step--1); font-weight: 800; text-decoration: none; }
+.tc-phone-contracts__grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+
+.tc-phone-card { display: grid; grid-template-columns: 104px minmax(0,1fr) 34px; min-height: 136px; overflow: hidden; align-items: stretch; color: var(--tc-ink); border: 1px solid var(--tc-line); border-radius: 16px; background: var(--tc-white); box-shadow: 0 7px 20px rgba(7,31,32,.09); text-decoration: none; transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+.tc-phone-card:hover { border-color: #a9cbc8; box-shadow: 0 12px 28px rgba(7,59,61,.13); transform: translateY(-2px); }
+.tc-phone-card__visual { display: grid; overflow: hidden; place-items: center; background: var(--tc-surface); }
+.tc-phone-art { position: relative; display: block; width: 55px; height: 102px; border: 4px solid #182326; border-radius: 13px; background: linear-gradient(145deg,#bdccd0,#385b62 48%,#10282c); box-shadow: 0 7px 14px rgba(0,0,0,.18); transform: rotate(-4deg); }
+.tc-phone-art::before { content: ""; position: absolute; top: 5px; left: 50%; width: 19px; height: 5px; border-radius: 999px; background: #172124; transform: translateX(-50%); }
+.tc-phone-art::after { content: ""; position: absolute; top: 10px; right: 6px; width: 12px; height: 12px; border: 2px solid rgba(255,255,255,.75); border-radius: 50%; box-shadow: -15px 0 0 -2px rgba(255,255,255,.75); }
+.tc-phone-art i { position: absolute; inset: 0; border-radius: 9px; background: radial-gradient(circle at 30% 70%,rgba(255,255,255,.34),transparent 27%); }
+.tc-phone-art--samsung { background: linear-gradient(145deg,#d5d2ce,#8c6974 48%,#372e48); transform: rotate(3deg); }
+.tc-phone-art--pixel { background: linear-gradient(145deg,#d3e5c9,#58796e 48%,#193a38); }
+.tc-phone-card__content { display: flex; padding: 17px 10px 15px 16px; flex-direction: column; justify-content: center; }
+.tc-phone-card__content small { color: var(--tc-brand); font-size: 11px; font-weight: 800; }
+.tc-phone-card__content strong { margin-top: 2px; font-size: 17px; line-height: 1.15; }
+.tc-phone-card__content em { margin-top: 8px; color: var(--tc-muted); font-size: 11px; font-style: normal; line-height: 1.35; }
+.tc-phone-card__arrow { display: grid; padding-right: 8px; place-items: center; color: var(--tc-brand); font-size: 22px; font-weight: 800; }
+.tc-phone-contracts__mobile-link { display: inline-flex; margin-top: 16px; align-items: center; gap: 8px; color: var(--tc-brand); font-size: var(--tc-step--1); font-weight: 800; text-decoration: none; }
+
+@media (min-width:760px) {
+  .tc-phone-contracts { padding-block: 18px 30px; }
+  .tc-phone-contracts__head > a { display: inline-flex; }
+  .tc-phone-contracts__mobile-link { display: none; }
+  .tc-phone-contracts__grid { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 18px; }
+  .tc-phone-card { grid-template-columns: 128px minmax(0,1fr) 36px; min-height: 170px; }
+  .tc-phone-art { width: 66px; height: 122px; }
+}

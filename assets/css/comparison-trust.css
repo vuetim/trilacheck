@@ -1,0 +1,21 @@
+/* The requested strip overlays the lower edge of each comparison hero. */
+.tc-comparison-hero { position: relative; }
+.tc-comparison-trust { position: absolute; z-index: 3; inset: auto 0 0; color: #fff; background: rgba(3, 35, 36, 0.48); }
+.tc-comparison-trust__inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.tc-comparison-hero .tc-comparison-trust ul { display: flex; flex: 1; min-width: 0; flex-wrap: wrap; justify-content: space-between; gap: 14px 24px; padding: 0; margin: 0; list-style: none; }
+.tc-comparison-hero .tc-comparison-trust li { display: flex; align-items: center; gap: 10px; padding: 0; color: #fff; font-size: 14px; font-weight: 500; line-height: 1.5; }
+.tc-comparison-hero .tc-comparison-trust li::before { content: none; }
+.tc-comparison-trust li span { color: #67d68e; font-size: 22px; font-weight: 800; }
+.tc-comparison-hero .tc-comparison-trust__badge { display: block; flex: 0 0 106px; width: 106px; height: 106px; min-height: 0; max-width: none; object-fit: contain; }
+/* Text-only heroes have no photograph to overlap. */
+.tc-comparison-hero--plain .tc-comparison-trust { position: relative; }
+@media (min-width: 760px) {
+  .tc-comparison-hero [class*="hero__content"] { padding-bottom: 130px; }
+  .tc-comparison-hero [class*="hero__media"] { height: 100%; }
+}
+@media (max-width: 759px) {
+  .tc-comparison-trust__inner { gap: 12px; }
+  .tc-comparison-hero .tc-comparison-trust ul { flex-direction: column; gap: 5px; }
+  .tc-comparison-hero .tc-comparison-trust li { gap: 7px; font-size: 11px; }
+  .tc-comparison-hero .tc-comparison-trust__badge { flex-basis: 88px; width: 88px; height: 88px; }
+}

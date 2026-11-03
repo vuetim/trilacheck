@@ -1,0 +1,12 @@
+body.page-handytarife-5gb .tc-mobile-detail__hero { background: linear-gradient(135deg, #dff3fa, #fff); }
+body.page-handytarife-15gb .tc-mobile-detail__hero { background: linear-gradient(135deg, #e9e7ff, #fff); }
+body.page-handytarife-50gb .tc-mobile-detail__hero { background: linear-gradient(135deg, #fff0e7, #fff); }
+body.page-handytarife-unlimited .tc-mobile-detail__hero { background: linear-gradient(135deg, #e7e1ff, #fff); }
+body.page-tarife-fur-junge-leute .tc-mobile-detail__hero { background: linear-gradient(135deg, #ffe6ef, #fff); }
+body.page-prepaid-tarife .tc-mobile-detail__hero { background: linear-gradient(135deg, #dff4ef, #fff); }
+body.page-handytarife-5gb .tc-mobile-detail__hero > div > p { color: #176b87; }
+body.page-handytarife-15gb .tc-mobile-detail__hero > div > p { color: #4d4aa0; }
+body.page-handytarife-50gb .tc-mobile-detail__hero > div > p { color: #a34b24; }
+body.page-handytarife-unlimited .tc-mobile-detail__hero > div > p { color: #34256d; }
+body.page-tarife-fur-junge-leute .tc-mobile-detail__hero > div > p { color: #a83f62; }
+body.page-prepaid-tarife .tc-mobile-detail__hero > div > p { color: #14685c; }

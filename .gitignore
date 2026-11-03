@@ -1,0 +1,15 @@
+# Local credentials and deployment scratch
+.deploy/
+.env
+.env.*
+*.pem
+*.key
+id_ed25519*
+# Generated packages and editor files
+*.zip
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+node_modules/
+vendor/

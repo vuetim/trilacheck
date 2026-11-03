@@ -1,0 +1,41 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "settings": {
+    "appearanceTools": true,
+    "layout": {
+      "contentSize": "760px",
+      "wideSize": "1200px"
+    },
+    "color": {
+      "defaultPalette": false,
+      "palette": [
+        { "slug": "brand", "color": "#0b5052", "name": "Trilacheck Grün" },
+        { "slug": "brand-dark", "color": "#073b3d", "name": "Dunkelgrün" },
+        { "slug": "accent", "color": "#ffcf33", "name": "Akzent" },
+        { "slug": "ink", "color": "#102023", "name": "Text" },
+        { "slug": "surface", "color": "#f4f7f6", "name": "Fläche" },
+        { "slug": "white", "color": "#ffffff", "name": "Weiß" }
+      ]
+    },
+    "typography": {
+      "fluid": true,
+      "fontFamilies": [
+        {
+          "fontFamily": "Trilacheck Sans, Arial, sans-serif",
+          "slug": "trilacheck-sans",
+          "name": "Trilacheck Sans"
+        }
+      ]
+    }
+  },
+  "styles": {
+    "color": { "background": "#ffffff", "text": "#102023" },
+    "typography": {
+      "fontFamily": "var(--wp--preset--font-family--trilacheck-sans)",
+      "fontSize": "16px",
+      "lineHeight": "1.6"
+    }
+  }
+}
+

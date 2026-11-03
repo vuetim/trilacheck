@@ -1,0 +1,24 @@
+:root {
+  --tc-brand: #0b5052;
+  --tc-brand-dark: #073b3d;
+  --tc-brand-soft: #e7f2f1;
+  --tc-accent: #ffcf33;
+  --tc-ink: #102023;
+  --tc-muted: #627174;
+  --tc-line: #dce5e4;
+  --tc-surface: #f4f7f6;
+  --tc-white: #fff;
+  --tc-danger: #b42318;
+  --tc-font: "Trilacheck Sans", Arial, sans-serif;
+  --tc-container: 1200px;
+  --tc-radius-sm: 10px;
+  --tc-radius: 16px;
+  --tc-radius-lg: 24px;
+  --tc-shadow: 0 12px 36px rgba(7, 59, 61, 0.12);
+  --tc-step--1: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
+  --tc-step-0: clamp(0.9375rem, 0.91rem + 0.15vw, 1rem);
+  --tc-step-1: clamp(1.125rem, 1.05rem + 0.35vw, 1.3125rem);
+  --tc-step-2: clamp(1.375rem, 1.21rem + 0.75vw, 1.75rem);
+  --tc-step-3: clamp(1.75rem, 1.46rem + 1.25vw, 2.375rem);
+}
+
