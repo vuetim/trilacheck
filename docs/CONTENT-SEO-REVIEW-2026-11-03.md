@@ -75,3 +75,12 @@ To prioritize ranking work, use Search Console query filters and the Pages tab t
 ## Validation
 
 Metadata/robots tests were extended to cover removal of the verified migration profile while preserving genuine public profiles, and addition of the owner-confirmed legal name while retaining the existing Organization graph. Local tests passed. Live deployment verification is recorded after the CI/CD run; legal drafts remain explicitly separate from that theme deployment.
+
+### Deployment and verification status
+
+- The initial publisher deployment was confirmed in public HTML: all six article pages retained one Yoast JSON-LD script, an Article node, the original brand name, and the owner-confirmed `legalName`.
+- That same check showed the social-profiles hook did not remove the WordPress website URL. The implementation was corrected to filter the completed `Person` node, with additional regression tests preserving its name, ID and genuine public references.
+- The final theme commit `f6a2599da333d16b8414df0e4804d92be09ef65a` passed PHP 8.2/8.3 checks, package checks and production deployment in [Actions run 41650090308](https://github.com/vuetim/trilacheck/actions/runs/41650090308).
+- The permission request for the final public HTTP verification was rejected. Removal of the migration URL is therefore tested locally and deployed, but has not been confirmed in the final live HTML. It must not be described as live-verified.
+- The last permitted live check confirmed that the three legal-page bodies had not been updated. The publisher's new schema legal name is not proof that the page bodies changed. No live legal-post database changes were made.
+- The Impressum draft also removes the obsolete paragraph describing the old EU ODR platform as active, while retaining the separate existing consumer-dispute participation statement. The [European Commission confirms the platform closed on 20 July 2025](https://consumer-redress.ec.europa.eu/site-relocation_en). This factual cleanup is not a review of the remaining legal clauses or an assertion of legal compliance.
