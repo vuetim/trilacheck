@@ -74,7 +74,24 @@ function trilacheck_public_author_profiles( $profiles ) {
 		)
 	);
 }
-add_filter( 'wpseo_schema_person_social_profiles', 'trilacheck_public_author_profiles' );
+
+/** Filter the completed Person node, including its WordPress website profile. */
+function trilacheck_schema_author_profiles( $person ) {
+	if ( ! is_array( $person ) ) {
+		return $person;
+	}
+	if ( isset( $person['sameAs'] ) && is_array( $person['sameAs'] ) ) {
+		$person['sameAs'] = trilacheck_public_author_profiles( $person['sameAs'] );
+		if ( empty( $person['sameAs'] ) ) {
+			unset( $person['sameAs'] );
+		}
+	}
+	if ( isset( $person['url'] ) && is_string( $person['url'] ) && 'trilacheck.local' === strtolower( (string) wp_parse_url( $person['url'], PHP_URL_HOST ) ) ) {
+		unset( $person['url'] );
+	}
+	return $person;
+}
+add_filter( 'wpseo_schema_person', 'trilacheck_schema_author_profiles' );
 
 /** Keep the brand while identifying the legal publisher confirmed by its owner. */
 function trilacheck_schema_legal_publisher( $organization ) {

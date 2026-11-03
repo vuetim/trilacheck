@@ -35,6 +35,12 @@ check( array( 'https://www.linkedin.com/in/example', 'https://trilacheck.de/' ) 
 check( array() === trilacheck_public_author_profiles( array( 'https://TRILACHECK.LOCAL/profile/' ) ), 'Case-insensitive local profile not removed' );
 check( array() === trilacheck_public_author_profiles( array() ), 'Empty profiles changed' );
 check( false === trilacheck_public_author_profiles( false ), 'Unexpected profile input changed' );
+$person = array( '@type' => 'Person', '@id' => 'person-id', 'name' => 'Original author', 'sameAs' => array( 'http://trilacheck.local' ), 'url' => 'http://trilacheck.local' );
+check( array( '@type' => 'Person', '@id' => 'person-id', 'name' => 'Original author' ) === trilacheck_schema_author_profiles( $person ), 'Completed Person node retains a migration URL' );
+$person['sameAs'][] = 'https://www.linkedin.com/in/example';
+$person['url'] = 'https://trilacheck.de/';
+$person['sameAs'] = array( 'https://www.linkedin.com/in/example' );
+check( $person === trilacheck_schema_author_profiles( $person ), 'Public Person references changed' );
 $organization = array( '@type' => 'Organization', '@id' => 'https://trilacheck.de/#organization', 'name' => 'TrilaCheck.de', 'logo' => array( '@id' => 'logo' ) );
 check( $organization + array( 'legalName' => 'TRILA GROUP L.L.C' ) === trilacheck_schema_legal_publisher( $organization ), 'Brand/schema identity changed while adding legal publisher' );
 echo "PASS: missing descriptions, editor overrides, scoped empty-category noindex and preserved robots directives.\n";
