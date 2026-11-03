@@ -59,3 +59,28 @@ function trilacheck_empty_category_wp_robots( $robots ) {
 	return $robots;
 }
 add_filter( 'wp_robots', 'trilacheck_empty_category_wp_robots' );
+
+/** Exclude the verified migration-only author profile from public schema. */
+function trilacheck_public_author_profiles( $profiles ) {
+	if ( ! is_array( $profiles ) ) {
+		return $profiles;
+	}
+	return array_values(
+		array_filter(
+			$profiles,
+			static function ( $url ) {
+				return ! is_string( $url ) || 'trilacheck.local' !== strtolower( (string) wp_parse_url( $url, PHP_URL_HOST ) );
+			}
+		)
+	);
+}
+add_filter( 'wpseo_schema_person_social_profiles', 'trilacheck_public_author_profiles' );
+
+/** Keep the brand while identifying the legal publisher confirmed by its owner. */
+function trilacheck_schema_legal_publisher( $organization ) {
+	if ( is_array( $organization ) ) {
+		$organization['legalName'] = 'TRILA GROUP L.L.C';
+	}
+	return $organization;
+}
+add_filter( 'wpseo_schema_organization', 'trilacheck_schema_legal_publisher' );

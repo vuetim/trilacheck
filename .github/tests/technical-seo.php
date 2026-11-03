@@ -8,6 +8,7 @@ function add_filter( ...$args ) {}
 function is_singular() { global $context; return $context['singular']; }
 function is_category( $slug = '' ) { global $context; return $context['category'] && ( '' === $slug || $slug === $context['slug'] ); }
 function get_queried_object() { global $context; return (object) array( 'post_name' => $context['slug'] ); }
+function wp_parse_url( $url, $component = -1 ) { return parse_url( $url, $component ); }
 function check( $result, $message ) { if ( ! $result ) { throw new RuntimeException( $message ); } }
 require dirname( __DIR__, 2 ) . '/includes/technical-seo.php';
 
@@ -29,4 +30,12 @@ check( 'index, follow' === trilacheck_empty_category_robots( 'index, follow' ), 
 $context['category'] = false;
 $wp_query->found_posts = 0;
 check( 'index, follow' === trilacheck_empty_category_robots( 'index, follow' ), 'Normal page noindexed' );
+$profiles = trilacheck_public_author_profiles( array( 'http://trilacheck.local', 'https://www.linkedin.com/in/example', 'https://trilacheck.de/' ) );
+check( array( 'https://www.linkedin.com/in/example', 'https://trilacheck.de/' ) === $profiles, 'Migration profile not removed or valid profiles changed' );
+check( array() === trilacheck_public_author_profiles( array( 'https://TRILACHECK.LOCAL/profile/' ) ), 'Case-insensitive local profile not removed' );
+check( array() === trilacheck_public_author_profiles( array() ), 'Empty profiles changed' );
+check( false === trilacheck_public_author_profiles( false ), 'Unexpected profile input changed' );
+$organization = array( '@type' => 'Organization', '@id' => 'https://trilacheck.de/#organization', 'name' => 'TrilaCheck.de', 'logo' => array( '@id' => 'logo' ) );
+check( $organization + array( 'legalName' => 'TRILA GROUP L.L.C' ) === trilacheck_schema_legal_publisher( $organization ), 'Brand/schema identity changed while adding legal publisher' );
 echo "PASS: missing descriptions, editor overrides, scoped empty-category noindex and preserved robots directives.\n";
+echo "PASS: public author schema excludes the migration URL and preserves valid profiles.\n";
