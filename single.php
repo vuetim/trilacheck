@@ -8,7 +8,7 @@ while (have_posts()):
 		? trilacheck_article_comparison(get_the_ID())
 		: array('url' => home_url('/vergleiche/'), 'label' => __('Alle Vergleiche', 'trilacheck'));
 	?>
-	<main class="tc-article-page">
+	<div class="tc-article-page">
 		<article <?php post_class('tc-article'); ?>>
 			<header class="tc-article__header">
 				<div class="tc-container tc-article__header-inner">
@@ -52,6 +52,6 @@ while (have_posts()):
 									→</span></a></article><?php endwhile; ?>
 				</div>
 			</section><?php wp_reset_postdata(); endif; ?>
-	</main>
+	</div>
 <?php endwhile;
 get_footer(); ?>

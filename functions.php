@@ -12,6 +12,7 @@ define( 'TRILACHECK_VERSION', '0.1.0' );
 require_once get_template_directory() . '/includes/home-customizer.php';
 require_once get_template_directory() . '/includes/search-routing.php';
 require_once get_template_directory() . '/includes/internal-links.php';
+require_once get_template_directory() . '/includes/technical-seo.php';
 
 function trilacheck_setup() {
 	load_theme_textdomain( 'trilacheck', get_template_directory() . '/languages' );

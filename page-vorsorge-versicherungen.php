@@ -2,7 +2,7 @@
 /** Provision insurance page. @package Trilacheck */
 get_header();
 ?>
-<main class="tc-provision-page">
+<div class="tc-provision-page">
 	<header class="tc-provision-hero tc-comparison-hero tc-comparison-hero--plain"><div class="tc-container"><p><?php esc_html_e( 'Finanziell vorsorgen', 'trilacheck' ); ?></p><h1><?php esc_html_e( 'Vorsorge-Versicherungen vergleichen', 'trilacheck' ); ?></h1><span><?php esc_html_e( 'Absicherung für Einkommen, Ruhestand, Pflege und Hinterbliebene nach deinen persönlichen Anforderungen prüfen.', 'trilacheck' ); ?></span><a href="#vorsorgevergleich"><?php esc_html_e( 'Vorsorgebereich auswählen', 'trilacheck' ); ?><b aria-hidden="true">↓</b></a></div><?php get_template_part( 'template-parts/comparison-trust' ); ?>
 	</header>
 	<section id="vorsorgevergleich" class="tc-container tc-provision-compare" aria-labelledby="tc-provision-compare-title"><div class="tc-provision-heading"><p><?php esc_html_e( 'Acht Vergleichsbereiche', 'trilacheck' ); ?></p><h2 id="tc-provision-compare-title"><?php esc_html_e( 'Welche Vorsorge möchtest du vergleichen?', 'trilacheck' ); ?></h2><span><?php esc_html_e( 'Öffne nur den gewünschten Rechner. Der Vergleich wird erst dann geladen.', 'trilacheck' ); ?></span></div><?php echo do_shortcode( '[trilacheck_provision_insurance]' ); ?></section>
@@ -12,5 +12,5 @@ get_header();
 		<section class="tc-provision-note"><div aria-hidden="true">i</div><section><h2><?php esc_html_e( 'Langfristige Verträge sorgfältig prüfen', 'trilacheck' ); ?></h2><p><?php esc_html_e( 'Vorsorgeprodukte können langfristige finanzielle Verpflichtungen schaffen. Vergleiche Kosten, Garantien, Anpassungsmöglichkeiten und Kündigungsfolgen. Bei komplexen Entscheidungen kann unabhängige fachliche Beratung sinnvoll sein.', 'trilacheck' ); ?></p></section></section>
 		<section class="tc-provision-faq"><h2><?php esc_html_e( 'Häufige Fragen zur Vorsorge', 'trilacheck' ); ?></h2><details><summary><?php esc_html_e( 'Welche Vorsorge-Versicherung ist die wichtigste?', 'trilacheck' ); ?></summary><p><?php esc_html_e( 'Das lässt sich nicht pauschal beantworten. Entscheidend sind deine existenziellen Risiken, bestehende Absicherung, Familie und finanzielle Möglichkeiten.', 'trilacheck' ); ?></p></details><details><summary><?php esc_html_e( 'Ist der günstigste Tarif die beste Wahl?', 'trilacheck' ); ?></summary><p><?php esc_html_e( 'Nicht unbedingt. Leistungsvoraussetzungen, Ausschlüsse, Garantien und langfristige Kosten sind mindestens ebenso wichtig wie der Beitrag.', 'trilacheck' ); ?></p></details><details><summary><?php esc_html_e( 'Schließe ich bei Trilacheck ab?', 'trilacheck' ); ?></summary><p><?php esc_html_e( 'Nein. Trilacheck stellt die Vergleiche bereit. Angebot und Abschluss erfolgen beim Vergleichspartner oder Versicherer.', 'trilacheck' ); ?></p></details></section>
 	</div>
-</main>
+</div>
 <?php get_footer(); ?>

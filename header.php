@@ -50,7 +50,7 @@ defined( 'ABSPATH' ) || exit;
 
 			<a class="tc-all-comparisons" href="<?php echo esc_url( home_url( '/vergleiche/' ) ); ?>" aria-label="<?php esc_attr_e( 'Alle Vergleiche', 'trilacheck' ); ?>">
 				<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-				<span><?php esc_html_e( 'Alle Vergleiche', 'trilacheck' ); ?></span>
+				<span><?php esc_html_e( 'Alle', 'trilacheck' ); ?></span>
 			</a>
 		</div>
 

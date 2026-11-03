@@ -2,7 +2,7 @@
 /** DSL comparison page. @package Trilacheck */
 get_header();
 ?>
-<main class="tc-dsl-page">
+<div class="tc-dsl-page">
 	<header class="tc-dsl-hero tc-comparison-hero">
 		<div class="tc-container tc-dsl-hero__inner">
 			<div class="tc-dsl-hero__content">
@@ -140,5 +140,5 @@ get_header();
 			<?php esc_html_e('Ein möglicher Bonus hängt vom gewählten Angebot und dessen Bedingungen ab.', 'trilacheck'); ?>
 		</p>
 	</div>
-</main>
+</div>
 <?php get_footer(); ?>

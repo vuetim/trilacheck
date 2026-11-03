@@ -8,7 +8,7 @@
 get_header();
 ?>
 
-<main class="tc-power-page">
+<div class="tc-power-page">
 	<header class="tc-power-hero tc-comparison-hero">
 		<div class="tc-container tc-power-hero__inner">
 			<div class="tc-power-hero__content">
@@ -96,6 +96,6 @@ get_header();
 		</div>
 		<p class="tc-power-disclaimer"><sup>1</sup> <?php esc_html_e( 'Die tatsächliche Ersparnis hängt unter anderem von Wohnort, Verbrauch, bisherigem Tarif und gewähltem Angebot ab.', 'trilacheck' ); ?></p>
 	</div>
-</main>
+</div>
 
 <?php get_footer(); ?>

@@ -4,7 +4,7 @@ get_header();
 global $wp_query;
 $featured_id = 0;
 ?>
-<main class="tc-blog-archive">
+<div class="tc-blog-archive">
 	<header class="tc-blog-hero"><div class="tc-container"><p><?php esc_html_e( 'Ratgeber & Wissen', 'trilacheck' ); ?></p><h1><?php esc_html_e( 'Besser vergleichen und bewusst entscheiden', 'trilacheck' ); ?></h1><span><?php esc_html_e( 'Verständliche Ratgeber zu Energie, Internet, Mobilfunk, Reisen, Finanzen und Versicherungen.', 'trilacheck' ); ?></span></div></header>
 	<div class="tc-container tc-blog-archive__body">
 		<?php if ( have_posts() ) : ?>
@@ -16,5 +16,5 @@ $featured_id = 0;
 			<?php the_posts_pagination(array('mid_size'=>1,'prev_text'=>'←','next_text'=>'→')); ?>
 		<?php else : ?><p><?php esc_html_e('Noch keine Ratgeber veröffentlicht.','trilacheck'); ?></p><?php endif; ?>
 	</div>
-</main>
+</div>
 <?php get_footer(); ?>

@@ -8,7 +8,7 @@ $categories = array(
 	array( 'class'=>'property', 'title'=>__( 'Sachversicherungen', 'trilacheck' ), 'text'=>__( 'Hausrat, Haftpflicht und weitere Sachrisiken absichern.', 'trilacheck' ), 'url'=>'/sachversicherungen/', 'icon'=>'shield' ),
 );
 ?>
-<main class="tc-insurance-hub">
+<div class="tc-insurance-hub">
 	<header class="tc-insurance-hub__hero tc-comparison-hero tc-comparison-hero--plain"><div class="tc-container"><p><?php esc_html_e( 'Versicherungen im Überblick', 'trilacheck' ); ?></p><h1><?php esc_html_e( 'Passende Versicherung vergleichen', 'trilacheck' ); ?></h1><span><?php esc_html_e( 'Wähle zuerst den Versicherungsbereich. Auf der jeweiligen Themenseite findest du passende Vergleiche und verständliche Informationen.', 'trilacheck' ); ?></span></div><?php get_template_part( 'template-parts/comparison-trust' ); ?>
 	</header>
 	<section class="tc-container tc-insurance-hub__categories" aria-labelledby="tc-insurance-categories-title"><div class="tc-insurance-hub__heading"><p><?php esc_html_e( 'Versicherungsbereiche', 'trilacheck' ); ?></p><h2 id="tc-insurance-categories-title"><?php esc_html_e( 'Was möchtest du absichern?', 'trilacheck' ); ?></h2></div><div class="tc-insurance-hub__grid">
@@ -17,5 +17,5 @@ $categories = array(
 	</span><span class="tc-insurance-category__copy"><strong><?php echo esc_html( $category['title'] ); ?></strong><small><?php echo esc_html( $category['text'] ); ?></small></span><span class="tc-insurance-category__arrow" aria-hidden="true">→</span></a><?php endforeach; ?>
 	</div></section>
 	<div class="tc-container tc-insurance-hub__content"><section><h2><?php esc_html_e( 'Versicherungen vergleichen und Leistungen verstehen', 'trilacheck' ); ?></h2><p><?php esc_html_e( 'Versicherungen sollen finanzielle Risiken abdecken, unterscheiden sich aber deutlich bei Beitrag, Leistungsumfang, Selbstbeteiligung und Ausschlüssen. Deshalb ist es sinnvoll, nicht nur den Preis, sondern auch die Bedingungen eines Tarifs zu vergleichen.', 'trilacheck' ); ?></p><p><?php esc_html_e( 'Welche Versicherung und welcher Schutz zu dir passen, hängt von deiner persönlichen Lebenssituation ab. Die Themenseiten helfen dir bei der Orientierung; bei individuellem Beratungsbedarf solltest du fachlichen Rat einholen.', 'trilacheck' ); ?></p></section><section class="tc-insurance-hub__steps"><h2><?php esc_html_e( 'So gehst du beim Vergleich vor', 'trilacheck' ); ?></h2><ol><li><b>1</b><span><strong><?php esc_html_e( 'Bereich auswählen', 'trilacheck' ); ?></strong><small><?php esc_html_e( 'Wähle aus, welches Risiko du absichern möchtest.', 'trilacheck' ); ?></small></span></li><li><b>2</b><span><strong><?php esc_html_e( 'Angaben machen', 'trilacheck' ); ?></strong><small><?php esc_html_e( 'Trage die für den Vergleich benötigten Informationen ein.', 'trilacheck' ); ?></small></span></li><li><b>3</b><span><strong><?php esc_html_e( 'Leistungen prüfen', 'trilacheck' ); ?></strong><small><?php esc_html_e( 'Vergleiche Beitrag, Deckung, Selbstbeteiligung und Ausschlüsse.', 'trilacheck' ); ?></small></span></li></ol></section></div>
-</main>
+</div>
 <?php get_footer(); ?>

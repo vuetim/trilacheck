@@ -2,7 +2,7 @@
 /** Property and liability insurance comparison page. @package Trilacheck */
 get_header();
 ?>
-<main class="tc-property-page">
+<div class="tc-property-page">
 	<header class="tc-property-hero tc-comparison-hero tc-comparison-hero--plain"><div class="tc-container"><p><?php esc_html_e( 'Eigentum und Haftungsrisiken', 'trilacheck' ); ?></p><h1><?php esc_html_e( 'Sachversicherungen vergleichen', 'trilacheck' ); ?></h1><span><?php esc_html_e( 'Versicherungsschutz für Haftung, Hausrat, Gebäude, Tiere, Rechtsschutz und Unternehmen nach Leistungsumfang vergleichen.', 'trilacheck' ); ?></span><a href="#sachvergleich"><?php esc_html_e( 'Versicherungsart auswählen', 'trilacheck' ); ?><b aria-hidden="true">↓</b></a></div><?php get_template_part( 'template-parts/comparison-trust' ); ?>
 	</header>
 	<section id="sachvergleich" class="tc-container tc-property-compare" aria-labelledby="tc-property-compare-title"><div class="tc-property-heading"><p><?php esc_html_e( 'Sieben Versicherungsbereiche', 'trilacheck' ); ?></p><h2 id="tc-property-compare-title"><?php esc_html_e( 'Was möchtest du absichern?', 'trilacheck' ); ?></h2><span><?php esc_html_e( 'Öffne den gewünschten Vergleich. Das externe Tool wird erst nach deiner Auswahl geladen.', 'trilacheck' ); ?></span></div><?php echo do_shortcode( '[trilacheck_property_insurance]' ); ?></section>
@@ -12,5 +12,5 @@ get_header();
 		<section class="tc-property-note"><div aria-hidden="true">i</div><section><h2><?php esc_html_e( 'Elementarschäden separat prüfen', 'trilacheck' ); ?></h2><p><?php esc_html_e( 'Schäden durch Überschwemmung, Rückstau, Erdbeben oder Schneedruck sind in Hausrat- und Wohngebäudetarifen häufig nicht automatisch enthalten. Prüfe, ob ein Elementarschadenbaustein eingeschlossen ist.', 'trilacheck' ); ?></p></section></section>
 		<section class="tc-property-faq"><h2><?php esc_html_e( 'Häufige Fragen zu Sachversicherungen', 'trilacheck' ); ?></h2><details><summary><?php esc_html_e( 'Was ist der Unterschied zwischen Hausrat und Wohngebäude?', 'trilacheck' ); ?></summary><p><?php esc_html_e( 'Hausrat umfasst grundsätzlich bewegliche Gegenstände im Haushalt. Eine Wohngebäudeversicherung bezieht sich auf das Gebäude und fest verbundene Bestandteile.', 'trilacheck' ); ?></p></details><details><summary><?php esc_html_e( 'Welche Versicherung ist besonders wichtig?', 'trilacheck' ); ?></summary><p><?php esc_html_e( 'Eine private Haftpflichtversicherung gilt als besonders wichtig, weil Schadenersatzforderungen sehr hoch sein können. Der weitere Bedarf hängt von deiner Situation ab.', 'trilacheck' ); ?></p></details><details><summary><?php esc_html_e( 'Schließe ich bei Trilacheck ab?', 'trilacheck' ); ?></summary><p><?php esc_html_e( 'Nein. Trilacheck stellt die Vergleiche bereit. Angebot und Abschluss erfolgen beim Vergleichspartner oder Versicherer.', 'trilacheck' ); ?></p></details></section>
 	</div>
-</main>
+</div>
 <?php get_footer(); ?>

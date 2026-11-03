@@ -8,10 +8,14 @@
 get_header();
 ?>
 <div class="tc-container tc-content-layout">
+	<?php if ( is_archive() ) : ?>
+		<h1 class="tc-entry__title"><?php the_archive_title(); ?></h1>
+		<?php the_archive_description(); ?>
+	<?php endif; ?>
 	<?php if ( have_posts() ) : ?>
 		<?php while ( have_posts() ) : the_post(); ?>
 			<article id="post-<?php the_ID(); ?>" <?php post_class( 'tc-entry' ); ?>>
-				<h1 class="tc-entry__title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h1>
+				<h2 class="tc-entry__title"><a href="<?php echo esc_url( get_permalink() ); ?>"><?php the_title(); ?></a></h2>
 				<div class="tc-entry__content"><?php the_excerpt(); ?></div>
 			</article>
 		<?php endwhile; ?>

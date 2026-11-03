@@ -14,7 +14,7 @@ if ( ! isset( $pages[ $slug ] ) ) { get_template_part( 'page' ); return; }
 $tariff_page = $pages[ $slug ];
 get_header();
 ?>
-<main class="tc-mobile-detail">
+<div class="tc-mobile-detail">
 	<header class="tc-mobile-detail__hero tc-comparison-hero tc-comparison-hero--plain"><div class="tc-container"><p><?php echo esc_html( $tariff_page['eyebrow'] ); ?></p><h1><?php echo esc_html( $tariff_page['title'] ); ?></h1><div class="tc-mobile-detail__lead"><?php echo esc_html( $tariff_page['lead'] ); ?></div><a href="#tarifvergleich"><?php esc_html_e( 'Tarife vergleichen', 'trilacheck' ); ?><span aria-hidden="true">→</span></a></div><?php get_template_part( 'template-parts/comparison-trust' ); ?>
 	</header>
 	<section id="tarifvergleich" class="tc-container tc-mobile-detail__widget" aria-labelledby="tc-detail-widget-title"><h2 id="tc-detail-widget-title"><?php echo esc_html( $tariff_page['title'] ); ?></h2><?php echo do_shortcode( '[trilacheck_mobile data="' . esc_attr( $tariff_page['widget'] ) . '"]' ); ?></section>
@@ -24,5 +24,5 @@ get_header();
 		<section class="tc-mobile-detail__faq"><h2><?php esc_html_e( 'Häufige Fragen', 'trilacheck' ); ?></h2><details><summary><?php esc_html_e( 'Kann ich meine Rufnummer mitnehmen?', 'trilacheck' ); ?></summary><p><?php esc_html_e( 'Bei vielen Wechseln ist die Rufnummernmitnahme möglich. Bedingungen und Fristen stehen im Angebot.', 'trilacheck' ); ?></p></details><details><summary><?php esc_html_e( 'Wo wird der Vertrag abgeschlossen?', 'trilacheck' ); ?></summary><p><?php esc_html_e( 'Trilacheck unterstützt beim Vergleich. Für den Abschluss wirst du zum Partner oder Anbieter weitergeleitet.', 'trilacheck' ); ?></p></details></section>
 		<nav class="tc-mobile-detail__more" aria-label="<?php esc_attr_e( 'Weitere Handytarife', 'trilacheck' ); ?>"><strong><?php esc_html_e( 'Weitere Vergleiche', 'trilacheck' ); ?></strong><a href="<?php echo esc_url( home_url( '/mobilfunk/' ) ); ?>"><?php esc_html_e( 'Alle Handytarife', 'trilacheck' ); ?></a><a href="<?php echo esc_url( home_url( '/handytarife-unlimited/' ) ); ?>">Unlimited</a><a href="<?php echo esc_url( home_url( '/tarife-fur-junge-leute/' ) ); ?>">Young-Tarife</a><a href="<?php echo esc_url( home_url( '/prepaid-tarife/' ) ); ?>">Prepaid</a></nav>
 	</div>
-</main>
+</div>
 <?php get_footer(); ?>

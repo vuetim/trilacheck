@@ -2,7 +2,7 @@
 /** Health insurance comparison page. @package Trilacheck */
 get_header();
 ?>
-<main class="tc-health-page">
+<div class="tc-health-page">
 	<header class="tc-health-hero tc-comparison-hero tc-comparison-hero--plain"><div class="tc-container"><p><?php esc_html_e( 'Gesundheit absichern', 'trilacheck' ); ?></p><h1><?php esc_html_e( 'Krankenversicherungen vergleichen', 'trilacheck' ); ?></h1><span><?php esc_html_e( 'Private Krankenvoll- und Zusatzversicherungen für unterschiedliche Personengruppen und Leistungswünsche prüfen.', 'trilacheck' ); ?></span><a href="#krankenvergleich"><?php esc_html_e( 'Versicherungsart auswählen', 'trilacheck' ); ?><b aria-hidden="true">↓</b></a></div><?php get_template_part( 'template-parts/comparison-trust' ); ?>
 	</header>
 	<section id="krankenvergleich" class="tc-container tc-health-compare" aria-labelledby="tc-health-compare-title"><div class="tc-health-heading"><p><?php esc_html_e( 'Fünf Vergleichsbereiche', 'trilacheck' ); ?></p><h2 id="tc-health-compare-title"><?php esc_html_e( 'Welche Krankenversicherung möchtest du vergleichen?', 'trilacheck' ); ?></h2><span><?php esc_html_e( 'Öffne den passenden Rechner. Das Vergleichstool wird erst bei deiner Auswahl geladen.', 'trilacheck' ); ?></span></div><?php echo do_shortcode( '[trilacheck_health_insurance]' ); ?></section>
@@ -13,5 +13,5 @@ get_header();
 		<section class="tc-health-note"><div aria-hidden="true">i</div><section><h2><?php esc_html_e( 'Nicht nur den heutigen Beitrag vergleichen', 'trilacheck' ); ?></h2><p><?php esc_html_e( 'Prüfe Leistungen, Selbstbeteiligung, Beitragsentlastung im Alter, Familienkosten und Wechselmöglichkeiten. Bei einer Entscheidung zwischen GKV und PKV kann unabhängige fachliche Beratung besonders sinnvoll sein.', 'trilacheck' ); ?></p></section></section>
 		<section class="tc-health-faq"><h2><?php esc_html_e( 'Häufige Fragen zur Krankenversicherung', 'trilacheck' ); ?></h2><details><summary><?php esc_html_e( 'Wer kann als Arbeitnehmer in die PKV wechseln?', 'trilacheck' ); ?></summary><p><?php esc_html_e( 'Arbeitnehmer können versicherungsfrei werden, wenn ihr regelmäßiges Jahresarbeitsentgelt die maßgebliche Jahresarbeitsentgeltgrenze überschreitet und weitere Voraussetzungen erfüllt sind. 2026 liegt die allgemeine Grenze bei 77.400 Euro.', 'trilacheck' ); ?></p></details><details><summary><?php esc_html_e( 'Was beeinflusst den PKV-Beitrag?', 'trilacheck' ); ?></summary><p><?php esc_html_e( 'Unter anderem Eintrittsalter, Gesundheitszustand, gewählte Leistungen, Selbstbeteiligung und Tarifkalkulation.', 'trilacheck' ); ?></p></details><details><summary><?php esc_html_e( 'Schließe ich bei Trilacheck ab?', 'trilacheck' ); ?></summary><p><?php esc_html_e( 'Nein. Trilacheck stellt die Vergleiche bereit. Antrag und Abschluss erfolgen beim Vergleichspartner oder Versicherer.', 'trilacheck' ); ?></p></details></section>
 	</div>
-</main>
+</div>
 <?php get_footer(); ?>

@@ -545,10 +545,16 @@ body.page-girokonto .tc-site-header--inner {
 /* Search remains a normal form without JavaScript. */
 .tc-search-toggle { display: none; }
 .tc-search[hidden], .tc-search-toggle[hidden] { display: none; }
+.tc-search-ready .tc-header-top { grid-template-columns: 42px minmax(0, 1fr) 44px 44px; gap: 12px; }
+.tc-search-ready .tc-brand { text-align: center; }
+.tc-search-toggle:not([hidden]) { display: grid; width: 44px; height: 48px; padding: 0; place-items: center; color: inherit; border: 0; border-radius: 8px; background: transparent; cursor: pointer; }
+.tc-search-toggle svg { display: block; width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+.tc-search-ready .tc-all-comparisons { position: relative; grid-column: 4; grid-row: 1; display: grid; width: 44px; min-width: 44px; height: 48px; place-items: center; }
+.tc-search-ready .tc-all-comparisons svg { display: block; height: 24px; }
+.tc-search-ready .tc-all-comparisons span { position: absolute; bottom: -1px; display: block; width: 100%; margin: 0; font-size: 9px; font-weight: 400; line-height: 10px; text-align: center; }
+.tc-search-ready .tc-search { margin-top: 10px; }
 @media (max-width: 767px) {
-  .tc-search-ready .tc-header-top { grid-template-columns: 42px minmax(0, 1fr) 40px 32px; gap: 6px; }
-  .tc-search-toggle:not([hidden]) { display: inline-grid; width: 40px; height: 44px; padding: 8px; place-items: center; color: inherit; border: 0; border-radius: 50%; background: transparent; cursor: pointer; }
-  .tc-search-toggle svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+  .tc-search-ready .tc-header-top { gap: 6px; }
   .tc-search-ready .tc-brand .custom-logo { max-width: min(178px, 100%); }
   .tc-search-ready .tc-brand__text { font-size: clamp(22px, 6.2vw, 30px); }
   .tc-search-ready .tc-all-comparisons { min-height: 44px; }

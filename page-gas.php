@@ -2,7 +2,7 @@
 /** Gas comparison page. @package Trilacheck */
 get_header();
 ?>
-<main class="tc-gas-page">
+<div class="tc-gas-page">
 	<header class="tc-gas-hero tc-comparison-hero">
 		<div class="tc-container tc-gas-hero__inner">
 			<div class="tc-gas-hero__content">
@@ -44,5 +44,5 @@ get_header();
 		</section>
 		<p class="tc-gas-disclaimer"><sup>1</sup> <?php esc_html_e( 'Mögliche Ersparnis und Boni hängen unter anderem von Wohnort, Verbrauch, bisherigem Tarif und gewähltem Angebot ab.', 'trilacheck' ); ?></p>
 	</div>
-</main>
+</div>
 <?php get_footer(); ?>

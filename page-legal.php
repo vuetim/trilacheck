@@ -7,7 +7,7 @@
  */
 get_header();
 ?>
-<main class="tc-legal-page">
+<div class="tc-legal-page">
 	<header class="tc-legal-hero">
 		<div class="tc-container">
 			<p><?php esc_html_e( 'TrilaCheck.de', 'trilacheck' ); ?></p>
@@ -19,5 +19,5 @@ get_header();
 			<?php while ( have_posts() ) : the_post(); the_content(); endwhile; ?>
 		</article>
 	</div>
-</main>
+</div>
 <?php get_footer(); ?>
