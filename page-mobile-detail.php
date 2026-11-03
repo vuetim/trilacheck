@@ -12,6 +12,8 @@ $pages = array(
 );
 if ( ! isset( $pages[ $slug ] ) ) { get_template_part( 'page' ); return; }
 $tariff_page = $pages[ $slug ];
+$editorial_pages = require __DIR__ . '/includes/mobile-editorial.php';
+$editorial = $editorial_pages[ $slug ];
 get_header();
 ?>
 <div class="tc-mobile-detail">
@@ -19,9 +21,9 @@ get_header();
 	</header>
 	<section id="tarifvergleich" class="tc-container tc-mobile-detail__widget" aria-labelledby="tc-detail-widget-title"><h2 id="tc-detail-widget-title"><?php echo esc_html( $tariff_page['title'] ); ?></h2><?php echo do_shortcode( '[trilacheck_mobile data="' . esc_attr( $tariff_page['widget'] ) . '"]' ); ?></section>
 	<div class="tc-container tc-mobile-detail__content">
-		<section><h2><?php esc_html_e( 'Für wen passt dieser Tarif?', 'trilacheck' ); ?></h2><p><?php echo esc_html( $tariff_page['who'] ); ?></p><p><?php esc_html_e( 'Wie viel Datenvolumen du benötigst, hängt von deinem Nutzungsverhalten ab. Prüfe nach Möglichkeit den Verbrauch der vergangenen Monate.', 'trilacheck' ); ?></p></section>
-		<section><h2><?php esc_html_e( 'Wichtige Punkte vor der Tarifwahl', 'trilacheck' ); ?></h2><div class="tc-mobile-detail__criteria"><article><h3><?php esc_html_e( 'Netzabdeckung', 'trilacheck' ); ?></h3><p><?php esc_html_e( 'Prüfe die Versorgung zu Hause, am Arbeitsplatz und auf häufigen Strecken.', 'trilacheck' ); ?></p></article><article><h3><?php esc_html_e( 'Gesamtkosten', 'trilacheck' ); ?></h3><p><?php esc_html_e( 'Beachte Grundpreis, Anschlusskosten, Rabatte und den Preis nach einer Aktion.', 'trilacheck' ); ?></p></article><article><h3><?php esc_html_e( 'Laufzeit', 'trilacheck' ); ?></h3><p><?php esc_html_e( 'Vergleiche Mindestlaufzeit, Kündigungsfrist und monatlich kündbare Varianten.', 'trilacheck' ); ?></p></article><article><h3><?php esc_html_e( 'Geschwindigkeit', 'trilacheck' ); ?></h3><p><?php esc_html_e( 'Achte neben 5G auch auf die vorgesehene maximale Datenrate.', 'trilacheck' ); ?></p></article></div></section>
-		<section class="tc-mobile-detail__faq"><h2><?php esc_html_e( 'Häufige Fragen', 'trilacheck' ); ?></h2><details><summary><?php esc_html_e( 'Kann ich meine Rufnummer mitnehmen?', 'trilacheck' ); ?></summary><p><?php esc_html_e( 'Bei vielen Wechseln ist die Rufnummernmitnahme möglich. Bedingungen und Fristen stehen im Angebot.', 'trilacheck' ); ?></p></details><details><summary><?php esc_html_e( 'Wo wird der Vertrag abgeschlossen?', 'trilacheck' ); ?></summary><p><?php esc_html_e( 'Trilacheck unterstützt beim Vergleich. Für den Abschluss wirst du zum Partner oder Anbieter weitergeleitet.', 'trilacheck' ); ?></p></details></section>
+		<section><h2><?php esc_html_e( 'Für wen passt dieser Tarif?', 'trilacheck' ); ?></h2><p><?php echo esc_html( $tariff_page['who'] ); ?></p><p><?php echo esc_html( $editorial['usage'] ); ?></p></section>
+		<section><h2><?php esc_html_e( 'Wichtige Punkte vor der Tarifwahl', 'trilacheck' ); ?></h2><div class="tc-mobile-detail__criteria"><?php foreach ( $editorial['criteria'] as $criterion_title => $criterion_text ) : ?><article><h3><?php echo esc_html( $criterion_title ); ?></h3><p><?php echo esc_html( $criterion_text ); ?></p></article><?php endforeach; ?></div></section>
+		<section class="tc-mobile-detail__faq"><h2><?php esc_html_e( 'Häufige Fragen', 'trilacheck' ); ?></h2><details><summary><?php echo esc_html( $editorial['question'] ); ?></summary><p><?php echo esc_html( $editorial['answer'] ); ?></p></details><details><summary><?php esc_html_e( 'Wo wird der Vertrag abgeschlossen?', 'trilacheck' ); ?></summary><p><?php esc_html_e( 'Trilacheck unterstützt beim Vergleich. Für den Abschluss wirst du zum Partner oder Anbieter weitergeleitet.', 'trilacheck' ); ?></p></details></section>
 		<nav class="tc-mobile-detail__more" aria-label="<?php esc_attr_e( 'Weitere Handytarife', 'trilacheck' ); ?>"><strong><?php esc_html_e( 'Weitere Vergleiche', 'trilacheck' ); ?></strong><a href="<?php echo esc_url( home_url( '/mobilfunk/' ) ); ?>"><?php esc_html_e( 'Alle Handytarife', 'trilacheck' ); ?></a><a href="<?php echo esc_url( home_url( '/handytarife-unlimited/' ) ); ?>">Unlimited</a><a href="<?php echo esc_url( home_url( '/tarife-fur-junge-leute/' ) ); ?>">Young-Tarife</a><a href="<?php echo esc_url( home_url( '/prepaid-tarife/' ) ); ?>">Prepaid</a></nav>
 	</div>
 </div>
