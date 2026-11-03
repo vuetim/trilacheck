@@ -44,13 +44,17 @@ defined( 'ABSPATH' ) || exit;
 				<?php endif; ?>
 			</div>
 
+			<button class="tc-search-toggle" type="button" aria-expanded="false" aria-controls="tc-header-search" aria-label="<?php esc_attr_e( 'Suche ein- oder ausblenden', 'trilacheck' ); ?>" hidden>
+				<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
+			</button>
+
 			<a class="tc-all-comparisons" href="<?php echo esc_url( home_url( '/vergleiche/' ) ); ?>" aria-label="<?php esc_attr_e( 'Alle Vergleiche', 'trilacheck' ); ?>">
 				<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
 				<span><?php esc_html_e( 'Alle Vergleiche', 'trilacheck' ); ?></span>
 			</a>
 		</div>
 
-		<form class="tc-search" role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+		<form id="tc-header-search" class="tc-search" role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>">
 			<label class="screen-reader-text" for="tc-site-search"><?php esc_html_e( 'Website durchsuchen', 'trilacheck' ); ?></label>
 			<svg class="tc-search__icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
 			<input id="tc-site-search" name="s" type="search" value="<?php echo esc_attr( get_search_query() ); ?>" placeholder="<?php esc_attr_e( 'Was möchtest du vergleichen?', 'trilacheck' ); ?>">

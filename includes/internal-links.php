@@ -74,8 +74,9 @@ function trilacheck_internal_link_assets() {
 	}
 	wp_enqueue_style( 'trilacheck-blog', get_template_directory_uri() . '/assets/css/blog.css', array( 'trilacheck-base' ), (string) filemtime( get_template_directory() . '/assets/css/blog.css' ) );
 	wp_enqueue_style( 'trilacheck-comparison-trust', get_template_directory_uri() . '/assets/css/comparison-trust.css', array( 'trilacheck-base' ), (string) filemtime( get_template_directory() . '/assets/css/comparison-trust.css' ) );
+	wp_enqueue_style( 'trilacheck-comparison-mobile', get_template_directory_uri() . '/assets/css/comparison-mobile.css', array( 'trilacheck-comparison-trust' ), (string) filemtime( get_template_directory() . '/assets/css/comparison-mobile.css' ) );
 }
-add_action( 'wp_enqueue_scripts', 'trilacheck_internal_link_assets' );
+add_action( 'wp_enqueue_scripts', 'trilacheck_internal_link_assets', 20 );
 
 /** Point the existing article sidebar at its most specific matching comparison. */
 function trilacheck_article_comparison( $post_id ) {

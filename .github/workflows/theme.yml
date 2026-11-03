@@ -27,6 +27,8 @@ jobs:
         run: find . -path './.git' -prune -o -name '*.php' -print0 | xargs -0 -n1 php -l
       - name: Check JavaScript syntax
         run: find assets -name '*.js' -print0 | xargs -0 -r -n1 node --check
+      - name: Test responsive search interactions
+        run: node .github/tests/header-search.cjs
       - name: Check theme structure
         run: php .github/tests/theme-package.php
       - name: Check deployment script syntax

@@ -1,6 +1,36 @@
 (() => {
   'use strict';
 
+  const siteHeader = document.querySelector('[data-tc-header]');
+  const searchToggle = siteHeader?.querySelector('.tc-search-toggle');
+  const searchForm = siteHeader?.querySelector('#tc-header-search');
+  const searchInput = searchForm?.querySelector('input[type="search"]');
+  if (searchToggle && searchForm && searchInput) {
+    const mobile = window.matchMedia('(max-width: 767px)');
+    let searchOpen = Boolean(searchInput.value.trim());
+    const syncSearch = () => {
+      searchToggle.hidden = !mobile.matches;
+      searchForm.hidden = mobile.matches && !searchOpen;
+      searchToggle.setAttribute('aria-expanded', String(mobile.matches && searchOpen));
+      siteHeader.classList.add('tc-search-ready');
+    };
+    searchToggle.addEventListener('click', () => {
+      searchOpen = !searchOpen;
+      syncSearch();
+      if (searchOpen) searchInput.focus();
+    });
+    searchForm.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && mobile.matches) {
+        event.preventDefault();
+        searchOpen = false;
+        syncSearch();
+        searchToggle.focus();
+      }
+    });
+    mobile.addEventListener('change', syncSearch);
+    syncSearch();
+  }
+
   const header = document.querySelector('.tc-site-header--home');
   if (header) {
     const updateHeaderHeight = () => {

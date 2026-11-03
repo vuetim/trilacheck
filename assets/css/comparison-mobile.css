@@ -1,0 +1,31 @@
+/* Compact comparison introductions; desktop keeps its existing presentation. */
+@media (max-width: 759px) {
+  .tc-comparison-hero { padding-block: 0; }
+  .tc-comparison-hero > .tc-container { min-height: 0; padding-block: 0; }
+  .tc-comparison-hero [class*="hero__content"],
+  .tc-comparison-hero--plain > .tc-container { min-height: 0; padding-block: 18px; }
+  .tc-comparison-hero h1 { margin: 0; font-size: clamp(22px, 5.8vw, 28px); line-height: 1.16; letter-spacing: -0.025em; }
+  .tc-comparison-hero h1 + p,
+  .tc-comparison-hero h1 + span,
+  .tc-comparison-hero [class$="__intro"],
+  .tc-comparison-hero [class$="__lead"] { margin: 9px 0 12px; font-size: 15px; line-height: 1.45; }
+  .tc-comparison-hero [class*="hero__content"] > p:first-child,
+  .tc-comparison-hero--plain > .tc-container > p:first-child { margin-bottom: 8px; font-size: 10px; }
+  .tc-comparison-hero [class*="hero__content"] > ul,
+  .tc-comparison-hero > .tc-container > ul { display: none; }
+  .tc-comparison-hero :is(.tc-power-saving, .tc-gas-saving, .tc-dsl-bonus, .tc-giro-bonus) {
+    position: static; display: inline-flex; flex-direction: row; flex-wrap: wrap;
+    align-items: center; justify-content: center; gap: 4px;
+    width: auto; height: auto; min-height: 32px; margin: 0 0 2px;
+    padding: 7px 11px; border-radius: 999px; box-shadow: none; line-height: 1.2;
+  }
+  .tc-comparison-hero :is(.tc-power-saving, .tc-gas-saving, .tc-dsl-bonus, .tc-giro-bonus) :is(span, strong, b) {
+    margin: 0; font-size: 13px; line-height: 1.2; letter-spacing: normal;
+  }
+  .tc-comparison-hero [class*="hero__content"] > a,
+  .tc-comparison-hero--plain > .tc-container > a {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; min-height: 44px; margin-top: 12px; padding: 10px 14px;
+    font-size: 14px; line-height: 1.25; text-align: center;
+  }
+}

@@ -541,3 +541,17 @@ body.page-girokonto .tc-site-header--inner {
     font-size: 18px;
   }
 }
+
+/* Search remains a normal form without JavaScript. */
+.tc-search-toggle { display: none; }
+.tc-search[hidden], .tc-search-toggle[hidden] { display: none; }
+@media (max-width: 767px) {
+  .tc-search-ready .tc-header-top { grid-template-columns: 42px minmax(0, 1fr) 40px 32px; gap: 6px; }
+  .tc-search-toggle:not([hidden]) { display: inline-grid; width: 40px; height: 44px; padding: 8px; place-items: center; color: inherit; border: 0; border-radius: 50%; background: transparent; cursor: pointer; }
+  .tc-search-toggle svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+  .tc-search-ready .tc-brand .custom-logo { max-width: min(178px, 100%); }
+  .tc-search-ready .tc-brand__text { font-size: clamp(22px, 6.2vw, 30px); }
+  .tc-search-ready .tc-all-comparisons { min-height: 44px; }
+  .tc-search-ready .tc-header-shell { padding-bottom: 10px; }
+  .tc-search-ready .tc-quick-nav { margin-top: 9px; }
+}
