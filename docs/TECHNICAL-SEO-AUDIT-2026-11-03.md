@@ -93,3 +93,19 @@ Google creates search-result titles and snippets automatically; good metadata su
 ## Validation / deployment
 
 Local PHP syntax checks, responsive search interaction tests, metadata/robots regression tests and theme package checks are run before committing. GitHub Actions repeats them on PHP 8.2/8.3, creates the validated package, backs up the current production theme and deploys only the theme. A full HTTP/HTML recrawl after deployment will be recorded below; the baseline above must not be mistaken for that follow-up.
+
+## Post-deployment verification
+
+Code commit `4bd47e3655b13b4df872ea520da90ee240d6ce3d` was deployed successfully in [GitHub Actions run 41632474244](https://github.com/vuetim/trilacheck/actions/runs/41632474244). PHP 8.2/8.3, search interactions, metadata/robots regression checks, package validation and the backed-up server deployment all passed.
+
+A fresh crawl of all 45 landing URLs and all 41 sitemap URLs confirmed:
+
+- All landing URLs return 200, with exactly one H1, one main landmark and one nonempty meta description. No nested main landmarks remain.
+- All 41 indexable landing URLs retain one self-referencing canonical.
+- Four empty category archives now have `noindex, follow`: Konto & Finanzen, Reise & Mietwagen, Strom and Versicherungen. Yoast intentionally omits the canonical tag for these noindex archives; this is not reported as an error. Their category routes remain available, and they stay outside the sitemap. Their indexing restriction clears automatically when the archive contains published posts.
+- Missing descriptions at all four affected routes were confirmed present in live HTML. Existing nonempty descriptions remained unchanged.
+- No duplicate page titles/descriptions, orphaned landing URLs or broken same-page fragment targets were found in the follow-up crawl. Schema remains one valid JSON-LD script per landing URL.
+- The missing-URL probe still returns HTTP 404 and now includes the explicit “Seite nicht gefunden” H1.
+- Header HTML contains the “Alle” label, and shared interaction tests cover collapsed/open search and Escape behavior on both desktop and mobile. Browser geometry was not measured; equal icon/control dimensions are implemented in CSS.
+
+These results close the specific technical issues found by this audit. The Search Console, field performance, Rich Results Test and browser-verification limits above still apply.
