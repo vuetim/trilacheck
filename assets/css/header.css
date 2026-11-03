@@ -220,7 +220,7 @@ body.page-girokonto .tc-site-header--inner {
 
 .tc-brand {
   min-width: 0;
-  text-align: center;
+  text-align: left;
 }
 .tc-brand .custom-logo-link {
   display: inline-flex;
@@ -546,7 +546,7 @@ body.page-girokonto .tc-site-header--inner {
 .tc-search-toggle { display: none; }
 .tc-search[hidden], .tc-search-toggle[hidden] { display: none; }
 .tc-search-ready .tc-header-top { grid-template-columns: 42px minmax(0, 1fr) 44px 44px; gap: 12px; }
-.tc-search-ready .tc-brand { text-align: center; }
+.tc-search-ready .tc-brand { text-align: left; }
 .tc-search-toggle:not([hidden]) { display: grid; width: 44px; height: 48px; padding: 0; place-items: center; color: inherit; border: 0; border-radius: 8px; background: transparent; cursor: pointer; }
 .tc-search-toggle svg { display: block; width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
 .tc-search-ready .tc-all-comparisons { position: relative; grid-column: 4; grid-row: 1; display: grid; width: 44px; min-width: 44px; height: 48px; place-items: center; }
