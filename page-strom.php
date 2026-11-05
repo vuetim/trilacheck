@@ -15,6 +15,7 @@ get_header();
 				<p class="tc-power-eyebrow"><?php esc_html_e( 'Energie vergleichen', 'trilacheck' ); ?></p>
 				<h1><?php esc_html_e( 'Stromtarife vergleichen', 'trilacheck' ); ?></h1>
 				<p class="tc-power-lead"><?php esc_html_e( 'Finde Stromtarife für deinen Wohnort und vergleiche Preise, Laufzeiten und Tarifbedingungen übersichtlich.', 'trilacheck' ); ?></p>
+				<p class="tc-power-saving"><span><?php esc_html_e( 'Bis zu', 'trilacheck' ); ?></span><strong>850 €</strong><b><?php esc_html_e( 'sparen', 'trilacheck' ); ?><sup>1</sup></b></p>
 				<ul class="tc-power-benefits">
 					<li><?php esc_html_e( 'Tarife passend zu Postleitzahl und Verbrauch', 'trilacheck' ); ?></li>
 					<li><?php esc_html_e( 'Kosten und Vertragsdetails im Blick behalten', 'trilacheck' ); ?></li>
@@ -22,11 +23,8 @@ get_header();
 				</ul>
 				<a class="tc-power-hero__cta" href="#stromvergleich"><?php esc_html_e( 'Stromtarife vergleichen', 'trilacheck' ); ?><span aria-hidden="true">→</span></a>
 				<div class="tc-power-banner">
-					<span class="tc-power-banner__label"><?php esc_html_e( 'Anzeige', 'trilacheck' ); ?></span>
 					<a href="https://a.check24.net/misc/click.php?pid=262971&amp;aid=306&amp;deep=stromanbieter-wechseln&amp;cat=1" target="_blank" rel="sponsored noopener" aria-label="<?php esc_attr_e( 'Stromtarife beim Vergleichspartner finden (öffnet in einem neuen Tab)', 'trilacheck' ); ?>">
-						<img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/heroes/trilacheck-hero-strom.webp' ); ?>" alt="" width="1792" height="1024" loading="lazy" decoding="async">
-						<strong><?php esc_html_e( 'Stromtarife vergleichen', 'trilacheck' ); ?></strong>
-						<span><?php esc_html_e( 'Tarif finden', 'trilacheck' ); ?> <span aria-hidden="true">→</span></span>
+						<img src="https://a.check24.net/misc/view.php?pid=262971&amp;aid=306&amp;cat=1" alt="<?php esc_attr_e( 'CHECK24 Stromvergleich – Tarif finden', 'trilacheck' ); ?>" width="728" height="90">
 					</a>
 				</div>
 			</div>
@@ -105,7 +103,7 @@ get_header();
 			<div><strong><?php esc_html_e( 'Bereit für deinen Stromvergleich?', 'trilacheck' ); ?></strong><p><?php esc_html_e( 'Prüfe verfügbare Tarife für deinen Wohnort.', 'trilacheck' ); ?></p></div>
 			<a href="#stromvergleich"><?php esc_html_e( 'Vergleich starten', 'trilacheck' ); ?><span aria-hidden="true">→</span></a>
 		</div>
-		<p class="tc-power-disclaimer"><?php esc_html_e( 'Die tatsächliche Ersparnis hängt unter anderem von Wohnort, Verbrauch, bisherigem Tarif und gewähltem Angebot ab.', 'trilacheck' ); ?></p>
+		<p class="tc-power-disclaimer"><sup>1</sup> <?php esc_html_e( 'Die tatsächliche Ersparnis hängt unter anderem von Wohnort, Verbrauch, bisherigem Tarif und gewähltem Angebot ab.', 'trilacheck' ); ?></p>
 	</div>
 </div>
 
