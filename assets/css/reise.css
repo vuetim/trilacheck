@@ -5,9 +5,9 @@
 .tc-reise-eyebrow, .tc-reise-heading > p { margin: 0 0 5px; color: var(--tc-brand); font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
 .tc-reise-hero h1 { max-width: 760px; margin: 0; font-size: var(--tc-step-3); line-height: 1.08; letter-spacing: -.035em; }
 .tc-reise-hero h1 + p { max-width: 720px; margin: 14px 0 0; color: var(--tc-muted); }
-.tc-reise-hero ul { display: grid; gap: 9px; margin: 0; padding: 16px; list-style: none; border: 1px solid #c9dddb; border-radius: var(--tc-radius); background: rgba(255,255,255,.78); }
-.tc-reise-hero li { position: relative; padding-left: 27px; font-weight: 700; }
-.tc-reise-hero li::before { content: "✓"; position: absolute; left: 0; color: var(--tc-brand); font-weight: 900; }
+.tc-reise-hero__content > ul { display: grid; gap: 9px; margin: 0; padding: 16px; list-style: none; border: 1px solid #c9dddb; border-radius: var(--tc-radius); background: rgba(255,255,255,.78); }
+.tc-reise-hero__content > ul > li { position: relative; padding-left: 27px; font-weight: 700; }
+.tc-reise-hero__content > ul > li::before { content: "✓"; position: absolute; left: 0; color: var(--tc-brand); font-weight: 900; }
 .tc-reise-widget .tc-comparison-widget { margin-top: 26px; }
 
 .tc-operators, .tc-reise-benefits, .tc-reise-content { padding-block: 28px; }
