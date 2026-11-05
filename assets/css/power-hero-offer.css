@@ -1,56 +1,15 @@
-/* Keep the official calculator independent of the clickable photograph. */
-.tc-power-hero .tc-power-hero-offer {
-  position: relative;
-  display: grid;
-  min-width: 0;
-  min-height: 520px;
-  height: auto;
-  padding: 48px 24px 140px;
-  place-items: center;
-}
-.tc-power-hero-offer__photo {
-  position: absolute;
-  inset: 0;
-  display: block;
-}
-.tc-power-hero-offer__photo img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.tc-power-hero-offer__photo:focus-visible {
-  outline: 3px solid var(--tc-accent);
-  outline-offset: -5px;
-}
-.tc-power-hero-offer__label {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  padding: 3px 7px;
-  border-radius: 4px;
-  color: #fff;
-  background: rgba(3, 24, 26, .75);
-  font-size: 11px;
-  line-height: 1.4;
-}
-.tc-power-hero-offer__calculator {
-  position: relative;
-  z-index: 1;
-  width: 324px;
-  max-width: 100%;
-  min-height: 300px;
-  padding: 12px;
-  border-radius: 16px;
-  color: #172f46;
-  background: #fff;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, .22);
-}
-@media (max-width: 759px) {
-  .tc-power-hero .tc-power-hero-offer {
-    min-height: 480px;
-    height: auto;
-    padding: 40px 16px 124px;
-  }
-}
+﻿/* Keep the photograph in the original grid and the calculator over it. */
+#c24pp-power-widget63313[data-whitelabel="yes"] .c24power-logo-wrapper{display:none}
+.tc-power-hero .tc-power-hero-offer{position:relative;min-width:0}
+.tc-power-hero .tc-power-hero-offer>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:70% center}
+.tc-power-hero-offer__calculator{position:absolute;top:calc((100% - 106px)/2);left:50%;z-index:1;transform:translate(-50%,-50%);width:324px;max-width:calc(100% - 32px);padding:12px;border-radius:16px;color:#172f46;background:#fff;box-shadow:0 12px 36px rgba(0,0,0,.22)}
+.tc-power-banner{width:100%;max-width:728px;margin-top:18px}
+.tc-power-banner__label{display:block;margin-bottom:4px;font-size:10px}
+.tc-power-banner>a{position:relative;isolation:isolate;display:flex;min-height:90px;padding:14px 18px;align-items:center;justify-content:space-between;gap:16px;overflow:hidden;border:1px solid rgba(255,255,255,.4);border-radius:10px;color:#fff;text-decoration:none;background:#073b60}
+.tc-power-banner>a::before{position:absolute;z-index:-1;inset:0;content:'';background:linear-gradient(90deg,rgba(4,32,57,.92),rgba(4,32,57,.4))}
+.tc-power-banner img{position:absolute;z-index:-2;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 60%}
+.tc-power-banner strong{font-size:clamp(14px,1.5vw,21px);line-height:1.2}
+.tc-power-banner>a>span{flex-shrink:0;padding:10px 13px;border-radius:6px;color:#073b3d;background:var(--tc-accent);font-size:13px;font-weight:800}
+.tc-power-banner a:focus-visible{outline:3px solid #fff;outline-offset:3px}
+@media(min-width:760px){.tc-power-hero .tc-power-hero__inner{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)}}
+@media(max-width:759px){.tc-power-hero .tc-power-hero-offer{height:440px}.tc-power-banner>a{min-height:82px;padding:12px;gap:10px}.tc-power-banner>a>span{padding:9px;font-size:12px}}

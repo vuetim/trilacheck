@@ -15,21 +15,25 @@ get_header();
 				<p class="tc-power-eyebrow"><?php esc_html_e( 'Energie vergleichen', 'trilacheck' ); ?></p>
 				<h1><?php esc_html_e( 'Stromtarife vergleichen', 'trilacheck' ); ?></h1>
 				<p class="tc-power-lead"><?php esc_html_e( 'Finde Stromtarife für deinen Wohnort und vergleiche Preise, Laufzeiten und Tarifbedingungen übersichtlich.', 'trilacheck' ); ?></p>
-				<p class="tc-power-saving"><span><?php esc_html_e( 'Bis zu', 'trilacheck' ); ?></span><strong>850 €</strong><b><?php esc_html_e( 'sparen', 'trilacheck' ); ?><sup>1</sup></b></p>
 				<ul class="tc-power-benefits">
 					<li><?php esc_html_e( 'Tarife passend zu Postleitzahl und Verbrauch', 'trilacheck' ); ?></li>
 					<li><?php esc_html_e( 'Kosten und Vertragsdetails im Blick behalten', 'trilacheck' ); ?></li>
 					<li><?php esc_html_e( 'Auch Ökostrom-Angebote vergleichen', 'trilacheck' ); ?></li>
 				</ul>
 				<a class="tc-power-hero__cta" href="#stromvergleich"><?php esc_html_e( 'Stromtarife vergleichen', 'trilacheck' ); ?><span aria-hidden="true">→</span></a>
+				<div class="tc-power-banner">
+					<span class="tc-power-banner__label"><?php esc_html_e( 'Anzeige', 'trilacheck' ); ?></span>
+					<a href="https://a.check24.net/misc/click.php?pid=262971&amp;aid=306&amp;deep=stromanbieter-wechseln&amp;cat=1" target="_blank" rel="sponsored noopener" aria-label="<?php esc_attr_e( 'Stromtarife beim Vergleichspartner finden (öffnet in einem neuen Tab)', 'trilacheck' ); ?>">
+						<img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/heroes/trilacheck-hero-strom.webp' ); ?>" alt="" width="1792" height="1024" loading="lazy" decoding="async">
+						<strong><?php esc_html_e( 'Stromtarife vergleichen', 'trilacheck' ); ?></strong>
+						<span><?php esc_html_e( 'Tarif finden', 'trilacheck' ); ?> <span aria-hidden="true">→</span></span>
+					</a>
+				</div>
 			</div>
 			<div class="tc-power-hero__media tc-power-hero-offer">
-				<a class="tc-power-hero-offer__photo" href="https://a.check24.net/misc/click.php?pid=262971&amp;aid=305&amp;deep=stromanbieter-wechseln&amp;cat=1" target="_blank" rel="sponsored noopener" aria-label="<?php esc_attr_e( 'Stromtarife bei CHECK24 vergleichen (öffnet in einem neuen Tab)', 'trilacheck' ); ?>">
-					<img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/heroes/trilacheck-hero-strom.webp' ); ?>" alt="" width="1792" height="1024" fetchpriority="high">
-					<span class="tc-power-hero-offer__label"><?php esc_html_e( 'Anzeige · CHECK24', 'trilacheck' ); ?></span>
-				</a>
+				<img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/heroes/trilacheck-hero-strom.webp' ); ?>" alt="" width="1792" height="1024" fetchpriority="high">
 				<div class="tc-power-hero-offer__calculator" role="region" aria-label="<?php esc_attr_e( 'CHECK24 Strom-Kurzrechner', 'trilacheck' ); ?>">
-					<div id="c24pp-power-widget63313" style="width: 300px; max-width: 100%; min-height: 220px;" data-target="_self" data-whitelabel="no" data-form="https://www.check24.net/strom-vergleich/"></div>
+					<div id="c24pp-power-widget63313" style="width: 300px; max-width: 100%; min-height: 220px;" data-target="_self" data-whitelabel="yes" data-form="https://www.check24.net/strom-vergleich/"></div>
 					<noscript><p><a href="https://a.check24.net/misc/click.php?pid=262971&amp;aid=305&amp;deep=stromanbieter-wechseln&amp;cat=1" rel="sponsored"><?php esc_html_e( 'Stromtarife direkt bei CHECK24 vergleichen', 'trilacheck' ); ?></a></p></noscript>
 				</div>
 			</div>
@@ -101,7 +105,7 @@ get_header();
 			<div><strong><?php esc_html_e( 'Bereit für deinen Stromvergleich?', 'trilacheck' ); ?></strong><p><?php esc_html_e( 'Prüfe verfügbare Tarife für deinen Wohnort.', 'trilacheck' ); ?></p></div>
 			<a href="#stromvergleich"><?php esc_html_e( 'Vergleich starten', 'trilacheck' ); ?><span aria-hidden="true">→</span></a>
 		</div>
-		<p class="tc-power-disclaimer"><sup>1</sup> <?php esc_html_e( 'Die tatsächliche Ersparnis hängt unter anderem von Wohnort, Verbrauch, bisherigem Tarif und gewähltem Angebot ab.', 'trilacheck' ); ?></p>
+		<p class="tc-power-disclaimer"><?php esc_html_e( 'Die tatsächliche Ersparnis hängt unter anderem von Wohnort, Verbrauch, bisherigem Tarif und gewähltem Angebot ab.', 'trilacheck' ); ?></p>
 	</div>
 </div>
 
