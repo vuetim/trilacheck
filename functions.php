@@ -85,6 +85,7 @@ function trilacheck_assets() {
 
 	if ( is_page( 'mobilfunk' ) ) {
 		wp_enqueue_style( 'trilacheck-mobilfunk', $theme_uri . '/assets/css/mobilfunk.css', array( 'trilacheck-base' ), $version( '/assets/css/mobilfunk.css' ) );
+		wp_enqueue_script( 'trilacheck-mobile-allgemein', 'https://files.check24.net/widgets/auto/262971/c24pp-mobileservice-iframe/sim-only-iframe.js', array(), null, true );
 	}
 	if ( is_page( array( 'handytarife-5gb', 'handytarife-15gb', 'handytarife-50gb', 'handytarife-unlimited', 'tarife-fur-junge-leute', 'prepaid-tarife' ) ) ) {
 		wp_enqueue_style( 'trilacheck-mobile-detail', $theme_uri . '/assets/css/mobile-detail.css', array( 'trilacheck-base' ), $version( '/assets/css/mobile-detail.css' ) );
@@ -101,6 +102,10 @@ function trilacheck_assets() {
 		wp_enqueue_style( 'trilacheck-power-hero-offer', $theme_uri . '/assets/css/power-hero-offer.css', array( 'trilacheck-strom', 'trilacheck-check24-power-short' ), $version( '/assets/css/power-hero-offer.css' ) );
 		$power_widget = is_page( 'oekostrom' ) ? '36586' : '63313';
 		wp_enqueue_script( 'trilacheck-check24-power-short', 'https://files.check24.net/widgets/262971/c24pp-power-widget' . $power_widget . '/power.js', array(), null, array( 'in_footer' => true, 'strategy' => 'async' ) );
+		if ( is_page( 'strom' ) ) {
+			wp_enqueue_script( 'trilacheck-energy-conversions', $theme_uri . '/assets/js/energy-conversions.js', array(), $version( '/assets/js/energy-conversions.js' ), true );
+			wp_enqueue_script( 'trilacheck-power-comparison', 'https://files.check24.net/widgets/auto/262971/c24pp-power-iframe/power-iframe.js', array( 'trilacheck-energy-conversions' ), null, true );
+		}
 		if ( is_page( 'oekostrom' ) ) {
 			wp_enqueue_style( 'trilacheck-oekostrom', $theme_uri . '/assets/css/oekostrom.css', array( 'trilacheck-power-hero-offer' ), $version( '/assets/css/oekostrom.css' ) );
 			wp_enqueue_script( 'trilacheck-eco-comparison', 'https://files.check24.net/widgets/auto/262971/c24pp-power-iframe/power-iframe.js', array(), null, true );
@@ -112,12 +117,19 @@ function trilacheck_assets() {
 		wp_enqueue_style( 'trilacheck-power-hero-offer', $theme_uri . '/assets/css/power-hero-offer.css', array( 'trilacheck-gas', 'trilacheck-check24-gas-short' ), $version( '/assets/css/power-hero-offer.css' ) );
 		wp_enqueue_style( 'trilacheck-gas-hero-offer', $theme_uri . '/assets/css/gas-hero-offer.css', array( 'trilacheck-power-hero-offer' ), $version( '/assets/css/gas-hero-offer.css' ) );
 		wp_enqueue_script( 'trilacheck-check24-gas-short', 'https://files.check24.net/widgets/262971/c24pp-gas-widget95444/gas.js', array(), null, array( 'in_footer' => true, 'strategy' => 'async' ) );
+		wp_enqueue_script( 'trilacheck-energy-conversions', $theme_uri . '/assets/js/energy-conversions.js', array(), $version( '/assets/js/energy-conversions.js' ), true );
+		wp_enqueue_script( 'trilacheck-gas-comparison', 'https://files.check24.net/widgets/auto/262971/c24pp-gas-iframe/gas-iframe.js', array( 'trilacheck-energy-conversions' ), null, true );
 	}
 	if ( is_page( 'dsl' ) ) {
 		wp_enqueue_style( 'trilacheck-dsl', $theme_uri . '/assets/css/dsl.css', array( 'trilacheck-base' ), $version( '/assets/css/dsl.css' ) );
+		wp_enqueue_script( 'trilacheck-dsl-comparison', 'https://files.check24.net/widgets/auto/262971/c24pp-dsl-iframe/dsl-iframe.js', array(), null, true );
+	}
+	if ( is_page( array( 'strom', 'gas', 'dsl', 'mobilfunk', 'oekostrom', 'mietwagen' ) ) ) {
+		wp_enqueue_style( 'trilacheck-direct-widgets', $theme_uri . '/assets/css/comparison-widgets.css', array( 'trilacheck-base' ), $version( '/assets/css/comparison-widgets.css' ) );
 	}
 	if ( is_page( 'mietwagen' ) ) {
 		wp_enqueue_style( 'trilacheck-rentalcar', $theme_uri . '/assets/css/rentalcar.css', array( 'trilacheck-base' ), $version( '/assets/css/rentalcar.css' ) );
+		wp_enqueue_script( 'trilacheck-rentalcar-comparison', 'https://files.check24.net/widgets/auto/262971/c24pp-rentalcar-iframe/rentalcar-iframe.js', array(), null, true );
 	}
 	if ( is_page( 'girokonto' ) ) {
 		wp_enqueue_style( 'trilacheck-giro', $theme_uri . '/assets/css/girokonto.css', array( 'trilacheck-base' ), $version( '/assets/css/girokonto.css' ) );

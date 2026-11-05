@@ -32,7 +32,7 @@ get_header();
 			<h2 id="tc-dsl-widget-title"><?php esc_html_e('DSL- und Internettarife vergleichen', 'trilacheck'); ?>
 			</h2>
 			<span><?php esc_html_e('Adresse eingeben, verfügbare Geschwindigkeiten prüfen und passende Angebote vergleichen.', 'trilacheck'); ?></span>
-		</div><?php echo do_shortcode('[trilacheck_dsl]'); ?>
+		</div><?php get_template_part( 'template-parts/direct-comparison', null, array( 'type' => 'dsl' ) ); ?>
 	</section>
 	<section class="tc-container tc-dsl-providers" aria-labelledby="tc-dsl-providers-title">
 		<div>

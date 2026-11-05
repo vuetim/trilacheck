@@ -33,7 +33,7 @@ get_header();
 	</header>
 	<section id="gasvergleich" class="tc-container tc-gas-widget" aria-labelledby="tc-gas-widget-title">
 		<div class="tc-gas-heading"><p><?php esc_html_e( 'Kostenlos vergleichen', 'trilacheck' ); ?></p><h2 id="tc-gas-widget-title"><?php esc_html_e( 'Gasvergleich starten', 'trilacheck' ); ?></h2><span><?php esc_html_e( 'Postleitzahl, Wohnfläche oder Jahresverbrauch eingeben und verfügbare Tarife prüfen.', 'trilacheck' ); ?></span></div>
-		<?php echo do_shortcode( '[trilacheck_gas]' ); ?>
+		<?php get_template_part( 'template-parts/direct-comparison', null, array( 'type' => 'gas' ) ); ?>
 	</section>
 	<section class="tc-container tc-gas-providers" aria-labelledby="tc-gas-providers-title">
 		<div><p><?php esc_html_e( 'Anbieterauswahl', 'trilacheck' ); ?></p><h2 id="tc-gas-providers-title"><?php esc_html_e( 'Zahlreiche Gasanbieter vergleichen', 'trilacheck' ); ?></h2></div>

@@ -29,7 +29,7 @@ get_header();
 	</header>
 
 	<div class="tc-container tc-mobile-widget">
-		<?php echo do_shortcode( '[trilacheck_mobile data="allgemein"]' ); ?>
+		<?php get_template_part( 'template-parts/direct-comparison', null, array( 'type' => 'mobile' ) ); ?>
 	</div>
 
 	<section class="tc-container tc-data-shortcuts" aria-labelledby="tc-data-shortcuts-title">

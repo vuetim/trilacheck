@@ -1,0 +1,53 @@
+.tc-entry__content:has(.tc-comparison-widget) {
+  max-width: none;
+}
+
+.tc-comparison-widget {
+  width: min(100%, 1200px);
+  margin: 28px auto 44px;
+}
+
+.tc-affiliate-notice {
+  margin: 0 0 12px;
+  padding: 10px 13px;
+  color: #4d5b5d;
+  border-left: 3px solid #0b5052;
+  background: #f4f7f6;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.tc-comparison-widget__frame {
+  width: 100%;
+  min-height: 520px;
+  overflow: visible;
+}
+
+.tc-comparison-widget__frame > div {
+  width: 100% !important;
+  max-width: 100%;
+}
+
+.tc-comparison-widget__frame iframe {
+  display: block;
+  width: 100% !important;
+  max-width: 100% !important;
+  border: 0;
+}
+
+.tc-widget-error {
+  padding: 12px;
+  color: #8a1c1c;
+  border: 1px solid #efc5c5;
+  background: #fff4f4;
+}
+
+@media (max-width: 767px) {
+  .tc-comparison-widget {
+    margin-block: 20px 32px;
+  }
+
+  .tc-comparison-widget__frame {
+    min-height: 640px;
+  }
+}

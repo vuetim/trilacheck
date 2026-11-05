@@ -48,7 +48,11 @@ get_header();
 			<h2 id="tc-power-widget-title"><?php esc_html_e( 'Stromvergleich starten', 'trilacheck' ); ?></h2>
 			<span><?php esc_html_e( 'Postleitzahl und Jahresverbrauch eingeben, Angebote prüfen und den passenden Tarif auswählen.', 'trilacheck' ); ?></span>
 		</div>
-		<?php echo do_shortcode( '[trilacheck_power]' ); ?>
+		<section class="tc-comparison-widget tc-comparison-widget--power" aria-label="<?php esc_attr_e( 'Stromtarife vergleichen', 'trilacheck' ); ?>">
+			<p class="tc-affiliate-notice">Kostenhinweis: Der Vergleich ist für dich kostenlos. Wir berechnen keine zusätzlichen Gebühren. Bei Vertragsabschluss können wir eine Provision vom Anbieter erhalten.</p>
+			<div class="tc-comparison-widget__frame"><div style="width:100%" id="c24pp-power-iframe" data-scrollto="begin"></div></div>
+			<noscript><p>Bitte aktiviere JavaScript, um den Stromvergleich zu verwenden.</p></noscript>
+		</section>
 	</section>
 
 	<div class="tc-container tc-power-content">
