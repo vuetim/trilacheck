@@ -7,6 +7,35 @@
 
 defined( 'ABSPATH' ) || exit;
 
+/** Include the published eco comparison in configured navigation, once. */
+function trilacheck_eco_menu_link( $items, $args ) {
+	if ( ! in_array( $args->theme_location ?? '', array( 'primary', 'quick_links', 'footer' ), true ) ) {
+		return $items;
+	}
+	$page = get_page_by_path( 'oekostrom' );
+	if ( ! $page || 'publish' !== $page->post_status ) {
+		return $items;
+	}
+	$url = get_permalink( $page->ID );
+	$path = untrailingslashit( wp_parse_url( $url, PHP_URL_PATH ) ?? '' );
+	preg_match_all( '/\bhref=([\'"])(.*?)\1/i', $items, $links );
+	foreach ( $links[2] as $link ) {
+		$link_path = wp_parse_url( html_entity_decode( $link, ENT_QUOTES, 'UTF-8' ), PHP_URL_PATH );
+		if ( untrailingslashit( $link_path ?? '' ) === $path ) {
+			return $items;
+		}
+	}
+	$active = is_page( $page->ID );
+	return $items . sprintf(
+		'<li class="menu-item%1$s"><a href="%2$s"%3$s>%4$s</a></li>',
+		$active ? ' current-menu-item' : '',
+		esc_url( $url ),
+		$active ? ' aria-current="page"' : '',
+		esc_html__( 'Ökostrom', 'trilacheck' )
+	);
+}
+add_filter( 'wp_nav_menu_items', 'trilacheck_eco_menu_link', 10, 2 );
+
 /** Category candidates are ordered from specific to broader existing topics. */
 function trilacheck_comparison_categories() {
 	return array(

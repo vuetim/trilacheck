@@ -22,12 +22,15 @@ get_header();
 				<a class="tc-power-hero__cta" href="#oekostromvergleich">Ökostrom vergleichen <span aria-hidden="true">→</span></a>
 				<div class="tc-power-banner">
 					<a href="https://a.check24.net/misc/click.php?pid=262971&amp;aid=122&amp;deep=oekostrom" target="_blank" rel="sponsored noopener" aria-label="Ökostrom beim Vergleichspartner finden (öffnet in einem neuen Tab)">
-						<img src="https://a.check24.net/misc/view.php?pid=262971&amp;aid=122&amp;cat=5" alt="CHECK24 Ökostromvergleich – Tarife finden" width="728" height="90">
+						<img src="<?php echo esc_url( get_theme_file_uri( '/assets/images/heroes/trilacheck-oekostrom-solar-wind-900.jpg' ) ); ?>" alt="" width="900" height="450" decoding="async">
+						<strong class="tc-power-banner__title">Ökostrom vergleichen</strong>
+						<span class="tc-power-banner__saving"><span>Bis zu</span><strong>850 €</strong><span>sparen<sup>1</sup></span></span>
+						<span class="tc-power-banner__button">Tarif finden</span>
 					</a>
 				</div>
 			</div>
 			<div class="tc-power-hero__media tc-power-hero-offer">
-				<img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/heroes/trilacheck-hero-strom.webp' ); ?>" alt="" width="1792" height="1024" fetchpriority="high">
+				<img src="<?php echo esc_url( get_theme_file_uri( '/assets/images/heroes/trilacheck-oekostrom-solar-wind.jpg' ) ); ?>" srcset="<?php echo esc_url( get_theme_file_uri( '/assets/images/heroes/trilacheck-oekostrom-solar-wind-900.jpg' ) ); ?> 900w, <?php echo esc_url( get_theme_file_uri( '/assets/images/heroes/trilacheck-oekostrom-solar-wind.jpg' ) ); ?> 1774w" sizes="(max-width: 759px) 100vw, 50vw" alt="Solarmodule und Windkraftanlagen zur Stromerzeugung aus erneuerbaren Energien" width="1774" height="887" fetchpriority="high" decoding="async">
 				<div class="tc-power-hero-offer__calculator" role="region" aria-label="Ökostrom-Kurzrechner">
 					<div id="c24pp-power-widget36586" style="width:300px;max-width:100%;min-height:220px" data-target="_self" data-whitelabel="yes" data-form="https://www.check24.net/oekostrom-vergleich/" data-eco="yes"></div>
 					<noscript><p><a href="https://a.check24.net/misc/click.php?pid=262971&amp;aid=122&amp;deep=oekostrom" rel="sponsored">Ökostrom direkt beim Partner vergleichen</a></p></noscript>
@@ -63,6 +66,7 @@ get_header();
 		</section>
 		<div class="tc-power-final-cta"><div><h2>Passenden Ökostromtarif finden</h2><p>Preise und Umweltkriterien gemeinsam betrachten.</p></div><a href="#oekostromvergleich">Zum Ökostromvergleich <span aria-hidden="true">→</span></a></div>
 		<p>Für einen breiteren Überblick kannst du auch <a href="<?php echo esc_url( home_url( '/strom/' ) ); ?>">alle Stromtarife vergleichen</a>.</p>
+		<p class="tc-power-disclaimer"><sup>1</sup> Die beworbene Ersparnis ist ein mögliches Vergleichsbeispiel, keine Zusage für deinen Haushalt. Die tatsächliche Ersparnis hängt von Wohnort, Verbrauch, bisherigem Tarif und gewähltem Angebot ab.</p>
 	</div>
 </div>
 <?php get_footer(); ?>
