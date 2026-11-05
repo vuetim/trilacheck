@@ -148,6 +148,14 @@ function trilacheck_assets() {
 		wp_enqueue_style( 'trilacheck-insurance-accordion', $theme_uri . '/assets/css/insurance-accordion.css', array( 'trilacheck-insurance' ), $version( '/assets/css/insurance-accordion.css' ) );
 		wp_enqueue_script( 'trilacheck-insurance', $theme_uri . '/assets/js/insurance.js', array(), $version( '/assets/js/insurance.js' ), true );
 	}
+	if ( is_page( 'auto-fahrzeuge' ) ) {
+		wp_enqueue_style( 'trilacheck-comparison-widgets', $theme_uri . '/assets/css/comparison-widgets.css', array(), $version( '/assets/css/comparison-widgets.css' ) );
+		wp_enqueue_script( 'trilacheck-kfz-comparison', 'https://form.partner-versicherung.de/widgets/180718/tcpp-iframe-kfz/kfz-iframe.js', array(), null, true );
+		wp_enqueue_script( 'trilacheck-motorcycle-comparison', 'https://form.partner-versicherung.de/widgets/180718/tcpp-iframe-mot/mot-iframe.js', array(), null, true );
+		wp_enqueue_style( 'trilacheck-kfz-short', 'https://form.partner-versicherung.de/widgets/kfz-widget.css', array(), null );
+		wp_enqueue_style( 'trilacheck-kfz-hero', $theme_uri . '/assets/css/kfz-hero-offer.css', array( 'trilacheck-insurance', 'trilacheck-kfz-short' ), $version( '/assets/css/kfz-hero-offer.css' ) );
+		wp_enqueue_script( 'trilacheck-kfz-short', 'https://form.partner-versicherung.de/widgets/180718/tcpp-widget-kfz/kfz-widget.js', array(), null, true );
+	}
 	if ( is_page( 'versicherungen' ) ) {
 		wp_enqueue_style( 'trilacheck-insurance-hub', $theme_uri . '/assets/css/insurance-hub.css', array( 'trilacheck-insurance' ), $version( '/assets/css/insurance-hub.css' ) );
 	}
