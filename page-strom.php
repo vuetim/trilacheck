@@ -24,7 +24,10 @@ get_header();
 				<a class="tc-power-hero__cta" href="#stromvergleich"><?php esc_html_e( 'Stromtarife vergleichen', 'trilacheck' ); ?><span aria-hidden="true">→</span></a>
 				<div class="tc-power-banner">
 					<a href="https://a.check24.net/misc/click.php?pid=262971&amp;aid=306&amp;deep=stromanbieter-wechseln&amp;cat=1" target="_blank" rel="sponsored noopener" aria-label="<?php esc_attr_e( 'Stromtarife beim Vergleichspartner finden (öffnet in einem neuen Tab)', 'trilacheck' ); ?>">
-						<img src="https://a.check24.net/misc/view.php?pid=262971&amp;aid=306&amp;cat=1" alt="<?php esc_attr_e( 'CHECK24 Stromvergleich – Tarif finden', 'trilacheck' ); ?>" width="728" height="90">
+						<img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/heroes/trilacheck-hero-strom.webp' ); ?>" alt="" width="1792" height="1024" decoding="async">
+						<strong class="tc-power-banner__title"><?php esc_html_e( 'Stromtarife vergleichen', 'trilacheck' ); ?></strong>
+						<span class="tc-power-banner__saving"><span><?php esc_html_e( 'Bis zu', 'trilacheck' ); ?></span><strong>850 €</strong><span><?php esc_html_e( 'sparen', 'trilacheck' ); ?><sup>1</sup></span></span>
+						<span class="tc-power-banner__button"><?php esc_html_e( 'Tarif finden', 'trilacheck' ); ?></span>
 					</a>
 				</div>
 			</div>
