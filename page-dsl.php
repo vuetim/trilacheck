@@ -40,9 +40,7 @@ get_header();
 			<h2 id="tc-dsl-providers-title">
 				<?php esc_html_e('Zahlreiche Internetanbieter vergleichen', 'trilacheck'); ?></h2>
 		</div>
-		<div class="tc-dsl-providers__track" role="list"><span role="listitem">swb</span><span
-				role="listitem">Vodafone</span><span role="listitem">Telekom</span><span
-				role="listitem">1&amp;1</span><span role="listitem">O2</span><span role="listitem">PYUR</span></div>
+		<div class="tc-dsl-providers__track" role="list"><?php get_template_part( 'template-parts/provider-logos', null, array( 'group' => 'dsl' ) ); ?></div>
 	</section>
 	<div class="tc-container tc-dsl-content">
 		<section>

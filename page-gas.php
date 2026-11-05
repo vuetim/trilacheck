@@ -23,7 +23,7 @@ get_header();
 	</section>
 	<section class="tc-container tc-gas-providers" aria-labelledby="tc-gas-providers-title">
 		<div><p><?php esc_html_e( 'Anbieterauswahl', 'trilacheck' ); ?></p><h2 id="tc-gas-providers-title"><?php esc_html_e( 'Zahlreiche Gasanbieter vergleichen', 'trilacheck' ); ?></h2></div>
-		<div class="tc-gas-providers__track" role="list"><span role="listitem">Vattenfall</span><span role="listitem">E.ON</span><span role="listitem">eprimo</span><span role="listitem">MAINGAU</span><span role="listitem">ENTEGA</span><span role="listitem">Yello</span></div>
+		<div class="tc-gas-providers__track" role="list"><?php get_template_part( 'template-parts/provider-logos', null, array( 'group' => 'gas' ) ); ?></div>
 	</section>
 	<div class="tc-container tc-gas-content">
 		<section aria-labelledby="tc-gas-costs-title">
