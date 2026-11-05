@@ -23,8 +23,15 @@ get_header();
 				</ul>
 				<a class="tc-power-hero__cta" href="#stromvergleich"><?php esc_html_e( 'Stromtarife vergleichen', 'trilacheck' ); ?><span aria-hidden="true">→</span></a>
 			</div>
-			<div class="tc-power-hero__media" aria-hidden="true">
-				<img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/heroes/trilacheck-hero-strom.webp' ); ?>" alt="" width="1792" height="1024" fetchpriority="high">
+			<div class="tc-power-hero__media tc-power-hero-offer">
+				<a class="tc-power-hero-offer__photo" href="https://a.check24.net/misc/click.php?pid=262971&amp;aid=305&amp;deep=stromanbieter-wechseln&amp;cat=1" target="_blank" rel="sponsored noopener" aria-label="<?php esc_attr_e( 'Stromtarife bei CHECK24 vergleichen (öffnet in einem neuen Tab)', 'trilacheck' ); ?>">
+					<img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/heroes/trilacheck-hero-strom.webp' ); ?>" alt="" width="1792" height="1024" fetchpriority="high">
+					<span class="tc-power-hero-offer__label"><?php esc_html_e( 'Anzeige · CHECK24', 'trilacheck' ); ?></span>
+				</a>
+				<div class="tc-power-hero-offer__calculator" role="region" aria-label="<?php esc_attr_e( 'CHECK24 Strom-Kurzrechner', 'trilacheck' ); ?>">
+					<div id="c24pp-power-widget63313" style="width: 300px; max-width: 100%; min-height: 220px;" data-target="_self" data-whitelabel="no" data-form="https://www.check24.net/strom-vergleich/"></div>
+					<noscript><p><a href="https://a.check24.net/misc/click.php?pid=262971&amp;aid=305&amp;deep=stromanbieter-wechseln&amp;cat=1" rel="sponsored"><?php esc_html_e( 'Stromtarife direkt bei CHECK24 vergleichen', 'trilacheck' ); ?></a></p></noscript>
+				</div>
 			</div>
 		</div>
 	<?php get_template_part( 'template-parts/comparison-trust' ); ?>
