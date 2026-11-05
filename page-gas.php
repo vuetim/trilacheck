@@ -12,8 +12,22 @@ get_header();
 				<div class="tc-gas-saving"><span><?php esc_html_e( 'Bis zu', 'trilacheck' ); ?></span><strong>1.250 €</strong><b><?php esc_html_e( 'sparen', 'trilacheck' ); ?><sup>1</sup></b></div>
 				<ul><li><?php esc_html_e( 'Mehr als 850 Gasanbieter im Vergleich', 'trilacheck' ); ?></li><li><?php esc_html_e( 'Bis zu 290 € Sofortbonus möglich', 'trilacheck' ); ?><sup>1</sup></li><li><?php esc_html_e( 'Laufzeit und Preisgarantie vergleichen', 'trilacheck' ); ?></li></ul>
 				<a href="#gasvergleich"><?php esc_html_e( 'Gastarife vergleichen', 'trilacheck' ); ?><span aria-hidden="true">→</span></a>
+				<div class="tc-power-banner">
+					<a href="https://a.check24.net/misc/click.php?pid=262971&amp;aid=317&amp;deep=gasanbieter-wechseln&amp;cat=3" target="_blank" rel="sponsored noopener" aria-label="<?php esc_attr_e( 'Gastarife beim Vergleichspartner finden (öffnet in einem neuen Tab)', 'trilacheck' ); ?>">
+						<img src="<?php echo esc_url( get_theme_file_uri( '/assets/images/heroes/trilacheck-hero-gas.webp' ) ); ?>" alt="" width="1792" height="1024" decoding="async">
+						<strong class="tc-power-banner__title"><?php esc_html_e( 'Gastarife vergleichen', 'trilacheck' ); ?></strong>
+						<span class="tc-power-banner__saving"><span><?php esc_html_e( 'Bis zu', 'trilacheck' ); ?></span><strong>1.250 €</strong><span><?php esc_html_e( 'sparen', 'trilacheck' ); ?><sup>1</sup></span></span>
+						<span class="tc-power-banner__button"><?php esc_html_e( 'Tarif finden', 'trilacheck' ); ?></span>
+					</a>
+				</div>
 			</div>
-			<div class="tc-gas-hero__media" aria-hidden="true"><img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/heroes/trilacheck-hero-gas.webp' ); ?>" alt="" width="1792" height="1024" fetchpriority="high"></div>
+			<div class="tc-gas-hero__media tc-gas-hero-offer">
+				<img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/heroes/trilacheck-hero-gas.webp' ); ?>" alt="" width="1792" height="1024" fetchpriority="high">
+				<div class="tc-power-hero-offer__calculator" role="region" aria-label="<?php esc_attr_e( 'Gas-Kurzrechner', 'trilacheck' ); ?>">
+					<div id="c24pp-gas-widget95444" style="width:300px;max-width:100%;min-height:220px" data-target="_self" data-whitelabel="yes" data-form="https://www.check24.net/gasanbieter-vergleich/"></div>
+					<noscript><p><a href="https://a.check24.net/misc/click.php?pid=262971&amp;aid=317&amp;deep=gasanbieter-wechseln&amp;cat=3" rel="sponsored"><?php esc_html_e( 'Gastarife direkt beim Partner vergleichen', 'trilacheck' ); ?></a></p></noscript>
+				</div>
+			</div>
 		</div>
 	<?php get_template_part( 'template-parts/comparison-trust' ); ?>
 	</header>

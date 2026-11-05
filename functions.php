@@ -108,6 +108,10 @@ function trilacheck_assets() {
 	}
 	if ( is_page( 'gas' ) ) {
 		wp_enqueue_style( 'trilacheck-gas', $theme_uri . '/assets/css/gas.css', array( 'trilacheck-base' ), $version( '/assets/css/gas.css' ) );
+		wp_enqueue_style( 'trilacheck-check24-gas-short', 'https://files.check24.net/widgets/gas.css', array(), null );
+		wp_enqueue_style( 'trilacheck-power-hero-offer', $theme_uri . '/assets/css/power-hero-offer.css', array( 'trilacheck-gas', 'trilacheck-check24-gas-short' ), $version( '/assets/css/power-hero-offer.css' ) );
+		wp_enqueue_style( 'trilacheck-gas-hero-offer', $theme_uri . '/assets/css/gas-hero-offer.css', array( 'trilacheck-power-hero-offer' ), $version( '/assets/css/gas-hero-offer.css' ) );
+		wp_enqueue_script( 'trilacheck-check24-gas-short', 'https://files.check24.net/widgets/262971/c24pp-gas-widget95444/gas.js', array(), null, array( 'in_footer' => true, 'strategy' => 'async' ) );
 	}
 	if ( is_page( 'dsl' ) ) {
 		wp_enqueue_style( 'trilacheck-dsl', $theme_uri . '/assets/css/dsl.css', array( 'trilacheck-base' ), $version( '/assets/css/dsl.css' ) );

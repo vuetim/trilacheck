@@ -1,0 +1,7 @@
+#c24pp-gas-widget95444[data-whitelabel="yes"] .c24gas-logo-wrapper{display:none}
+.tc-gas-hero .tc-gas-hero-offer{position:relative;min-width:0}
+.tc-gas-hero .tc-gas-hero-offer>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:70% center}
+.tc-gas-page .tc-power-banner__saving strong{font-size:24px}
+@media(min-width:760px){.tc-gas-hero .tc-gas-hero__inner{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)}}
+@media(max-width:759px){.tc-gas-hero .tc-gas-hero-offer{height:440px}}
+@media(max-width:479px){.tc-gas-page .tc-power-banner__saving strong{font-size:17px}}
