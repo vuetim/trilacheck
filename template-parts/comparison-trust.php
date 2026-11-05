@@ -7,6 +7,7 @@ $tc_page = get_queried_object();
 $tc_topics = array(
 	'gas' => 'Gastarife und Preise vergleichen',
 	'strom' => 'Stromtarife und Preise vergleichen',
+	'oekostrom' => 'Ökostromtarife und Bedingungen vergleichen',
 	'dsl' => 'Internetangebote transparent vergleichen',
 	'mobilfunk' => 'Passende Handytarife vergleichen',
 	'handy-mit-vertrag' => 'Handys und Vertragskosten vergleichen',

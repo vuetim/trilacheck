@@ -12,6 +12,7 @@ function trilacheck_comparison_categories() {
 	return array(
 		'gas'                       => array( 'gas' ),
 		'strom'                     => array( 'strom' ),
+		'oekostrom'                 => array( 'oekostrom', 'strom' ),
 		'dsl'                       => array( 'dsl' ),
 		'mobilfunk'                 => array( 'mobilfunk', 'internet-mobilfunk' ),
 		'handy-mit-vertrag'          => array( 'handy-mit-vertrag', 'mobilfunk', 'internet-mobilfunk' ),

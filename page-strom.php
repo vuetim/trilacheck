@@ -52,6 +52,7 @@ get_header();
 	</section>
 
 	<div class="tc-container tc-power-content">
+		<p><a href="<?php echo esc_url( home_url( '/oekostrom/' ) ); ?>"><?php esc_html_e( 'Gezielt Ökostromtarife vergleichen und Herkunft prüfen', 'trilacheck' ); ?></a></p>
 		<section aria-labelledby="tc-power-costs-title">
 			<h2 id="tc-power-costs-title"><?php esc_html_e( 'Stromkosten berechnen – so setzt sich der Strompreis zusammen', 'trilacheck' ); ?></h2>
 			<p><?php esc_html_e( 'Die jährlichen Stromkosten ergeben sich aus dem Verbrauch, dem Arbeitspreis pro Kilowattstunde (kWh) und dem festen Grundpreis.', 'trilacheck' ); ?></p>

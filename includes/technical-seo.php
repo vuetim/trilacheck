@@ -15,6 +15,7 @@ function trilacheck_missing_seo_description( $description ) {
 	if ( is_singular() ) {
 		$page = get_queried_object();
 		$defaults = array(
+			'oekostrom' => 'Ökostromtarife nach Postleitzahl und Verbrauch vergleichen. Herkunftsnachweise, Ökostromlabels, Vertragskosten und Bedingungen vor dem Wechsel prüfen.',
 			'cookies' => 'Informationen zu Cookies und ähnlichen Technologien auf TrilaCheck.de. Erfahre, wie du deine Cookie-Einstellungen verwalten kannst.',
 			'vertrag-kuendigen' => 'Verträge kündigen: Hinweise zu Laufzeiten, Fristen und Kündigungswegen. Prüfe vor dem Anbieterwechsel die Bedingungen deines Vertrags.',
 			'gasvergleich-2026-worauf-sollte-man-beim-gastarif-achten' => 'Gastarife vergleichen: Arbeitspreis, Grundpreis, Preisgarantie und Bonusbedingungen prüfen. Ratgeber zum Gasvergleich und Anbieterwechsel.',

@@ -2,7 +2,7 @@
 /** All comparisons hub. @package Trilacheck */
 get_header();
 $groups = array(
-	array( 'class'=>'energy', 'title'=>'Energie', 'text'=>'Tarife für dein Zuhause vergleichen.', 'links'=>array( 'Strom vergleichen'=>'/strom/', 'Gas vergleichen'=>'/gas/' ) ),
+	array( 'class'=>'energy', 'title'=>'Energie', 'text'=>'Tarife für dein Zuhause vergleichen.', 'links'=>array( 'Strom vergleichen'=>'/strom/', 'Ökostrom vergleichen'=>'/oekostrom/', 'Gas vergleichen'=>'/gas/' ) ),
 	array( 'class'=>'mobile', 'title'=>'Internet & Mobilfunk', 'text'=>'Internet, SIM-Tarife und Smartphone-Verträge finden.', 'links'=>array( 'DSL & Internet'=>'/dsl/', 'Alle Handytarife'=>'/mobilfunk/', '5 GB Tarife'=>'/handytarife-5gb/', '15 GB Tarife'=>'/handytarife-15gb/', '50 GB Tarife'=>'/handytarife-50gb/', 'Unlimited Tarife'=>'/handytarife-unlimited/', 'Tarife für junge Leute'=>'/tarife-fur-junge-leute/', 'Prepaid-Tarife'=>'/prepaid-tarife/', 'Handy mit Vertrag'=>'/handy-mit-vertrag/' ) ),
 	array( 'class'=>'travel', 'title'=>'Reisen & Mobilität', 'text'=>'Urlaub planen und unterwegs flexibel bleiben.', 'links'=>array( 'Reisen vergleichen'=>'/reise/', 'Mietwagen vergleichen'=>'/mietwagen/' ) ),
 	array( 'class'=>'finance', 'title'=>'Finanzen', 'text'=>'Kontomodelle und Konditionen übersichtlich prüfen.', 'links'=>array( 'Girokonto vergleichen'=>'/girokonto/' ) ),

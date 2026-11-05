@@ -95,11 +95,16 @@ function trilacheck_assets() {
 		wp_enqueue_style( 'trilacheck-handy-vertrag', $theme_uri . '/assets/css/handy-vertrag.css', array( 'trilacheck-base' ), $version( '/assets/css/handy-vertrag.css' ) );
 	}
 
-	if ( is_page( 'strom' ) ) {
+	if ( is_page( array( 'strom', 'oekostrom' ) ) ) {
 		wp_enqueue_style( 'trilacheck-strom', $theme_uri . '/assets/css/strom.css', array( 'trilacheck-base' ), $version( '/assets/css/strom.css' ) );
 		wp_enqueue_style( 'trilacheck-check24-power-short', 'https://files.check24.net/widgets/power.css', array(), null );
 		wp_enqueue_style( 'trilacheck-power-hero-offer', $theme_uri . '/assets/css/power-hero-offer.css', array( 'trilacheck-strom', 'trilacheck-check24-power-short' ), $version( '/assets/css/power-hero-offer.css' ) );
-		wp_enqueue_script( 'trilacheck-check24-power-short', 'https://files.check24.net/widgets/262971/c24pp-power-widget63313/power.js', array(), null, array( 'in_footer' => true, 'strategy' => 'async' ) );
+		$power_widget = is_page( 'oekostrom' ) ? '36586' : '63313';
+		wp_enqueue_script( 'trilacheck-check24-power-short', 'https://files.check24.net/widgets/262971/c24pp-power-widget' . $power_widget . '/power.js', array(), null, array( 'in_footer' => true, 'strategy' => 'async' ) );
+		if ( is_page( 'oekostrom' ) ) {
+			wp_enqueue_style( 'trilacheck-oekostrom', $theme_uri . '/assets/css/oekostrom.css', array( 'trilacheck-power-hero-offer' ), $version( '/assets/css/oekostrom.css' ) );
+			wp_enqueue_script( 'trilacheck-eco-comparison', 'https://files.check24.net/widgets/auto/262971/c24pp-power-iframe/power-iframe.js', array(), null, true );
+		}
 	}
 	if ( is_page( 'gas' ) ) {
 		wp_enqueue_style( 'trilacheck-gas', $theme_uri . '/assets/css/gas.css', array( 'trilacheck-base' ), $version( '/assets/css/gas.css' ) );
