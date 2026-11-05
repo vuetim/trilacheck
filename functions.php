@@ -81,6 +81,11 @@ function trilacheck_assets() {
 
 	if ( is_page( 'reise' ) ) {
 		wp_enqueue_style( 'trilacheck-reise', $theme_uri . '/assets/css/reise.css', array( 'trilacheck-base' ), $version( '/assets/css/reise.css' ) );
+		wp_enqueue_style( 'trilacheck-check24-package-short', 'https://files.check24.net/widgets/package.css', array(), null );
+		wp_enqueue_style( 'trilacheck-power-hero-offer', $theme_uri . '/assets/css/power-hero-offer.css', array( 'trilacheck-reise', 'trilacheck-check24-package-short' ), $version( '/assets/css/power-hero-offer.css' ) );
+		wp_enqueue_style( 'trilacheck-reise-hero-offer', $theme_uri . '/assets/css/reise-hero-offer.css', array( 'trilacheck-power-hero-offer' ), $version( '/assets/css/reise-hero-offer.css' ) );
+		wp_enqueue_script( 'trilacheck-check24-package-short', 'https://files.check24.net/widgets/262971/c24pp-package-widget42491/package.js', array(), null, array( 'in_footer' => true, 'strategy' => 'async' ) );
+		wp_enqueue_script( 'trilacheck-package-allgemein', 'https://files.check24.net/widgets/auto/262971/c24pp-package-iframe/package-iframe.js', array(), null, true );
 	}
 
 	if ( is_page( 'mobilfunk' ) ) {
@@ -124,8 +129,12 @@ function trilacheck_assets() {
 		wp_enqueue_style( 'trilacheck-dsl', $theme_uri . '/assets/css/dsl.css', array( 'trilacheck-base' ), $version( '/assets/css/dsl.css' ) );
 		wp_enqueue_script( 'trilacheck-dsl-comparison', 'https://files.check24.net/widgets/auto/262971/c24pp-dsl-iframe/dsl-iframe.js', array(), null, true );
 	}
-	if ( is_page( array( 'strom', 'gas', 'dsl', 'mobilfunk', 'oekostrom', 'mietwagen' ) ) ) {
+	if ( is_page( array( 'strom', 'gas', 'dsl', 'mobilfunk', 'oekostrom', 'mietwagen', 'reise' ) ) ) {
 		wp_enqueue_style( 'trilacheck-direct-widgets', $theme_uri . '/assets/css/comparison-widgets.css', array( 'trilacheck-base' ), $version( '/assets/css/comparison-widgets.css' ) );
+	}
+	if ( is_page( array( 'dsl', 'mobilfunk' ) ) ) {
+		wp_enqueue_style( 'trilacheck-power-hero-offer', $theme_uri . '/assets/css/power-hero-offer.css', array( 'trilacheck-base' ), $version( '/assets/css/power-hero-offer.css' ) );
+		wp_enqueue_style( 'trilacheck-service-banner', $theme_uri . '/assets/css/service-banner.css', array( 'trilacheck-power-hero-offer' ), $version( '/assets/css/service-banner.css' ) );
 	}
 	if ( is_page( 'mietwagen' ) ) {
 		wp_enqueue_style( 'trilacheck-rentalcar', $theme_uri . '/assets/css/rentalcar.css', array( 'trilacheck-base' ), $version( '/assets/css/rentalcar.css' ) );

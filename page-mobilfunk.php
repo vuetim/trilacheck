@@ -20,6 +20,7 @@ get_header();
 					<li><?php esc_html_e( '5G, Laufzeit und Datenvolumen passend auswählen', 'trilacheck' ); ?></li>
 					<li><?php esc_html_e( 'Tarifdetails vor dem Abschluss transparent prüfen', 'trilacheck' ); ?></li>
 				</ul>
+				<?php get_template_part( 'template-parts/service-banner', null, array( 'type' => 'mobile' ) ); ?>
 			</div>
 			<div class="tc-mobile-hero__media" aria-hidden="true">
 				<img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/heroes/trilacheck-hero-handytarife.webp' ); ?>" alt="" width="1792" height="1024" fetchpriority="high">

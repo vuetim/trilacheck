@@ -19,6 +19,7 @@ get_header();
 					<li><?php esc_html_e('DSL, Kabel und weitere Anschlussarten prüfen', 'trilacheck'); ?></li>
 				</ul><a href="#dslvergleich"><?php esc_html_e('Internettarife vergleichen', 'trilacheck'); ?><span
 						aria-hidden="true">→</span></a>
+				<?php get_template_part( 'template-parts/service-banner', null, array( 'type' => 'dsl' ) ); ?>
 			</div>
 			<div class="tc-dsl-hero__media" aria-hidden="true"><img
 					src="<?php echo esc_url(get_template_directory_uri() . '/assets/images/heroes/trilacheck-hero-dsl.webp'); ?>"

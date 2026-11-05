@@ -11,22 +11,29 @@ get_header();
 <article class="tc-reise">
 	<header class="tc-reise-hero tc-comparison-hero tc-comparison-hero--plain">
 		<div class="tc-container tc-reise-hero__inner">
-			<div>
+			<div class="tc-reise-hero__content">
 				<p class="tc-reise-eyebrow"><?php esc_html_e( 'Reisen vergleichen', 'trilacheck' ); ?></p>
 				<h1><?php esc_html_e( 'Pauschalreisen vergleichen und Urlaub finden', 'trilacheck' ); ?></h1>
 				<p><?php esc_html_e( 'Vergleiche Reiseangebote für unterschiedliche Ziele, Reisezeiträume und Budgets. Die Buchung erfolgt anschließend beim jeweiligen Anbieter.', 'trilacheck' ); ?></p>
-			</div>
 			<ul aria-label="<?php esc_attr_e( 'Vorteile des Reisevergleichs', 'trilacheck' ); ?>">
 				<li><?php esc_html_e( 'Reiseangebote übersichtlich vergleichen', 'trilacheck' ); ?></li>
 				<li><?php esc_html_e( 'Filter passend zu deinen Reisewünschen', 'trilacheck' ); ?></li>
 				<li><?php esc_html_e( 'Kostenloser Vergleich über unseren Partner', 'trilacheck' ); ?></li>
 			</ul>
+			</div>
+			<div class="tc-reise-hero__media">
+				<img src="<?php echo esc_url( get_theme_file_uri( '/assets/images/heroes/trilacheck-hero-reisen.webp' ) ); ?>" alt="" width="1792" height="1024" fetchpriority="high">
+				<div class="tc-power-hero-offer__calculator" role="region" aria-label="<?php esc_attr_e( 'Pauschalreise-Kurzrechner', 'trilacheck' ); ?>">
+					<div id="c24pp-package-widget42491" style="width:300px;max-width:100%;min-height:250px" data-target="_self" data-whitelabel="yes" data-form="https://www.check24.net/pauschalreisen-vergleich/"></div>
+					<noscript><p><?php esc_html_e( 'Bitte aktiviere JavaScript für den Reisevergleich.', 'trilacheck' ); ?></p></noscript>
+				</div>
+			</div>
 		</div>
 	<?php get_template_part( 'template-parts/comparison-trust' ); ?>
 	</header>
 
 	<div class="tc-container tc-reise-widget">
-		<?php echo do_shortcode( '[trilacheck_package destination="allgemein"]' ); ?>
+		<?php get_template_part( 'template-parts/direct-comparison', null, array( 'type' => 'package' ) ); ?>
 	</div>
 
 	<section class="tc-container tc-operators" aria-labelledby="tc-operators-title">
