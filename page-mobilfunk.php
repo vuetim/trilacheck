@@ -14,7 +14,7 @@ get_header();
 			<div class="tc-mobile-hero__content">
 				<p class="tc-mobile-eyebrow"><?php esc_html_e( 'Mobilfunk', 'trilacheck' ); ?></p>
 				<h1><?php esc_html_e( 'Handytarife im Vergleich', 'trilacheck' ); ?></h1>
-				<p><?php esc_html_e( 'Vergleiche SIM-only-Tarife nach Datenvolumen, Netz, Laufzeit und weiteren Leistungen.', 'trilacheck' ); ?></p>
+				<p><?php esc_html_e( 'Vergleiche SIM-only-Tarife nach Datenvolumen, Netz, Laufzeit und weiteren Leistungen.', 'trilacheck' ); ?></p><?php get_template_part( 'template-parts/comparison-service' ); ?>
 				<ul>
 					<li><?php esc_html_e( 'Tarife verschiedener Mobilfunkanbieter vergleichen', 'trilacheck' ); ?></li>
 					<li><?php esc_html_e( '5G, Laufzeit und Datenvolumen passend auswählen', 'trilacheck' ); ?></li>

@@ -13,7 +13,7 @@ get_header();
 			<div class="tc-power-hero__content">
 				<p class="tc-power-eyebrow">Erneuerbare Energie vergleichen</p>
 				<h1>Ökostromtarife vergleichen</h1>
-				<p class="tc-power-lead">Finde Ökostromangebote für deinen Wohnort und vergleiche Preis, Herkunft und Vertragsbedingungen.</p>
+				<p class="tc-power-lead">Finde Ökostromangebote für deinen Wohnort und vergleiche Preis, Herkunft und Vertragsbedingungen.</p><?php get_template_part( 'template-parts/comparison-service' ); ?>
 				<ul class="tc-power-benefits">
 					<li>Ökostromtarife nach Postleitzahl und Verbrauch prüfen</li>
 					<li>Herkunftsnachweise und zusätzliche Umweltkriterien unterscheiden</li>
@@ -41,7 +41,7 @@ get_header();
 	</header>
 	<section id="oekostromvergleich" class="tc-container tc-power-widget" aria-labelledby="tc-eco-widget-title">
 		<div class="tc-power-heading"><p>Tarife für deinen Haushalt</p><h2 id="tc-eco-widget-title">Deinen Ökostromvergleich starten</h2><span>Postleitzahl und Jahresverbrauch eingeben und die Ökostromauswahl sowie die Tarifdetails im Rechner prüfen.</span></div>
-		<p class="tc-affiliate-notice">Kostenhinweis: Der Vergleich ist für dich kostenlos. Wir berechnen keine zusätzlichen Gebühren. Bei Vertragsabschluss können wir eine Provision vom Anbieter erhalten.</p>
+		<?php get_template_part( 'template-parts/comparison-support' ); ?>
 		<div style="width:100%" id="c24pp-power-iframe" data-scrollto="begin" data-eco="yes"></div>
 		<noscript><p>Bitte aktiviere JavaScript für den Vergleichsrechner oder nutze den <a href="https://a.check24.net/misc/click.php?pid=262971&amp;aid=122&amp;deep=oekostrom" rel="sponsored">Ökostromvergleich beim Partner</a>.</p></noscript>
 	</section>

@@ -12,7 +12,7 @@ get_header();
 		<div class="tc-container">
 			<p><?php esc_html_e( 'Smartphone inklusive', 'trilacheck' ); ?></p>
 			<h1><?php esc_html_e( 'Handy mit Vertrag vergleichen', 'trilacheck' ); ?></h1>
-			<div class="tc-contract-hero__intro"><?php esc_html_e( 'Vergleiche Mobilfunktarife zusammen mit einem Smartphone. Prüfe Gesamtkosten, Datenvolumen, Laufzeit und einmalige Gerätekosten vor dem Abschluss.', 'trilacheck' ); ?></div>
+			<div class="tc-contract-hero__intro"><?php esc_html_e( 'Vergleiche Mobilfunktarife zusammen mit einem Smartphone. Prüfe Gesamtkosten, Datenvolumen, Laufzeit und einmalige Gerätekosten vor dem Abschluss.', 'trilacheck' ); ?></div><?php get_template_part( 'template-parts/comparison-service' ); ?>
 			<ul><li><?php esc_html_e( 'Smartphone und Tarif gemeinsam vergleichen', 'trilacheck' ); ?></li><li><?php esc_html_e( 'Monatliche und einmalige Kosten beachten', 'trilacheck' ); ?></li><li><?php esc_html_e( 'Abschluss beim ausgewählten Anbieter', 'trilacheck' ); ?></li></ul>
 		</div>
 	<?php get_template_part( 'template-parts/comparison-trust' ); ?>

@@ -89,3 +89,15 @@ button, a { -webkit-tap-highlight-color: transparent; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
+
+/* Shared comparison service and help box. */
+.tc-comparison-hero .tc-comparison-service{display:flex;align-items:center;gap:8px;margin:12px 0;font-size:13px;font-weight:600;line-height:1.4;color:inherit}
+.tc-comparison-hero .tc-comparison-service>span{display:inline;color:#e9ad00;font-size:15px;line-height:1;letter-spacing:2px;white-space:nowrap}
+.tc-comparison-hero:not(.tc-comparison-hero--plain) .tc-comparison-service>span{color:#ffdf00}
+.tc-affiliate-notice.tc-comparison-support{padding:20px;margin:0 0 20px;border:1px solid #b9d9d5;border-left:4px solid #0b5052;border-radius:12px;background:#edf7f5;color:#173e40;font-size:14px;line-height:1.65}
+.tc-comparison-support>strong{display:block;margin-bottom:8px;font-size:17px;line-height:1.4}
+.tc-comparison-support>p{margin:0 0 10px}
+.tc-comparison-support>p:last-child{margin-bottom:0}
+.tc-comparison-support a{display:inline-block;padding:5px 10px;border-radius:6px;background:#075052;color:#fff;font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.tc-comparison-support a:focus-visible{outline:3px solid #075052;outline-offset:3px}
+.tc-comparison-support .tc-comparison-support__disclosure{font-size:12px}

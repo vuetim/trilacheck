@@ -8,7 +8,7 @@ get_header();
 			<div class="tc-gas-hero__content">
 				<p class="tc-gas-eyebrow"><?php esc_html_e( 'Energie vergleichen', 'trilacheck' ); ?></p>
 				<h1><?php esc_html_e( 'Gastarife vergleichen', 'trilacheck' ); ?></h1>
-				<p class="tc-gas-lead"><?php esc_html_e( 'Gasangebote für deinen Wohnort vergleichen und Tarifdetails transparent prüfen.', 'trilacheck' ); ?></p>
+				<p class="tc-gas-lead"><?php esc_html_e( 'Gasangebote für deinen Wohnort vergleichen und Tarifdetails transparent prüfen.', 'trilacheck' ); ?></p><?php get_template_part( 'template-parts/comparison-service' ); ?>
 				<div class="tc-gas-saving"><span><?php esc_html_e( 'Bis zu', 'trilacheck' ); ?></span><strong>1.250 €</strong><b><?php esc_html_e( 'sparen', 'trilacheck' ); ?><sup>1</sup></b></div>
 				<ul><li><?php esc_html_e( 'Mehr als 850 Gasanbieter im Vergleich', 'trilacheck' ); ?></li><li><?php esc_html_e( 'Bis zu 290 € Sofortbonus möglich', 'trilacheck' ); ?><sup>1</sup></li><li><?php esc_html_e( 'Laufzeit und Preisgarantie vergleichen', 'trilacheck' ); ?></li></ul>
 				<a href="#gasvergleich"><?php esc_html_e( 'Gastarife vergleichen', 'trilacheck' ); ?><span aria-hidden="true">→</span></a>

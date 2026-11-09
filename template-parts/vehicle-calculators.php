@@ -3,7 +3,7 @@
 defined( 'ABSPATH' ) || exit;
 ?>
 <section class="tc-insurance-calculators" aria-label="<?php esc_attr_e( 'Fahrzeugversicherungen vergleichen', 'trilacheck' ); ?>">
-	<p class="tc-affiliate-notice"><?php esc_html_e( 'Kostenhinweis: Der Vergleich ist für dich kostenlos. Wir berechnen keine zusätzlichen Gebühren. Bei Vertragsabschluss können wir eine Provision vom Anbieter erhalten.', 'trilacheck' ); ?></p>
+	<?php get_template_part( 'template-parts/comparison-support' ); ?>
 	<details id="kfz-versicherung" class="tc-insurance-calculator tc-insurance-calculator--car">
 		<summary><span><?php esc_html_e( 'Kfz-Versicherung', 'trilacheck' ); ?></span><small><?php esc_html_e( 'Autoversicherung vergleichen', 'trilacheck' ); ?></small></summary>
 		<div class="tc-comparison-widget__frame"><div style="width:100%" id="tcpp-iframe-kfz"></div></div>

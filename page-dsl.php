@@ -10,7 +10,7 @@ get_header();
 				<h1><?php esc_html_e('DSL-Tarife vergleichen', 'trilacheck'); ?></h1>
 				<p class="tc-dsl-lead">
 					<?php esc_html_e('Internetangebote für deine Adresse nach Geschwindigkeit, Kosten und Vertragsbedingungen vergleichen.', 'trilacheck'); ?>
-				</p>
+				</p><?php get_template_part( 'template-parts/comparison-service' ); ?>
 				<div class="tc-dsl-bonus"><span><?php esc_html_e('Bis zu', 'trilacheck'); ?></span><strong>370
 						€</strong><b><?php esc_html_e('Sofortbonus', 'trilacheck'); ?><sup>1</sup></b></div>
 				<ul>

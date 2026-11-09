@@ -17,7 +17,7 @@ $editorial = $editorial_pages[ $slug ];
 get_header();
 ?>
 <div class="tc-mobile-detail">
-	<header class="tc-mobile-detail__hero tc-comparison-hero tc-comparison-hero--plain"><div class="tc-container"><p><?php echo esc_html( $tariff_page['eyebrow'] ); ?></p><h1><?php echo esc_html( $tariff_page['title'] ); ?></h1><div class="tc-mobile-detail__lead"><?php echo esc_html( $tariff_page['lead'] ); ?></div><a href="#tarifvergleich"><?php esc_html_e( 'Tarife vergleichen', 'trilacheck' ); ?><span aria-hidden="true">→</span></a></div><?php get_template_part( 'template-parts/comparison-trust' ); ?>
+	<header class="tc-mobile-detail__hero tc-comparison-hero tc-comparison-hero--plain"><div class="tc-container"><p><?php echo esc_html( $tariff_page['eyebrow'] ); ?></p><h1><?php echo esc_html( $tariff_page['title'] ); ?></h1><div class="tc-mobile-detail__lead"><?php echo esc_html( $tariff_page['lead'] ); ?></div><?php get_template_part( 'template-parts/comparison-service' ); ?><a href="#tarifvergleich"><?php esc_html_e( 'Tarife vergleichen', 'trilacheck' ); ?><span aria-hidden="true">→</span></a></div><?php get_template_part( 'template-parts/comparison-trust' ); ?>
 	</header>
 	<section id="tarifvergleich" class="tc-container tc-mobile-detail__widget" aria-labelledby="tc-detail-widget-title"><h2 id="tc-detail-widget-title"><?php echo esc_html( $tariff_page['title'] ); ?></h2><?php echo do_shortcode( '[trilacheck_mobile data="' . esc_attr( $tariff_page['widget'] ) . '"]' ); ?></section>
 	<div class="tc-container tc-mobile-detail__content">

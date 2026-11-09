@@ -14,7 +14,7 @@ get_header();
 			<div class="tc-reise-hero__content">
 				<p class="tc-reise-eyebrow"><?php esc_html_e( 'Reisen vergleichen', 'trilacheck' ); ?></p>
 				<h1><?php esc_html_e( 'Pauschalreisen vergleichen und Urlaub finden', 'trilacheck' ); ?></h1>
-				<p><?php esc_html_e( 'Vergleiche Reiseangebote für unterschiedliche Ziele, Reisezeiträume und Budgets. Die Buchung erfolgt anschließend beim jeweiligen Anbieter.', 'trilacheck' ); ?></p>
+				<p><?php esc_html_e( 'Vergleiche Reiseangebote für unterschiedliche Ziele, Reisezeiträume und Budgets. Die Buchung erfolgt anschließend beim jeweiligen Anbieter.', 'trilacheck' ); ?></p><?php get_template_part( 'template-parts/comparison-service' ); ?>
 			<ul aria-label="<?php esc_attr_e( 'Vorteile des Reisevergleichs', 'trilacheck' ); ?>">
 				<li><?php esc_html_e( 'Reiseangebote übersichtlich vergleichen', 'trilacheck' ); ?></li>
 				<li><?php esc_html_e( 'Filter passend zu deinen Reisewünschen', 'trilacheck' ); ?></li>
