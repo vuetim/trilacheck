@@ -49,6 +49,7 @@
 		<div class="tc-footer-bottom"><div class="tc-container"><p>&copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> <?php bloginfo( 'name' ); ?>. <?php esc_html_e( 'Alle Rechte vorbehalten.', 'trilacheck' ); ?></p><a href="#top" aria-label="<?php esc_attr_e( 'Zum Seitenanfang', 'trilacheck' ); ?>">↑</a></div></div>
 	</footer>
 
+	<?php get_template_part( 'template-parts/support-prompt' ); ?>
 	<?php wp_footer(); ?>
 	<script>
 	document.addEventListener('click', function (event) {
