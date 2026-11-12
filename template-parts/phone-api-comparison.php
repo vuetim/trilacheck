@@ -11,6 +11,7 @@ $data    = $read( 'daten' );
 $upfront = $read( 'anzahlung' );
 $budget  = $read( 'budget' );
 $sort    = $read( 'sortierung' );
+$duration = $read( 'laufzeit' );
 $page    = max( 1, min( 100, absint( $read( 'angebote_seite' ) ) ) );
 $params  = array( 'type' => 1, 'incl_bundles' => 1, 'filter' => 0, 'count' => 12, 'from' => ( $page - 1 ) * 12, 'subid' => 'trilacheck-handy', 'com_only' => 1 );
 if ( $phone && preg_match( '/^[a-z0-9-]{1,120}$/', $phone ) ) {
@@ -40,22 +41,32 @@ if ( in_array( $budget, array( '20', '30', '40', '50', '70' ), true ) ) {
 	$budget = '';
 }
 $params['sort_prop'] = 'monthly' === $sort ? 'MONTHLY_FEES' : 'EFFECTIVE_COSTS';
+if ( in_array( $duration, array( '30', '360', '720' ), true ) ) {
+	$params['contract_period'] = (int) $duration;
+} else {
+	$duration = '';
+}
 $offers = trilacheck_tariffuxx_request( 'get-offers-by-params', $params );
 $devices = trilacheck_tariffuxx_models( $offers );
 ?>
 <section class="tc-phone-api" aria-labelledby="tc-phone-api-title">
 	<h2 id="tc-phone-api-title">Smartphone und passenden Tarif finden</h2>
 	<p>Wähle dein Wunschhandy und vergleiche Gerätepreis, Tarif und Gesamtkosten.</p>
-	<form method="get" action="<?php echo esc_url( get_permalink() ); ?>#tarifvergleich" class="tc-phone-api__filters">
+	<div class="tc-phone-api__layout">
+	<button type="button" class="tc-phone-api__filter-toggle" aria-expanded="true" aria-controls="tc-phone-filters">Filter anpassen <span aria-hidden="true">⌄</span></button>
+	<form id="tc-phone-filters" method="get" action="<?php echo esc_url( get_permalink() ); ?>#tarifvergleich" class="tc-phone-api__filters">
+		<strong class="tc-phone-api__filter-title">Dein Wunschhandy & Tarif</strong>
 		<label>Smartphone<select name="telefon"><option value="">Alle Smartphones</option><?php if ( $phone && ! isset( $devices[ $phone ] ) ) : ?><option value="<?php echo esc_attr( $phone ); ?>" selected><?php echo esc_html( ucwords( str_replace( '-', ' ', $phone ) ) ); ?></option><?php endif; ?><?php foreach ( $devices as $slug => $name ) : ?><option value="<?php echo esc_attr( $slug ); ?>" <?php selected( $phone, $slug ); ?>><?php echo esc_html( $name ); ?></option><?php endforeach; ?></select></label>
 		<label>Netz<select name="netz"><option value="">Alle Netze</option><?php foreach ( array( 'd1' => 'Telekom-Netz', 'd2' => 'Vodafone-Netz', 'o2' => 'Telefónica (o2)', '1u1' => '1&1' ) as $value => $label ) : ?><option value="<?php echo esc_attr( $value ); ?>" <?php selected( $network, $value ); ?>><?php echo esc_html( $label ); ?></option><?php endforeach; ?></select></label>
 		<label>Datenvolumen<select name="daten"><option value="">Alle</option><?php foreach ( array( '5000', '15000', '30000', '50000', '100000' ) as $value ) : ?><option value="<?php echo esc_attr( $value ); ?>" <?php selected( $data, $value ); ?>>Ab <?php echo esc_html( $value / 1000 ); ?> GB</option><?php endforeach; ?></select></label>
 		<label>Gerätepreis einmalig<select name="anzahlung"><option value="">Alle</option><?php foreach ( array( '0', '1', '50', '100', '200' ) as $value ) : ?><option value="<?php echo esc_attr( $value ); ?>" <?php selected( $upfront, $value ); ?>>Bis <?php echo esc_html( $value ); ?> €</option><?php endforeach; ?></select></label>
 		<label>Monatliche Grundgebühr<select name="budget"><option value="">Alle</option><?php foreach ( array( '20', '30', '40', '50', '70' ) as $value ) : ?><option value="<?php echo esc_attr( $value ); ?>" <?php selected( $budget, $value ); ?>>Bis <?php echo esc_html( $value ); ?> €</option><?php endforeach; ?></select></label>
+		<label>Laufzeit<select name="laufzeit"><option value="">Alle Laufzeiten</option><?php foreach ( array( '30' => 'Max. 1 Monat', '360' => 'Max. 12 Monate', '720' => 'Max. 24 Monate' ) as $value => $label ) : ?><option value="<?php echo esc_attr( $value ); ?>" <?php selected( $duration, $value ); ?>><?php echo esc_html( $label ); ?></option><?php endforeach; ?></select></label>
 		<label>Sortieren nach<select name="sortierung"><option value="effective" <?php selected( $sort, 'effective' ); ?>>Ø Gesamtkosten / Monat</option><option value="monthly" <?php selected( $sort, 'monthly' ); ?>>Monatliche Grundgebühr</option></select></label>
 		<button type="submit">Angebote vergleichen →</button>
 		<a href="<?php echo esc_url( get_permalink() ); ?>#tarifvergleich">Filter zurücksetzen</a>
 	</form>
+	<div class="tc-phone-api__results">
 	<?php if ( is_wp_error( $offers ) ) : ?>
 		<p role="status">Der neue Vergleich ist momentan nicht verfügbar. Nutze bitte unseren bisherigen Vergleich:</p>
 		<?php echo do_shortcode( '[trilacheck_phone_contract]' ); ?>
@@ -69,12 +80,19 @@ $devices = trilacheck_tariffuxx_models( $offers );
 			if ( is_array( $hardware ) && isset( $hardware[0] ) ) {
 				$hardware = $hardware[0];
 			}
-			if ( ! $link || ! is_array( $hardware ) ) {
+			if ( ! $link || ! is_array( $hardware ) || empty( $hardware ) || ! is_numeric( $offer['effective_product_charges'] ?? null ) || ! is_numeric( $offer['total_product_charges'] ?? null ) ) {
 				continue;
 			}
 			++$shown;
 			$one_time = trilacheck_tariffuxx_charges( $offer['one_time_product_charges'] ?? array() );
 			$recurring = trilacheck_tariffuxx_charges( $offer['recurring_product_charges'] ?? array() );
+			$device_cost = null;
+			foreach ( $one_time as $charge ) {
+				if ( preg_match( '/Gerätepreis|Gerätezuzahlung|Anzahlung/ui', $charge['description'] ?? '' ) && is_numeric( $charge['value'] ?? null ) ) {
+					$device_cost = (float) $charge['value'];
+					break;
+				}
+			}
 			$image = '';
 			if ( ! empty( $hardware['product_images'][0]['file_name'] ) ) {
 				$brand = strtolower( str_replace( ' ', '-', $hardware['brand'] ?? '' ) );
@@ -88,8 +106,12 @@ $devices = trilacheck_tariffuxx_models( $offers );
 					<h3><?php echo esc_html( trilacheck_tariffuxx_text( $hardware['description'] ?? $hardware['model'] ?? 'Smartphone' ) ); ?></h3>
 					<p><?php echo esc_html( trilacheck_tariffuxx_text( ( $offer['provider']['name'] ?? '' ) . ' · ' . ( $offer['name'] ?? '' ) ) ); ?></p>
 					<ul class="tc-phone-api__features"><?php foreach ( array( $offer['mobile_network_name'] ?? '', $offer['internet_data_volume'] ?? '', ! empty( $offer['is_5g'] ) ? '5G' : '', $offer['contract_period_text'] ?? '' ) as $feature ) : ?><?php if ( $feature ) : ?><li><?php echo esc_html( trilacheck_tariffuxx_text( $feature ) ); ?></li><?php endif; ?><?php endforeach; ?></ul>
-					<ul class="tc-phone-api__costs"><?php foreach ( $recurring as $charge ) : ?><li><?php echo esc_html( trilacheck_tariffuxx_text( $charge['description'] ?? 'Tarifkosten' ) . ': ' . trilacheck_tariffuxx_money( $charge['value'] ?? 0 ) . ' ' . trilacheck_tariffuxx_text( $charge['period_description'] ?? '' ) ); ?><?php if ( ! empty( $charge['from_period'] ) ) : ?> · ab Periode <?php echo esc_html( $charge['from_period'] ); ?><?php endif; ?><?php if ( ! empty( $charge['to_period'] ) ) : ?> bis <?php echo esc_html( $charge['to_period'] ); ?><?php endif; ?></li><?php endforeach; ?><?php foreach ( $one_time as $charge ) : ?><li><?php echo esc_html( trilacheck_tariffuxx_text( $charge['description'] ?? 'Einmalkosten' ) . ': ' . trilacheck_tariffuxx_money( $charge['value'] ?? 0 ) . ' einmalig' ); ?></li><?php endforeach; ?></ul>
-					<div class="tc-phone-api__price"><span>Ø pro Monat über 24 Monate<strong><?php echo esc_html( trilacheck_tariffuxx_money( $offer['effective_product_charges'] ?? 0 ) ); ?></strong></span><span>Gesamtkosten über 24 Monate<strong><?php echo esc_html( trilacheck_tariffuxx_money( $offer['total_product_charges'] ?? 0 ) ); ?></strong></span></div>
+					<div class="tc-phone-api__price">
+						<span>Tarif-Grundgebühr<strong><?php echo isset( $recurring[0]['value'] ) && is_numeric( $recurring[0]['value'] ) ? esc_html( trilacheck_tariffuxx_money( $recurring[0]['value'] ) ) : 'Siehe Details'; ?></strong><small><?php echo esc_html( trilacheck_tariffuxx_text( $recurring[0]['period_description'] ?? '' ) ); ?><?php if ( count( $recurring ) > 1 ) : ?> · weitere Preisphasen, siehe Details<?php endif; ?></small></span>
+						<span>Gerätepreis einmalig<strong><?php echo null !== $device_cost ? esc_html( trilacheck_tariffuxx_money( $device_cost ) ) : 'Siehe Details'; ?></strong><small>Weitere Einmalkosten siehe Details</small></span>
+						<span class="tc-phone-api__average">Ø pro Monat<strong><?php echo esc_html( trilacheck_tariffuxx_money( $offer['effective_product_charges'] ) ); ?></strong><small>über 24 Monate inkl. Einmalkosten und angerechneter Vorteile</small></span>
+					</div>
+					<p class="tc-phone-api__total">Gesamtkosten über 24 Monate: <strong><?php echo esc_html( trilacheck_tariffuxx_money( $offer['total_product_charges'] ) ); ?></strong></p>
 					<details><summary>Kosten & Tarifdetails</summary>
 						<?php foreach ( array( 'one_time_product_charges' => 'Einmalige Kosten', 'recurring_product_charges' => 'Laufende Tarifkosten', 'bonus_product_charges' => 'Boni und Vorteile' ) as $field => $label ) : ?>
 							<p><strong><?php echo esc_html( $label ); ?></strong></p><ul><?php foreach ( trilacheck_tariffuxx_charges( $offer[ $field ] ?? array() ) as $charge ) : ?><li><?php echo esc_html( trilacheck_tariffuxx_text( $charge['description'] ?? '' ) . ': ' . trilacheck_tariffuxx_money( $charge['value'] ?? 0 ) . ' ' . trilacheck_tariffuxx_text( $charge['period_description'] ?? '' ) ); ?><?php if ( ! empty( $charge['from_period'] ) ) : ?> · ab Periode <?php echo esc_html( $charge['from_period'] ); ?><?php endif; ?><?php if ( ! empty( $charge['to_period'] ) ) : ?> bis <?php echo esc_html( $charge['to_period'] ); ?><?php endif; ?><?php if ( ! empty( $charge['info'] ) ) : ?> — <?php echo esc_html( trilacheck_tariffuxx_text( $charge['info'] ) ); ?><?php endif; ?></li><?php endforeach; ?></ul>
@@ -107,4 +129,6 @@ $devices = trilacheck_tariffuxx_models( $offers );
 		<nav class="tc-phone-api__pagination" aria-label="Angebotsseiten"><?php if ( $page > 1 ) : ?><a href="<?php echo esc_url( add_query_arg( 'angebote_seite', $page - 1 ) . '#tarifvergleich' ); ?>">← Zurück</a><?php endif; ?><?php if ( count( $offers ) >= 12 && $page < 100 ) : ?><a href="<?php echo esc_url( add_query_arg( 'angebote_seite', $page + 1 ) . '#tarifvergleich' ); ?>">Weitere Angebote →</a><?php endif; ?></nav>
 		<p>Bei einem Vertragsabschluss können wir eine Provision erhalten. Für dich entstehen keine zusätzlichen Gebühren durch Trilacheck.</p>
 	<?php endif; ?>
+	</div>
+	</div>
 </section>

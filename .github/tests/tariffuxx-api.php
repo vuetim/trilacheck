@@ -50,7 +50,7 @@ function wp_remote_get( $url, $options ) {
 }
 require dirname( __DIR__, 2 ) . '/includes/tariffuxx-api.php';
 function check( $condition, $message ) { if ( ! $condition ) { throw new RuntimeException( $message ); } }
-$_GET = array( 'telefon' => 'samsung-galaxy-a17-5g', 'anzahlung' => '0', 'daten' => '15000', 'netz' => 'd1' );
+$_GET = array( 'telefon' => 'samsung-galaxy-a17-5g', 'anzahlung' => '0', 'daten' => '15000', 'netz' => 'd1', 'laufzeit' => '720' );
 ob_start();
 include dirname( __DIR__, 2 ) . '/template-parts/phone-api-comparison.php';
 $html = ob_get_clean();
@@ -62,6 +62,11 @@ check( '15000' === $GLOBALS['request']['data_units'] && '1' === $GLOBALS['reques
 check( str_contains( $html, '21,99 €' ) && str_contains( $html, '23,65 €' ), 'Recurring charge and average must remain distinct.' );
 check( '' === trilacheck_tariffuxx_link( 'https://evil.example/?r=1111811' ), 'Off-domain links must be excluded.' );
 check( '' === trilacheck_tariffuxx_link( 'https://www.tariffuxx.de/untracked' ), 'Untracked links must be excluded.' );
+check( '720' === $GLOBALS['request']['contract_period'], 'Contract duration filter must reach upstream.' );
+check( '' === trilacheck_tariffuxx_link( 'https://www.tariffuxx.de/angebot?r=999&r=1111811' ), 'Ambiguous duplicate partner IDs must be excluded.' );
+$tracked = 'https://www.tariffuxx.de/handytarife/angebot/123?phi%5B%5D=1188&r=1111811&subid=trilacheck-handy';
+check( $tracked === trilacheck_tariffuxx_link( $tracked ), 'Selected phone, partner, SubID and all upstream tracking parameters must remain unchanged.' );
+check( $tracked === trilacheck_tariffuxx_link( str_replace( '&', '&amp;', $tracked ) ), 'HTML-escaped tracking links must decode correctly.' );
 $GLOBALS['simulate_error'] = true;
 ob_start();
 include dirname( __DIR__, 2 ) . '/template-parts/phone-api-comparison.php';

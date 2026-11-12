@@ -36,6 +36,7 @@ add_action( 'admin_init', function () {
 add_action( 'wp_enqueue_scripts', function () {
 	if ( is_page( 'handy-mit-vertrag' ) && trilacheck_tariffuxx_enabled() ) {
 		wp_enqueue_style( 'trilacheck-phone-api', get_template_directory_uri() . '/assets/css/phone-api.css', array( 'trilacheck-base' ), filemtime( get_template_directory() . '/assets/css/phone-api.css' ) );
+		wp_enqueue_script( 'trilacheck-phone-api', get_template_directory_uri() . '/assets/js/phone-api.js', array(), filemtime( get_template_directory() . '/assets/js/phone-api.js' ), true );
 	}
 } );
 
@@ -83,12 +84,16 @@ function trilacheck_tariffuxx_text( $value ) {
 
 /** Use only tracked links issued for our partner account. Never use real_link. */
 function trilacheck_tariffuxx_link( $link ) {
-	$parts = wp_parse_url( html_entity_decode( (string) $link, ENT_QUOTES, 'UTF-8' ) );
+	$link  = html_entity_decode( (string) $link, ENT_QUOTES, 'UTF-8' );
+	$parts = wp_parse_url( $link );
 	if ( ! is_array( $parts ) || 'https' !== ( $parts['scheme'] ?? '' ) || ! in_array( strtolower( $parts['host'] ?? '' ), array( 'www.tariffuxx.de', 'tariffuxx.de' ), true ) ) {
 		return '';
 	}
 	parse_str( $parts['query'] ?? '', $query );
-	return '1111811' === (string) ( $query['r'] ?? '' ) ? $link : '';
+	if ( isset( $parts['user'] ) || isset( $parts['pass'] ) || ! is_string( $query['r'] ?? null ) || 1 !== preg_match_all( '/(?:^|&)r=/', $parts['query'] ?? '' ) ) {
+		return '';
+	}
+	return '1111811' === $query['r'] ? $link : '';
 }
 
 function trilacheck_tariffuxx_money( $value ) {
