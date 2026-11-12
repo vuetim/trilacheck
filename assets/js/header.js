@@ -29,6 +29,26 @@
     syncSearch();
   }
 
+  const dataToggle = siteHeader?.querySelector('[data-tc-data-toggle]');
+  const dataMenu = siteHeader?.querySelector('#tc-header-data-menu');
+  if (dataToggle && dataMenu) {
+    const setDataOpen = (open) => {
+      dataMenu.hidden = !open;
+      dataToggle.setAttribute('aria-expanded', String(open));
+    };
+    setDataOpen(false);
+    dataToggle.addEventListener('click', (event) => {
+      event.preventDefault();
+      setDataOpen(dataMenu.hidden);
+    });
+    document.addEventListener('click', (event) => {
+      if (!dataMenu.contains(event.target) && !dataToggle.contains(event.target)) setDataOpen(false);
+    });
+    siteHeader.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !dataMenu.hidden) { setDataOpen(false); dataToggle.focus(); }
+    });
+  }
+
   const header = document.querySelector('.tc-site-header--home');
   if (header) {
     const updateHeaderHeight = () => {

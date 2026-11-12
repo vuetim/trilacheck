@@ -75,6 +75,11 @@ defined( 'ABSPATH' ) || exit;
 			);
 			?>
 		</nav>
+		<div id="tc-header-data-menu" class="tc-header-data-menu" hidden>
+			<?php foreach ( array( '5gb' => '5 GB', '15gb' => '15 GB', '50gb' => '50 GB' ) as $volume => $label ) : ?>
+				<a href="<?php echo esc_url( home_url( '/handytarife-' . $volume . '/#tarifvergleich' ) ); ?>"><?php echo esc_html( $label ); ?></a>
+			<?php endforeach; ?>
+		</div>
 	</div>
 
 	<div id="tc-mobile-menu" class="tc-drawer" hidden>

@@ -145,20 +145,30 @@ function trilacheck_article_comparison( $post_id ) {
 function trilacheck_phone_quick_links( $items, $args ) {
 	if ( 'quick_links' !== ( $args->theme_location ?? '' ) ) { return $items; }
 	$iphone = trilacheck_tariffuxx_phone_entry( 'Apple' );
+	$samsung = trilacheck_tariffuxx_phone_entry( 'Samsung' );
 	$links = array(
 		'Handy mit Vertrag' => home_url( '/handy-mit-vertrag/' ),
 		'iPhone' => $iphone['url'],
+		'Samsung' => $samsung['url'],
 		'eSIM' => home_url( '/mobilfunk/?esim=1#tarifvergleich' ),
-		'5 GB' => home_url( '/handytarife-5gb/' ),
-		'15 GB' => home_url( '/handytarife-15gb/' ),
-		'50 GB' => home_url( '/handytarife-50gb/' ),
 		'DSL' => home_url( '/dsl/' ),
 	);
+	// Remove old standalone volume links before adding their grouped control.
+	foreach ( array( '5gb', '15gb', '50gb' ) as $volume ) {
+		$url = home_url( '/handytarife-' . $volume . '/' );
+		$items = preg_replace( '~<li\b[^>]*>\s*<a\b[^>]*href=[\'"]' . preg_quote( esc_url( $url ), '~' ) . '[\'"][^>]*>.*?</a>\s*</li>~is', '', $items );
+	}
 	$prefix = '';
 	foreach ( $links as $label => $url ) {
 		$items = preg_replace( '~<li\b[^>]*>\s*<a\b[^>]*href=[\'"]' . preg_quote( esc_url( $url ), '~' ) . '[\'"][^>]*>.*?</a>\s*</li>~is', '', $items );
 		$prefix .= '<li><a href="' . esc_url( $url ) . '">' . esc_html( $label ) . '</a></li>';
+		if ( 'DSL' === $label ) { $prefix .= trilacheck_data_menu_item(); }
 	}
 	return $prefix . $items;
 }
 add_filter( 'wp_nav_menu_items', 'trilacheck_phone_quick_links', 20, 2 );
+
+/** Group the three volume pages in the header without clipping a dropdown. */
+function trilacheck_data_menu_item() {
+	return '<li><a href="' . esc_url( home_url( '/mobilfunk/#tc-data-shortcuts-title' ) ) . '" data-tc-data-toggle aria-controls="tc-header-data-menu">Datenvolumen <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></a></li>';
+}

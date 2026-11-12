@@ -564,3 +564,5 @@ body.page-girokonto .tc-site-header--inner {
 
 /* Keep the first quick link reachable when the expanded menu scrolls. */
 @media (min-width:768px){.tc-quick-menu{justify-content:flex-start;width:max-content;max-width:100%;margin-inline:auto}}
+
+.tc-header-data-menu{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:12px 0 2px}.tc-header-data-menu[hidden]{display:none}.tc-header-data-menu a{display:block;min-width:90px;padding:10px 18px;border:1px solid rgba(255,255,255,.35);border-radius:999px;color:inherit;text-align:center;text-decoration:none;font-size:14px;font-weight:700;background:rgba(255,255,255,.08)}.tc-header-data-menu a:hover,.tc-header-data-menu a:focus-visible{background:#fff;color:#075052}.tc-quick-menu [data-tc-data-toggle] svg{margin-left:5px;vertical-align:middle;transition:transform .2s}.tc-quick-menu [aria-expanded=true] svg{transform:rotate(180deg)}

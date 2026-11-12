@@ -225,10 +225,8 @@ function trilacheck_menu_fallback() {
 	$links = array(
 		__( 'Handy mit Vertrag', 'trilacheck' ) => '/handy-mit-vertrag/',
 		'iPhone' => str_replace( home_url(), '', trilacheck_tariffuxx_phone_entry( 'Apple' )['url'] ),
+		'Samsung' => str_replace( home_url(), '', trilacheck_tariffuxx_phone_entry( 'Samsung' )['url'] ),
 		'eSIM' => '/mobilfunk/?esim=1#tarifvergleich',
-		'5 GB' => '/handytarife-5gb/',
-		'15 GB' => '/handytarife-15gb/',
-		'50 GB' => '/handytarife-50gb/',
 		'DSL' => '/dsl/',
 		__( 'Strom', 'trilacheck' )          => '/strom/',
 		__( 'Ökostrom', 'trilacheck' )       => '/oekostrom/',
@@ -250,6 +248,7 @@ function trilacheck_menu_fallback() {
 			$active ? ' aria-current="page"' : '',
 			esc_html( $label )
 		);
+		if ( 'DSL' === $label ) { echo trilacheck_data_menu_item(); }
 	}
 	echo '</ul>';
 }
