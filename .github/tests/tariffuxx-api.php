@@ -5,15 +5,15 @@ define( 'MB_IN_BYTES', 1048576 );
 define( 'HOUR_IN_SECONDS', 3600 );
 define( 'MINUTE_IN_SECONDS', 60 );
 define( 'TRILACHECK_TARIFFUXX_PUBLIC_KEY', 'test-server-only-key' );
-class WP_Error {}
+class WP_Error { public function get_error_code() { return 'tx_unavailable'; } }
 function add_action( ...$args ) {}
 function wp_next_scheduled( $hook ) { return true; }
-function get_option( $key, $default = false ) { return $default; }
+function get_option( $key, $default = false ) { return $GLOBALS['options'][ $key ] ?? $default; }
 function get_transient( $key ) { return false; }
 function set_transient( ...$args ) {}
 function wp_json_encode( $value ) { return json_encode( $value ); }
 function is_wp_error( $value ) { return $value instanceof WP_Error; }
-function wp_remote_retrieve_response_code( $value ) { return $value['status']; }
+function wp_remote_retrieve_response_code( $value ) { return is_array( $value ) ? $value['status'] : 0; }
 function wp_remote_retrieve_body( $value ) { return json_encode( array( 'products' => $value['products'] ) ); }
 function wp_strip_all_tags( $value ) { return strip_tags( $value ); }
 function wp_parse_url( $value ) { return parse_url( $value ); }
@@ -25,6 +25,9 @@ function esc_html( $value ) { return htmlspecialchars( (string) $value, ENT_QUOT
 function esc_attr( $value ) { return esc_html( $value ); }
 function esc_url( $value ) { return esc_html( $value ); }
 function get_permalink() { return 'https://trilacheck.de/handy-mit-vertrag/'; }
+function home_url( $path ) { return 'https://trilacheck.de' . $path; }
+function current_user_can( $capability ) { return false; }
+function checked( $value ) { if ( $value ) { echo 'checked'; } }
 function selected( $a, $b ) { if ( (string) $a === (string) $b ) { echo 'selected'; } }
 function number_format_i18n( $value, $decimals ) { return number_format( $value, $decimals, ',', '.' ); }
 function add_query_arg( $name, $value ) { return get_permalink() . '?' . $name . '=' . $value; }
@@ -36,9 +39,10 @@ function wp_remote_get( $url, $options ) {
 	}
 	$GLOBALS['request'] = $params;
 	if ( ! empty( $GLOBALS['simulate_error'] ) ) { return new WP_Error(); }
+	if ( isset( $GLOBALS['response_offers'] ) ) { return array( 'status' => 200, 'products' => $GLOBALS['response_offers'] ); }
 	$offer = array(
 		'product_link' => 'https://www.tariffuxx.de/handytarife/angebot/123?r=1111811&subid=trilacheck-handy',
-		'product_hardware_items' => array( 'model' => 'Galaxy A17 5G', 'description' => 'Samsung <script>unsafe</script>', 'brand' => 'Samsung', 'product_images' => array() ),
+		'product_hardware_items' => array( 'model' => 'Galaxy A17 5G', 'description' => 'Samsung <script>unsafe</script>', 'brand' => 'Samsung', 'brand_modal_identifier' => 'samsung-galaxy-a17-5g', 'product_images' => array() ),
 		'provider' => array( 'name' => 'Test' ), 'name' => 'Tarif',
 		'one_time_product_charges' => array( array( 'description' => 'Gerätepreis', 'value' => 0 ) ),
 		'recurring_product_charges' => array( 'description' => 'Grundgebühr', 'value' => 21.99, 'period_description' => 'pro Monat', 'from_period' => 1 ),
@@ -67,9 +71,29 @@ check( '' === trilacheck_tariffuxx_link( 'https://www.tariffuxx.de/angebot?r=999
 $tracked = 'https://www.tariffuxx.de/handytarife/angebot/123?phi%5B%5D=1188&r=1111811&subid=trilacheck-handy';
 check( $tracked === trilacheck_tariffuxx_link( $tracked ), 'Selected phone, partner, SubID and all upstream tracking parameters must remain unchanged.' );
 check( $tracked === trilacheck_tariffuxx_link( str_replace( '&', '&amp;', $tracked ) ), 'HTML-escaped tracking links must decode correctly.' );
+check( str_contains( $html, 'value="samsung-galaxy-a17-5g"' ), 'Smartphone picker must include models from real offers even before the cron catalogue is ready.' );
+$GLOBALS['options']['trilacheck_tariffuxx_models'] = array( array( 'product_hardware_items' => array(
+	array( 'brand_modal_identifier' => 'samsung-galaxy-a17-5g', 'name' => 'Samsung Galaxy A17 5G', 'brand' => 'Samsung' ),
+	array( 'brand_modal_identifier' => 'apple-iphone-18', 'name' => 'Apple iPhone 18', 'brand' => 'Apple' ),
+) ) );
+$_GET = array( 'hersteller' => 'samsung', 'esim' => '1', '5g' => '1', 'sortierung' => 'monthly' );
+ob_start();
+include dirname( __DIR__, 2 ) . '/template-parts/phone-api-comparison.php';
+$html = ob_get_clean();
+check( array( 'samsung-galaxy-a17-5g' ) === $GLOBALS['request']['phone'], 'Manufacturer must filter real device IDs at the API, not only hide cards locally.' );
+check( '1' === $GLOBALS['request']['esim_req'] && '1' === $GLOBALS['request']['technologies']['5g'], 'eSIM and 5G filters must reach the API.' );
+check( 'MONTHLY_FEES' === $GLOBALS['request']['sort_prop'], 'Sort must reach the API.' );
+check( str_contains( $html, 'class="tc-phone-api__compare"' ), 'Comparison control must carry a validated offer.' );
+$_GET = array( 'telefon' => 'phone-no-longer-available' );
+ob_start();
+include dirname( __DIR__, 2 ) . '/template-parts/phone-api-comparison.php';
+$html = ob_get_clean();
+check( ! str_contains( $html, 'class="tc-phone-api__card"' ) && str_contains( $html, 'Keine passenden Angebote gefunden' ), 'Unknown models must not silently show unrelated offers.' );
+$_GET = array();
 $GLOBALS['simulate_error'] = true;
 ob_start();
 include dirname( __DIR__, 2 ) . '/template-parts/phone-api-comparison.php';
 $html = ob_get_clean();
 check( str_contains( $html, 'LEGACY_FALLBACK' ), 'API failure must preserve working legacy comparison.' );
+check( ! str_contains( $html, 'id="tc-phone-model"' ), 'API failures must not leave an empty, misleading smartphone picker above the fallback widget.' );
 echo "PASS: API rendering, model and zero-price filters, partner tracking, output safety and legacy fallback.\n";

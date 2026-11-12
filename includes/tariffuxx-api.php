@@ -20,7 +20,7 @@ add_action( 'admin_init', function () {
 		},
 	) );
 	add_settings_field( 'trilacheck_tariffuxx_public_key', 'TARIFFUXX Products API', function () {
-		?><input type="password" name="trilacheck_tariffuxx_public_key" value="" autocomplete="new-password" class="regular-text"><p class="description">Public Key eintragen. Leer lassen, um den gespeicherten Schlüssel beizubehalten. Kein Private Key erforderlich. Alternativ TRILACHECK_TARIFFUXX_PUBLIC_KEY in wp-config.php setzen.</p><?php
+		?><input type="password" name="trilacheck_tariffuxx_public_key" value="" autocomplete="new-password" class="regular-text"><p class="description">Public Key eintragen. Leer lassen, um den gespeicherten Schlüssel beizubehalten. Kein Private Key erforderlich. Alternativ TRILACHECK_TARIFFUXX_PUBLIC_KEY in wp-config.php setzen.</p><p><strong><?php echo trilacheck_tariffuxx_key() ? 'API-Schlüssel vorhanden.' : 'API-Schlüssel fehlt: Ohne Schlüssel wird der bisherige Vergleich verwendet.'; ?></strong></p><?php
 	}, 'reading' );
 	register_setting( 'reading', 'trilacheck_phone_comparison', array(
 		'type' => 'string',
@@ -33,6 +33,10 @@ add_action( 'admin_init', function () {
 	}, 'reading' );
 } );
 
+function trilacheck_tariffuxx_key() {
+	return defined( 'TRILACHECK_TARIFFUXX_PUBLIC_KEY' ) ? TRILACHECK_TARIFFUXX_PUBLIC_KEY : ( getenv( 'TRILACHECK_TARIFFUXX_PUBLIC_KEY' ) ?: get_option( 'trilacheck_tariffuxx_public_key', '' ) );
+}
+
 add_action( 'wp_enqueue_scripts', function () {
 	if ( is_page( 'handy-mit-vertrag' ) && trilacheck_tariffuxx_enabled() ) {
 		wp_enqueue_style( 'trilacheck-phone-api', get_template_directory_uri() . '/assets/css/phone-api.css', array( 'trilacheck-base' ), filemtime( get_template_directory() . '/assets/css/phone-api.css' ) );
@@ -42,7 +46,7 @@ add_action( 'wp_enqueue_scripts', function () {
 
 /** Fixed upstream; credentials never leave the server in rendered output. */
 function trilacheck_tariffuxx_request( $endpoint, $params ) {
-	$key = defined( 'TRILACHECK_TARIFFUXX_PUBLIC_KEY' ) ? TRILACHECK_TARIFFUXX_PUBLIC_KEY : ( getenv( 'TRILACHECK_TARIFFUXX_PUBLIC_KEY' ) ?: get_option( 'trilacheck_tariffuxx_public_key', '' ) );
+	$key = trilacheck_tariffuxx_key();
 	if ( ! $key ) {
 		return new WP_Error( 'tx_config', 'API nicht eingerichtet.' );
 	}
@@ -55,7 +59,7 @@ function trilacheck_tariffuxx_request( $endpoint, $params ) {
 	$params['key'] = $key;
 	$response = wp_remote_get( 'https://www.tariffuxx.de/api/products/' . $endpoint . '.json?' . http_build_query( $params, '', '&', PHP_QUERY_RFC3986 ), array( 'timeout' => 'get-by-params' === $endpoint ? 45 : 20, 'redirection' => 0, 'limit_response_size' => 32 * MB_IN_BYTES ) );
 	if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
-		return new WP_Error( 'tx_unavailable', 'Angebote momentan nicht erreichbar.' );
+		return new WP_Error( 'tx_unavailable', 'Angebote momentan nicht erreichbar.', array( 'status' => wp_remote_retrieve_response_code( $response ) ) );
 	}
 	$data = json_decode( wp_remote_retrieve_body( $response ), true );
 	if ( ! is_array( $data ) || ! isset( $data['products'] ) || ! is_array( $data['products'] ) ) {
@@ -68,7 +72,7 @@ function trilacheck_tariffuxx_request( $endpoint, $params ) {
 			foreach ( (array) ( $product['product_hardware_items'] ?? array() ) as $device ) {
 				$model = sanitize_title( trim( ( $device['brand'] ?? '' ) . ' ' . ( $device['model'] ?? '' ) ) );
 				if ( $model ) {
-					$models[ $model ] = array( 'brand_modal_identifier' => $model, 'name' => trim( ( $device['brand'] ?? '' ) . ' ' . ( $device['model'] ?? '' ) ) );
+					$models[ $model ] = array( 'brand_modal_identifier' => $model, 'name' => trim( ( $device['brand'] ?? '' ) . ' ' . ( $device['model'] ?? '' ) ), 'brand' => $device['brand'] ?? '', 'model' => $device['model'] ?? '', 'image' => $device['images'][0]['file_uri'] ?? '' );
 				}
 			}
 		}
@@ -117,13 +121,30 @@ add_action( 'trilacheck_tariffuxx_sync_models', function () {
 } );
 
 function trilacheck_tariffuxx_models( $offers ) {
+	$catalogue = trilacheck_tariffuxx_devices( $offers );
+	$models = array();
+	foreach ( $catalogue as $slug => $device ) {
+		$models[ $slug ] = $device['name'];
+	}
+	return $models;
+}
+
+/** Normalized device metadata, with offers as a cold-cache fallback. */
+function trilacheck_tariffuxx_devices( $offers = array() ) {
 	if ( ! wp_next_scheduled( 'trilacheck_tariffuxx_sync_models' ) ) {
 		wp_schedule_event( time() + 10, 'hourly', 'trilacheck_tariffuxx_sync_models' );
 	}
 	$models = array();
 	foreach ( get_option( 'trilacheck_tariffuxx_models', array() ) as $product ) {
 		foreach ( (array) ( $product['product_hardware_items'] ?? array() ) as $device ) {
-			$models[ $device['brand_modal_identifier'] ] = trilacheck_tariffuxx_text( $device['name'] );
+			$slug = $device['brand_modal_identifier'] ?? '';
+			if ( $slug ) {
+				$models[ $slug ] = array(
+					'name' => trilacheck_tariffuxx_text( $device['name'] ?? $slug ),
+					'brand' => trilacheck_tariffuxx_text( $device['brand'] ?? ucfirst( strtok( $slug, '-' ) ) ),
+					'image' => $device['image'] ?? '',
+				);
+			}
 		}
 	}
 	foreach ( is_array( $offers ) ? $offers : array() as $offer ) {
@@ -132,9 +153,61 @@ function trilacheck_tariffuxx_models( $offers ) {
 			$device = $device[0];
 		}
 		if ( ! empty( $device['brand_modal_identifier'] ) ) {
-			$models[ $device['brand_modal_identifier'] ] = trilacheck_tariffuxx_text( trim( ( $device['brand'] ?? '' ) . ' ' . ( $device['model'] ?? '' ) ) );
+			$models[ $device['brand_modal_identifier'] ] = array( 'name' => trilacheck_tariffuxx_text( trim( ( $device['brand'] ?? '' ) . ' ' . ( $device['model'] ?? '' ) ) ), 'brand' => trilacheck_tariffuxx_text( $device['brand'] ?? '' ), 'image' => trilacheck_tariffuxx_image( $device ) );
 		}
 	}
-	asort( $models, SORT_NATURAL | SORT_FLAG_CASE );
+	uasort( $models, function ( $a, $b ) { return strnatcasecmp( $a['name'], $b['name'] ); } );
 	return $models;
+}
+
+function trilacheck_tariffuxx_image( $device ) {
+	if ( empty( $device['product_images'][0]['file_name'] ) ) {
+		return '';
+	}
+	return 'https://assets.tariffuxx.de/img/hardware/' . rawurlencode( strtolower( str_replace( ' ', '-', $device['brand'] ?? '' ) ) ) . '/' . rawurlencode( strtolower( str_replace( ' ', '-', $device['model'] ?? '' ) ) ) . '/' . rawurlencode( $device['product_images'][0]['file_name'] ) . '.png';
+}
+
+/** Shared validation for display and comparison: no untracked offer is buyable. */
+function trilacheck_tariffuxx_offer( $offer ) {
+	$link = trilacheck_tariffuxx_link( $offer['product_link'] ?? '' );
+	$device = $offer['product_hardware_items'] ?? array();
+	if ( isset( $device[0] ) ) {
+		$device = $device[0];
+	}
+	if ( ! $link || empty( $device ) || ! is_numeric( $offer['effective_product_charges'] ?? null ) || ! is_numeric( $offer['total_product_charges'] ?? null ) ) {
+		return false;
+	}
+	$one_time = trilacheck_tariffuxx_charges( $offer['one_time_product_charges'] ?? array() );
+	$recurring = trilacheck_tariffuxx_charges( $offer['recurring_product_charges'] ?? array() );
+	$device_price = null;
+	$extra_price = 0;
+	foreach ( $one_time as $charge ) {
+		if ( ! is_numeric( $charge['value'] ?? null ) ) {
+			continue;
+		}
+		if ( preg_match( '/Gerätepreis|Gerätezuzahlung|Anzahlung/ui', $charge['description'] ?? '' ) ) {
+			$device_price = ( $device_price ?? 0 ) + (float) $charge['value'];
+		} else {
+			$extra_price += (float) $charge['value'];
+		}
+	}
+	return array(
+		'link' => $link,
+		'phone' => trilacheck_tariffuxx_text( $device['description'] ?? $device['model'] ?? 'Smartphone' ),
+		'image' => trilacheck_tariffuxx_image( $device ),
+		'provider' => trilacheck_tariffuxx_text( $offer['provider']['name'] ?? '' ),
+		'network' => trilacheck_tariffuxx_text( $offer['mobile_network_name'] ?? '' ),
+		'network_code' => sanitize_title( $offer['network_code'] ?? '' ),
+		'tariff' => trilacheck_tariffuxx_text( $offer['name'] ?? '' ),
+		'data' => trilacheck_tariffuxx_text( $offer['internet_data_volume'] ?? '' ),
+		'term' => trilacheck_tariffuxx_text( $offer['contract_period_text'] ?? '' ),
+		'five_g' => ! empty( $offer['is_5g'] ),
+		'monthly' => isset( $recurring[0]['value'] ) && is_numeric( $recurring[0]['value'] ) ? trilacheck_tariffuxx_money( $recurring[0]['value'] ) : 'Siehe Details',
+		'billing' => trilacheck_tariffuxx_text( $recurring[0]['period_description'] ?? '' ),
+		'phases' => count( $recurring ) > 1,
+		'device_price' => null !== $device_price ? trilacheck_tariffuxx_money( $device_price ) : 'Siehe Details',
+		'extra_price' => trilacheck_tariffuxx_money( $extra_price ),
+		'average' => trilacheck_tariffuxx_money( $offer['effective_product_charges'] ),
+		'total' => trilacheck_tariffuxx_money( $offer['total_product_charges'] ),
+	);
 }

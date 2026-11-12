@@ -29,6 +29,8 @@ jobs:
         run: find assets -name '*.js' -print0 | xargs -0 -r -n1 node --check
       - name: Test responsive search interactions
         run: node .github/tests/header-search.cjs
+      - name: Test phone affiliate link integrity
+        run: node .github/tests/phone-api.cjs
       - name: Check theme structure
         run: |
           php .github/tests/theme-package.php
