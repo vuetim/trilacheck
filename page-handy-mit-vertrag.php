@@ -17,7 +17,13 @@ get_header();
 		</div>
 	<?php get_template_part( 'template-parts/comparison-trust' ); ?>
 	</header>
-	<div class="tc-container tc-contract-widget"><?php echo do_shortcode( '[trilacheck_phone_contract]' ); ?></div>
+	<div class="tc-container tc-contract-widget" id="tarifvergleich"><?php
+	if ( trilacheck_tariffuxx_enabled() ) {
+		get_template_part( 'template-parts/phone-api-comparison' );
+	} else {
+		echo do_shortcode( '[trilacheck_phone_contract]' );
+	}
+	?></div>
 	<div class="tc-container tc-contract-content">
 		<section><h2><?php esc_html_e( 'Was bedeutet Handy mit Vertrag?', 'trilacheck' ); ?></h2><p><?php esc_html_e( 'Bei einem Bundle werden Mobilfunktarif und Smartphone gemeinsam angeboten. Das Gerät wird je nach Angebot über eine Einmalzahlung, monatliche Raten oder eine Kombination aus beidem finanziert. Vergleiche deshalb nicht nur den monatlichen Grundpreis, sondern die Kosten über die gesamte Mindestlaufzeit.', 'trilacheck' ); ?></p></section>
 		<section><h2><?php esc_html_e( 'Darauf solltest du beim Vergleich achten', 'trilacheck' ); ?></h2><div class="tc-contract-criteria"><div><h3><?php esc_html_e( 'Gesamtkosten', 'trilacheck' ); ?></h3><p><?php esc_html_e( 'Grundpreise, Anschlusskosten und Gerätezahlung zusammenrechnen.', 'trilacheck' ); ?></p></div><div><h3><?php esc_html_e( 'Datenvolumen', 'trilacheck' ); ?></h3><p><?php esc_html_e( 'Ein Volumen wählen, das zu deinem tatsächlichen Verbrauch passt.', 'trilacheck' ); ?></p></div><div><h3><?php esc_html_e( 'Laufzeit', 'trilacheck' ); ?></h3><p><?php esc_html_e( 'Mindestlaufzeit und Kündigungsbedingungen sorgfältig prüfen.', 'trilacheck' ); ?></p></div><div><h3><?php esc_html_e( 'Netz', 'trilacheck' ); ?></h3><p><?php esc_html_e( 'Die lokale Netzabdeckung vor der Bestellung kontrollieren.', 'trilacheck' ); ?></p></div></div></section>

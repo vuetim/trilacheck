@@ -33,6 +33,7 @@ jobs:
         run: |
           php .github/tests/theme-package.php
           php .github/tests/technical-seo.php
+          php .github/tests/tariffuxx-api.php
       - name: Check deployment script syntax
         run: bash -n .github/scripts/deploy.sh
 
