@@ -140,3 +140,15 @@ function trilacheck_article_comparison( $post_id ) {
 	}
 	return array( 'url' => home_url( '/vergleiche/' ), 'label' => __( 'Alle Vergleiche', 'trilacheck' ) );
 }
+
+/** Prioritize phone comparison in the configured quick menu without duplicates. */
+function trilacheck_phone_quick_links( $items, $args ) {
+	if ( 'quick_links' !== ( $args->theme_location ?? '' ) ) { return $items; }
+	foreach ( array( '/handy-mit-vertrag/', '/mobilfunk/?esim=1#tarifvergleich' ) as $path ) {
+		$url = home_url( $path );
+		$items = preg_replace( '~<li\b[^>]*>\s*<a\b[^>]*href=[\'"]' . preg_quote( esc_url( $url ), '~' ) . '[\'"][^>]*>.*?</a>\s*</li>~is', '', $items );
+	}
+	$iphone = trilacheck_tariffuxx_phone_entry( 'Apple' );
+	return '<li><a href="' . esc_url( home_url( '/handy-mit-vertrag/' ) ) . '">Handy mit Vertrag</a></li><li><a href="' . esc_url( $iphone['url'] ) . '">iPhone</a></li><li><a href="' . esc_url( home_url( '/mobilfunk/?esim=1#tarifvergleich' ) ) . '">eSIM</a></li>' . $items;
+}
+add_filter( 'wp_nav_menu_items', 'trilacheck_phone_quick_links', 20, 2 );

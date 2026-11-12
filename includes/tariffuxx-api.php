@@ -47,7 +47,7 @@ function trilacheck_tariffuxx_key() {
 }
 
 add_action( 'wp_enqueue_scripts', function () {
-	if ( ( is_page( 'handy-mit-vertrag' ) && trilacheck_tariffuxx_enabled() ) || ( is_page( 'mobilfunk' ) && trilacheck_tariffuxx_enabled( 'sim' ) ) ) {
+	if ( ( is_page( array( 'handytarife-5gb', 'handytarife-15gb', 'handytarife-50gb', 'handytarife-unlimited', 'tarife-fur-junge-leute', 'prepaid-tarife' ) ) && trilacheck_tariffuxx_enabled( 'sim' ) ) || ( is_page( 'handy-mit-vertrag' ) && trilacheck_tariffuxx_enabled() ) || ( is_page( 'mobilfunk' ) && trilacheck_tariffuxx_enabled( 'sim' ) ) ) {
 		wp_enqueue_style( 'trilacheck-phone-api', get_template_directory_uri() . '/assets/css/phone-api.css', array( 'trilacheck-base' ), filemtime( get_template_directory() . '/assets/css/phone-api.css' ) );
 		wp_enqueue_script( 'trilacheck-phone-api', get_template_directory_uri() . '/assets/js/phone-api.js', array(), filemtime( get_template_directory() . '/assets/js/phone-api.js' ), true );
 	}
@@ -74,7 +74,12 @@ function trilacheck_tariffuxx_request( $endpoint, $params ) {
 	if ( ! is_array( $data ) || ! isset( $data['products'] ) || ! is_array( $data['products'] ) ) {
 		return new WP_Error( 'tx_response', 'Angebote momentan nicht erreichbar.' );
 	}
-	if ( 'get-by-params' === $endpoint ) {
+	if ( 'get-by-params' === $endpoint && empty( $params['is_bundle_data_only'] ) ) {
+		// SIM master data: retain only the metadata needed for topic-specific filters.
+		$data['products'] = array_map( static function ( $product ) {
+			return array( 'product_id' => $product['product_id'] ?? 0, 'restricted_customer_group_code' => $product['restricted_customer_group_code'] ?? '', 'internet_data_volume' => $product['internet_data_volume'] ?? '' );
+		}, $data['products'] );
+	} elseif ( 'get-by-params' === $endpoint ) {
 		// Store only model metadata; the full upstream catalogue is several MB.
 		$models = array();
 		foreach ( $data['products'] as $product ) {
@@ -237,4 +242,20 @@ function trilacheck_tariffuxx_icon( $name ) {
 		'info' => '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7h.01"/>',
 	);
 	return '<svg class="tc-tariff-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">' . ( $paths[ $name ] ?? $paths['info'] ) . '</svg>';
+}
+
+/** Link to an actual catalogue model, with a brand filter when the cache is cold. */
+function trilacheck_tariffuxx_phone_entry( $brand ) {
+	$devices = array_filter( trilacheck_tariffuxx_devices(), static function ( $device ) use ( $brand ) { return strtolower( $device['brand'] ) === strtolower( $brand ); } );
+	// Prefer the numbered flagship families, not alphabetically later SE/A/Xcover models.
+	$families = array( 'apple' => '/iphone[ -]+[0-9]+/i', 'samsung' => '/galaxy[ -]+s[0-9]+/i', 'google' => '/pixel[ -]+[0-9]+/i' );
+	$family = $families[ strtolower( $brand ) ] ?? '';
+	$flagships = $family ? array_filter( $devices, static function ( $device ) use ( $family ) { return preg_match( $family, $device['name'] ); } ) : array();
+	if ( $flagships ) { $devices = $flagships; }
+	uksort( $devices, 'strnatcasecmp' );
+	$devices = array_reverse( $devices, true );
+	$slug = key( $devices );
+	$device = $slug ? $devices[ $slug ] : null;
+	$query = $slug ? array( 'telefon' => $slug ) : array( 'hersteller' => sanitize_title( $brand ) );
+	return array( 'url' => add_query_arg( $query, home_url( '/handy-mit-vertrag/' ) ) . '#tarifvergleich', 'name' => $device ? $device['name'] : '', 'image' => $device ? $device['image'] : '' );
 }

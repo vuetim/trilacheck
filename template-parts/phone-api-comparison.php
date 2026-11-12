@@ -8,8 +8,10 @@ defined( 'ABSPATH' ) || exit;
 
 $mode = isset( $args['mode'] ) && 'sim' === $args['mode'] ? 'sim' : 'phone';
 $is_sim = 'sim' === $mode;
-$read = static function ( $name ) {
-	return isset( $_GET[ $name ] ) && is_string( $_GET[ $name ] ) ? sanitize_text_field( wp_unslash( $_GET[ $name ] ) ) : '';
+$preset = $is_sim ? ( $args['preset'] ?? '' ) : '';
+$defaults = array( '5gb' => array( 'daten' => '5000' ), '15gb' => array( 'daten' => '15000' ), '50gb' => array( 'daten' => '50000' ), 'prepaid' => array( 'tarifart' => 'prepaid' ), 'young' => array( 'zielgruppe' => 'young' ), 'unlimited' => array( 'daten' => 'unlimited' ) );
+$read = static function ( $name ) use ( $defaults, $preset ) {
+	return isset( $_GET[ $name ] ) && is_string( $_GET[ $name ] ) ? sanitize_text_field( wp_unslash( $_GET[ $name ] ) ) : ( $defaults[ $preset ][ $name ] ?? '' );
 };
 $phone        = $is_sim ? '' : $read( 'telefon' );
 $manufacturer = $read( 'hersteller' );
@@ -30,6 +32,7 @@ foreach ( $catalogue as $device ) {
 	}
 }
 asort( $brands, SORT_NATURAL | SORT_FLAG_CASE );
+$unknown_brand = $manufacturer && ! isset( $brands[ $manufacturer ] );
 if ( ! isset( $brands[ $manufacturer ] ) ) {
 	$manufacturer = '';
 }
@@ -52,9 +55,10 @@ if ( isset( $networks[ $network ] ) ) {
 } else {
 	$network = '';
 }
-$data_choices = array( '5000' => 'Ab 5 GB', '15000' => 'Ab 15 GB', '30000' => 'Ab 30 GB', '50000' => 'Ab 50 GB', '100000' => 'Ab 100 GB' );
+$data_choices = array( '5000' => 'Ab 5 GB', '15000' => 'Ab 15 GB', '30000' => 'Ab 30 GB', '50000' => 'Ab 50 GB', '100000' => 'Ab 100 GB', 'unlimited' => 'Unlimited' );
+if ( ! $is_sim ) { unset( $data_choices['unlimited'] ); }
 if ( isset( $data_choices[ $data ] ) ) {
-	$params['data_units'] = (int) $data;
+	if ( 'unlimited' !== $data ) { $params['data_units'] = (int) $data; }
 } else {
 	$data = '';
 }
@@ -86,10 +90,24 @@ if ( $five_g ) {
 }
 $payment = $is_sim ? $read( 'tarifart' ) : '';
 if ( in_array( $payment, array( 'postpaid', 'prepaid' ), true ) ) { $params['payment'] = $payment; }
+$audience = $is_sim && 'young' === $read( 'zielgruppe' ) ? 'young' : '';
+$topic_ids = null;
+if ( $is_sim && ( 'unlimited' === $data || $audience ) ) {
+	$master = trilacheck_tariffuxx_request( 'get-by-params', array( 'type' => 1 ) );
+	if ( ! is_wp_error( $master ) ) {
+		$topic_ids = array();
+		foreach ( $master as $product ) {
+			if ( $audience && 'young' !== ( $product['restricted_customer_group_code'] ?? '' ) ) { continue; }
+			if ( 'unlimited' === $data && ! preg_match( '/unlimited|unbegrenzt/iu', $product['internet_data_volume'] ?? '' ) ) { continue; }
+			if ( ! empty( $product['product_id'] ) ) { $topic_ids[] = (int) $product['product_id']; }
+		}
+		$params['products'] = $topic_ids;
+	}
+}
 $unknown_model = $phone && $catalogue && ! isset( $catalogue[ $phone ] );
 // The upstream silently ignores unknown filter values. Never show unrelated
 // phones as if they matched a removed or mistyped model deep link.
-$offers = $unknown_model ? array() : trilacheck_tariffuxx_request( 'get-offers-by-params', $params );
+$offers = isset( $master ) && is_wp_error( $master ) ? $master : ( $unknown_brand || $unknown_model || array() === $topic_ids ? array() : trilacheck_tariffuxx_request( 'get-offers-by-params', $params ) );
 $catalogue = $is_sim ? array() : trilacheck_tariffuxx_devices( is_array( $offers ) ? $offers : array() );
 foreach ( $catalogue as $device ) {
 	if ( $device['brand'] ) {
@@ -116,6 +134,7 @@ $fields = array(
 );
 if ( $is_sim ) {
  unset( $fields['hersteller'], $fields['anzahlung'] );
+ $fields['zielgruppe'] = array( 'label' => 'Zielgruppe', 'all' => 'Alle', 'choices' => array( 'young' => 'Young-Tarife' ), 'value' => $audience );
  $fields['tarifart'] = array( 'label' => 'Tarifart', 'all' => 'Vertrag und Prepaid', 'choices' => array( 'postpaid' => 'Vertrag', 'prepaid' => 'Prepaid' ), 'value' => $payment );
 }
 ?>

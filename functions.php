@@ -225,6 +225,9 @@ add_filter( 'template_include', 'trilacheck_mobile_detail_template' );
 
 function trilacheck_menu_fallback() {
 	$links = array(
+		__( 'Handy mit Vertrag', 'trilacheck' ) => '/handy-mit-vertrag/',
+		'iPhone' => str_replace( home_url(), '', trilacheck_tariffuxx_phone_entry( 'Apple' )['url'] ),
+		'eSIM' => '/mobilfunk/?esim=1#tarifvergleich',
 		__( 'Strom', 'trilacheck' )          => '/strom/',
 		__( 'Ökostrom', 'trilacheck' )       => '/oekostrom/',
 		__( 'Gas', 'trilacheck' )            => '/gas/',
@@ -253,7 +256,7 @@ function trilacheck_menu_fallback() {
 function trilacheck_primary_menu_fallback() {
 	$groups = array(
 		__( 'Energie', 'trilacheck' ) => array( 'Strom'=>'/strom/', 'Ökostrom'=>'/oekostrom/', 'Gas'=>'/gas/' ),
-		__( 'Internet & Mobilfunk', 'trilacheck' ) => array( 'DSL'=>'/dsl/', 'Alle Handytarife'=>'/mobilfunk/', '5 GB Tarife'=>'/handytarife-5gb/', '15 GB Tarife'=>'/handytarife-15gb/', '50 GB Tarife'=>'/handytarife-50gb/', 'Unlimited Tarife'=>'/handytarife-unlimited/', 'Tarife für junge Leute'=>'/tarife-fur-junge-leute/', 'Prepaid-Tarife'=>'/prepaid-tarife/', 'Handy mit Vertrag'=>'/handy-mit-vertrag/' ),
+		__( 'Internet & Mobilfunk', 'trilacheck' ) => array( 'Handy mit Vertrag'=>'/handy-mit-vertrag/', 'eSIM'=>'/mobilfunk/?esim=1#tarifvergleich', 'DSL'=>'/dsl/', 'Alle Handytarife'=>'/mobilfunk/', '5 GB Tarife'=>'/handytarife-5gb/', '15 GB Tarife'=>'/handytarife-15gb/', '50 GB Tarife'=>'/handytarife-50gb/', 'Unlimited Tarife'=>'/handytarife-unlimited/', 'Tarife für junge Leute'=>'/tarife-fur-junge-leute/', 'Prepaid-Tarife'=>'/prepaid-tarife/' ),
 		__( 'Reisen & Mobilität', 'trilacheck' ) => array( 'Reisen'=>'/reise/', 'Mietwagen'=>'/mietwagen/' ),
 		__( 'Finanzen', 'trilacheck' ) => array( 'Girokonto'=>'/girokonto/' ),
 		__( 'Versicherungen', 'trilacheck' ) => array( 'Alle Versicherungen'=>'/versicherungen/', 'Auto & Fahrzeuge'=>'/auto-fahrzeuge/', 'Vorsorge-Versicherungen'=>'/vorsorge-versicherungen/', 'Krankenversicherungen'=>'/krankenversicherungen/', 'Sachversicherungen'=>'/sachversicherungen/' ),

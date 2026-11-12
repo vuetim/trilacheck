@@ -30,13 +30,14 @@ function current_user_can( $capability ) { return false; }
 function checked( $value ) { if ( $value ) { echo 'checked'; } }
 function selected( $a, $b ) { if ( (string) $a === (string) $b ) { echo 'selected'; } }
 function number_format_i18n( $value, $decimals ) { return number_format( $value, $decimals, ',', '.' ); }
-function add_query_arg( $name, $value ) { return get_permalink() . '?' . $name . '=' . $value; }
+function add_query_arg( $name, $value ) { return is_array( $name ) ? $value . '?' . http_build_query( $name ) : get_permalink() . '?' . $name . '=' . $value; }
 function wp_enqueue_script( ...$args ) { $GLOBALS['fallback_script'] = $args[1]; }
 function get_template_part( ...$args ) { echo 'CHECK24_FALLBACK'; }
 function do_shortcode( $value ) { return '<div>LEGACY_FALLBACK</div>'; }
 function wp_remote_get( $url, $options ) {
 	parse_str( parse_url( $url, PHP_URL_QUERY ), $params );
 	if ( str_contains( $url, 'get-by-params' ) ) {
+		if ( isset( $GLOBALS['sim_catalogue'] ) && empty( $params['is_bundle_data_only'] ) ) { return array( 'status' => 200, 'products' => $GLOBALS['sim_catalogue'] ); }
 		return array( 'status' => 200, 'products' => array( array( 'product_hardware_items' => array( array( 'brand' => 'Samsung', 'model' => 'Galaxy A17 5G', 'name' => 'Samsung Galaxy A17 5G 128GB' ) ) ) ) );
 	}
 	$GLOBALS['request'] = $params;
@@ -123,4 +124,18 @@ $html = ob_get_clean();
 check( str_contains( $html, 'CHECK24_FALLBACK' ) && str_contains( $GLOBALS['fallback_script'], '/262971/' ), 'SIM errors must activate CHECK24 with the existing partner ID.' );
 $GLOBALS['options']['trilacheck_mobile_comparison'] = 'legacy';
 check( ! trilacheck_tariffuxx_enabled( 'sim' ) && trilacheck_tariffuxx_enabled(), 'SIM legacy switch must not disable the phone API.' );
+$GLOBALS['simulate_error'] = false;
+$GLOBALS['sim_catalogue'] = array(
+ array( 'product_id' => 11, 'restricted_customer_group_code' => 'young', 'internet_data_volume' => '20 GB' ),
+ array( 'product_id' => 22, 'restricted_customer_group_code' => '', 'internet_data_volume' => 'Unlimited' ),
+ array( 'product_id' => 33, 'restricted_customer_group_code' => '', 'internet_data_volume' => '50 GB' ),
+);
+foreach ( array( '5gb' => '5000', '15gb' => '15000', '50gb' => '50000', 'prepaid' => 'prepaid', 'young' => '11', 'unlimited' => '22' ) as $preset => $expected ) {
+ $args = array( 'mode' => 'sim', 'preset' => $preset ); $_GET = array();
+ ob_start(); include dirname( __DIR__, 2 ) . '/template-parts/phone-api-comparison.php'; ob_end_clean();
+ $actual = in_array( $preset, array( 'young', 'unlimited' ), true ) ? ( $GLOBALS['request']['products'][0] ?? '' ) : ( 'prepaid' === $preset ? $GLOBALS['request']['payment'] : $GLOBALS['request']['data_units'] );
+ check( $expected === $actual, 'Topic page must apply the matching API filter: ' . $preset );
+}
+$entry = trilacheck_tariffuxx_phone_entry( 'Apple' );
+check( str_contains( $entry['url'], 'telefon=apple-iphone-18' ) && str_ends_with( $entry['url'], '#tarifvergleich' ), 'Homepage cards must deep link to an existing selected model.' );
 echo "PASS: API rendering, model and zero-price filters, partner tracking, output safety and legacy fallback.\n";

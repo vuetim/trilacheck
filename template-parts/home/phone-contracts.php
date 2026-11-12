@@ -24,10 +24,10 @@ $phones = array(
 	</div>
 
 	<div class="tc-phone-contracts__grid">
-		<?php foreach ( $phones as $phone ) : ?>
-			<a class="tc-phone-card" href="<?php echo esc_url( home_url( '/handy-mit-vertrag/' ) ); ?>">
+		<?php foreach ( $phones as $phone ) : $entry = trilacheck_tariffuxx_phone_entry( $phone['brand'] ); ?>
+			<a class="tc-phone-card" href="<?php echo esc_url( $entry['url'] ); ?>">
 				<span class="tc-phone-card__visual" aria-hidden="true"><span class="tc-phone-art <?php echo esc_attr( $phone['class'] ); ?>"><i></i></span></span>
-				<span class="tc-phone-card__content"><small><?php echo esc_html( $phone['brand'] ); ?></small><strong><?php echo esc_html( $phone['name'] ); ?> <?php esc_html_e( 'mit Vertrag', 'trilacheck' ); ?></strong><em><?php esc_html_e( 'Tarife und Geräte vergleichen', 'trilacheck' ); ?></em></span>
+				<span class="tc-phone-card__content"><small><?php echo esc_html( $phone['brand'] ); ?></small><strong><?php echo esc_html( $entry['name'] ?: $phone['name'] ); ?> <?php esc_html_e( 'mit Vertrag', 'trilacheck' ); ?></strong><em><?php esc_html_e( 'Tarife und Geräte vergleichen', 'trilacheck' ); ?></em></span>
 				<span class="tc-phone-card__arrow" aria-hidden="true">→</span>
 			</a>
 		<?php endforeach; ?>
