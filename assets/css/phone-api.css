@@ -120,12 +120,12 @@
 .tc-comparison-hero--compact+.tc-contract-widget,.tc-comparison-hero--compact+.tc-mobile-widget{padding-top:12px}
 @media(max-width:767px){.tc-compact-trust{gap:6px 14px;font-size:11px}.tc-comparison-hero.tc-comparison-hero--compact{padding-block:14px 10px}.tc-phone-api__tabs a{font-size:14px}.tc-phone-api__visual--sim img{width:80px;height:48px}}
 
-.tc-phone-api__rank{display:inline-flex;align-items:center;gap:5px;max-width:100%;margin-bottom:8px;padding:4px 8px;border-radius:5px;background:#edf3f4;color:#34565b;font-size:11px;font-weight:750;line-height:1.4}
+.tc-phone-api__rank{float:right;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;width:88px;height:88px;margin:0 0 10px 16px;padding:10px;border-radius:50%;background:#edf3f4;color:#34565b;text-align:center;font-size:11px;font-weight:750;line-height:1.35;shape-outside:circle(50%)}
 .tc-phone-api__rank--first{background:#ffdf00;color:#12383d}
 .tc-phone-api__rank .tc-tariff-icon{width:13px;height:13px;fill:currentColor}
 .tc-mobile-detail__hero.tc-comparison-hero--compact .tc-mobile-detail__lead{max-width:880px;margin:0 0 10px;font-size:14px;line-height:1.55}
 .tc-mobile-detail__hero.tc-comparison-hero--compact+.tc-mobile-detail__widget{padding-top:8px}
 .tc-mobile-detail__widget>.tc-phone-api{margin-top:12px}
-@media(max-width:767px){.tc-mobile-detail__hero.tc-comparison-hero--compact .tc-mobile-detail__lead{font-size:12px}.tc-phone-api__rank{font-size:10px;padding:3px 6px}}
+@media(max-width:767px){.tc-mobile-detail__hero.tc-comparison-hero--compact .tc-mobile-detail__lead{font-size:12px}.tc-phone-api__rank{width:68px;height:68px;font-size:9px;padding:7px;margin-left:10px}}
 
 .tc-mobile-detail .tc-mobile-detail__hero.tc-comparison-hero--compact{background:#f5f9f9}

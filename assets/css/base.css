@@ -101,3 +101,5 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .tc-comparison-support a{display:inline-block;padding:5px 10px;border-radius:6px;background:#075052;color:#fff;font-weight:700;text-decoration:underline;text-underline-offset:3px}
 .tc-comparison-support a:focus-visible{outline:3px solid #075052;outline-offset:3px}
 .tc-comparison-support .tc-comparison-support__disclosure{font-size:12px}
+
+.tc-comparison-disclosure{margin:14px 0;color:#536a6e;font-size:12px;line-height:1.6}

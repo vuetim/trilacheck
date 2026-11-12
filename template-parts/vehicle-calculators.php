@@ -12,5 +12,6 @@ defined( 'ABSPATH' ) || exit;
 		<summary><span><?php esc_html_e( 'Motorradversicherung', 'trilacheck' ); ?></span><small><?php esc_html_e( 'Tarife für Motorräder vergleichen', 'trilacheck' ); ?></small></summary>
 		<div class="tc-comparison-widget__frame"><div style="width:100%" id="tcpp-iframe-mot"></div></div>
 	</details>
+	<?php get_template_part( 'template-parts/comparison-disclosure' ); ?>
 	<noscript><p><?php esc_html_e( 'Bitte aktiviere JavaScript, um die Versicherungsvergleiche zu verwenden.', 'trilacheck' ); ?></p></noscript>
 </section>

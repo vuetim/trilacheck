@@ -52,6 +52,7 @@ get_header();
 		<section class="tc-comparison-widget tc-comparison-widget--power" aria-label="<?php esc_attr_e( 'Stromtarife vergleichen', 'trilacheck' ); ?>">
 			<?php get_template_part( 'template-parts/comparison-support' ); ?>
 			<div class="tc-comparison-widget__frame"><div style="width:100%" id="c24pp-power-iframe" data-scrollto="begin"></div></div>
+			<?php get_template_part( 'template-parts/comparison-disclosure' ); ?>
 			<noscript><p>Bitte aktiviere JavaScript, um den Stromvergleich zu verwenden.</p></noscript>
 		</section>
 	</section>

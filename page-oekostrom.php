@@ -43,6 +43,7 @@ get_header();
 		<div class="tc-power-heading"><p>Tarife für deinen Haushalt</p><h2 id="tc-eco-widget-title">Deinen Ökostromvergleich starten</h2><span>Postleitzahl und Jahresverbrauch eingeben und die Ökostromauswahl sowie die Tarifdetails im Rechner prüfen.</span></div>
 		<?php get_template_part( 'template-parts/comparison-support' ); ?>
 		<div style="width:100%" id="c24pp-power-iframe" data-scrollto="begin" data-eco="yes"></div>
+		<?php get_template_part( 'template-parts/comparison-disclosure' ); ?>
 		<noscript><p>Bitte aktiviere JavaScript für den Vergleichsrechner oder nutze den <a href="https://a.check24.net/misc/click.php?pid=262971&amp;aid=122&amp;deep=oekostrom" rel="sponsored">Ökostromvergleich beim Partner</a>.</p></noscript>
 	</section>
 	<div class="tc-container tc-power-content">

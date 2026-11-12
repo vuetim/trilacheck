@@ -10,8 +10,12 @@ function trilacheck_comparison_support_shortcode( $output, $tag ) {
 	ob_start();
 	get_template_part( 'template-parts/comparison-support' );
 	$notice = ob_get_clean();
-	return preg_replace_callback( '/<p\b[^>]*class="tc-affiliate-notice"[^>]*>.*?<\/p>/s', static function () use ( $notice ) {
+	$updated = preg_replace_callback( '/<p\b[^>]*class="tc-affiliate-notice"[^>]*>.*?<\/p>/s', static function () use ( $notice ) {
 		return $notice;
-	}, $output, 1 );
+	}, $output, 1, $replaced );
+	if ( ! $replaced ) { return $output; }
+	ob_start();
+	get_template_part( 'template-parts/comparison-disclosure' );
+	return $updated . ob_get_clean();
 }
 add_filter( 'do_shortcode_tag', 'trilacheck_comparison_support_shortcode', 10, 2 );

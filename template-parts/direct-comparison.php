@@ -17,5 +17,6 @@ $comparison = $comparisons[ $type ];
 <section class="tc-comparison-widget tc-comparison-widget--<?php echo esc_attr( $type ); ?>" aria-label="<?php echo esc_attr( $comparison['label'] ); ?>">
 	<?php get_template_part( 'template-parts/comparison-support' ); ?>
 	<div class="tc-comparison-widget__frame"><div style="width:100%" id="<?php echo esc_attr( $comparison['id'] ); ?>"<?php if ( in_array( $type, array( 'gas', 'rentalcar', 'package' ), true ) ) : ?> data-scrollto="begin"<?php endif; ?><?php if ( 'package' === $type ) : ?> data-offer="allgemein" data-forward-url="no"<?php endif; ?>></div></div>
+	<?php get_template_part( 'template-parts/comparison-disclosure' ); ?>
 	<noscript><p><?php esc_html_e( 'Bitte aktiviere JavaScript, um den Vergleich zu verwenden.', 'trilacheck' ); ?></p></noscript>
 </section>
