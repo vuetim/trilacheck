@@ -138,4 +138,18 @@ foreach ( array( '5gb' => '5000', '15gb' => '15000', '50gb' => '50000', 'prepaid
 }
 $entry = trilacheck_tariffuxx_phone_entry( 'Apple' );
 check( str_contains( $entry['url'], 'telefon=apple-iphone-18' ) && str_ends_with( $entry['url'], '#tarifvergleich' ), 'Homepage cards must deep link to an existing selected model.' );
+check( ! trilacheck_tariffuxx_topic_enabled( 'unlimited' ) && ! trilacheck_tariffuxx_topic_enabled( 'young' ), 'Unlimited and Young pages must retain their CHECK24 calculators.' );
+$GLOBALS['options']['trilacheck_mobile_comparison'] = 'api';
+check( trilacheck_tariffuxx_topic_enabled( '5gb' ) && trilacheck_tariffuxx_topic_enabled( 'prepaid' ), 'Other topic pages must retain the API.' );
+$args = array( 'mode' => 'sim' );
+$_GET = array();
+$GLOBALS['response_offers'] = array_fill( 0, 3, $GLOBALS['response_offers'][0] );
+ob_start(); include dirname( __DIR__, 2 ) . '/template-parts/phone-api-comparison.php'; $html = ob_get_clean();
+check( str_contains( $html, 'Zweitbestes Preisangebot' ) && str_contains( $html, 'Drittbestes Preisangebot' ), 'First result page must label the three leading price offers.' );
+check( str_contains( $html, 'Gesamtkosten über 24 Monate' ), 'Ranking criterion must remain explicit.' );
+foreach ( array( array( 'sortierung' => 'monthly' ), array( 'angebote_seite' => '2' ) ) as $query ) {
+ $_GET = $query;
+ ob_start(); include dirname( __DIR__, 2 ) . '/template-parts/phone-api-comparison.php'; $html = ob_get_clean();
+ check( ! str_contains( $html, 'tc-phone-api__rank' ), 'Price ranking badges must not label a different sort or later pages as top three.' );
+}
 echo "PASS: API rendering, model and zero-price filters, partner tracking, output safety and legacy fallback.\n";

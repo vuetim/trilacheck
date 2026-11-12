@@ -42,13 +42,22 @@ add_action( 'admin_init', function () {
 	}, 'reading' );
 } );
 
+/** Keep the existing CHECK24 calculators for these two specialist pages. */
+function trilacheck_tariffuxx_topic_enabled( $preset ) {
+	return ! in_array( $preset, array( 'unlimited', 'young' ), true ) && trilacheck_tariffuxx_enabled( 'sim' );
+}
+
 function trilacheck_tariffuxx_key() {
 	return defined( 'TRILACHECK_TARIFFUXX_PUBLIC_KEY' ) ? TRILACHECK_TARIFFUXX_PUBLIC_KEY : ( getenv( 'TRILACHECK_TARIFFUXX_PUBLIC_KEY' ) ?: get_option( 'trilacheck_tariffuxx_public_key', '' ) );
 }
 
 add_action( 'wp_enqueue_scripts', function () {
-	if ( ( is_page( array( 'handytarife-5gb', 'handytarife-15gb', 'handytarife-50gb', 'handytarife-unlimited', 'tarife-fur-junge-leute', 'prepaid-tarife' ) ) && trilacheck_tariffuxx_enabled( 'sim' ) ) || ( is_page( 'handy-mit-vertrag' ) && trilacheck_tariffuxx_enabled() ) || ( is_page( 'mobilfunk' ) && trilacheck_tariffuxx_enabled( 'sim' ) ) ) {
+	$is_detail = is_page( array( 'handytarife-5gb', 'handytarife-15gb', 'handytarife-50gb', 'handytarife-unlimited', 'tarife-fur-junge-leute', 'prepaid-tarife' ) );
+	$uses_api = ( is_page( 'handy-mit-vertrag' ) && trilacheck_tariffuxx_enabled() ) || ( is_page( array( 'mobilfunk', 'handytarife-5gb', 'handytarife-15gb', 'handytarife-50gb', 'prepaid-tarife' ) ) && trilacheck_tariffuxx_enabled( 'sim' ) );
+	if ( $is_detail || $uses_api ) {
 		wp_enqueue_style( 'trilacheck-phone-api', get_template_directory_uri() . '/assets/css/phone-api.css', array( 'trilacheck-base' ), filemtime( get_template_directory() . '/assets/css/phone-api.css' ) );
+	}
+	if ( $uses_api ) {
 		wp_enqueue_script( 'trilacheck-phone-api', get_template_directory_uri() . '/assets/js/phone-api.js', array(), filemtime( get_template_directory() . '/assets/js/phone-api.js' ), true );
 	}
 } );
