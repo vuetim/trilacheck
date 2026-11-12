@@ -561,3 +561,6 @@ body.page-girokonto .tc-site-header--inner {
   .tc-search-ready .tc-header-shell { padding-bottom: 10px; }
   .tc-search-ready .tc-quick-nav { margin-top: 9px; }
 }
+
+/* Keep the first quick link reachable when the expanded menu scrolls. */
+@media (min-width:768px){.tc-quick-menu{justify-content:flex-start;width:max-content;max-width:100%;margin-inline:auto}}

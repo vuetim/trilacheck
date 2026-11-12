@@ -61,8 +61,6 @@ function trilacheck_assets() {
 	wp_enqueue_style( 'trilacheck-style', get_stylesheet_uri(), array( 'trilacheck-header' ), $version( '/style.css' ) );
 
 	wp_enqueue_script( 'trilacheck-header', $theme_uri . '/assets/js/header.js', array(), $version( '/assets/js/header.js' ), true );
-	wp_enqueue_style( 'trilacheck-support-prompt', $theme_uri . '/assets/css/support-prompt.css', array( 'trilacheck-base' ), $version( '/assets/css/support-prompt.css' ) );
-	wp_enqueue_script( 'trilacheck-support-prompt', $theme_uri . '/assets/js/support-prompt.js', array(), $version( '/assets/js/support-prompt.js' ), true );
 
 	if ( is_front_page() ) {
 		wp_enqueue_style( 'trilacheck-home', $theme_uri . '/assets/css/home.css', array( 'trilacheck-base' ), $version( '/assets/css/home.css' ) );
@@ -228,11 +226,14 @@ function trilacheck_menu_fallback() {
 		__( 'Handy mit Vertrag', 'trilacheck' ) => '/handy-mit-vertrag/',
 		'iPhone' => str_replace( home_url(), '', trilacheck_tariffuxx_phone_entry( 'Apple' )['url'] ),
 		'eSIM' => '/mobilfunk/?esim=1#tarifvergleich',
+		'5 GB' => '/handytarife-5gb/',
+		'15 GB' => '/handytarife-15gb/',
+		'50 GB' => '/handytarife-50gb/',
+		'DSL' => '/dsl/',
 		__( 'Strom', 'trilacheck' )          => '/strom/',
 		__( 'Ökostrom', 'trilacheck' )       => '/oekostrom/',
 		__( 'Gas', 'trilacheck' )            => '/gas/',
 		__( 'Versicherungen', 'trilacheck' ) => '/versicherungen/',
-		__( 'DSL', 'trilacheck' )            => '/dsl/',
 		__( 'Handytarife', 'trilacheck' )    => '/mobilfunk/',
 		__( 'Reisen', 'trilacheck' )         => '/reise/',
 		__( 'Mietwagen', 'trilacheck' )      => '/mietwagen/',
