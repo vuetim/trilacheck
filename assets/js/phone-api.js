@@ -57,10 +57,76 @@
       const href = trackedUrl(link.href);
       if (href) link.href = href;
     });
-    root.querySelectorAll('.tc-phone-api__detail-link').forEach((link) => {
-      link.addEventListener('click', () => {
+    const supportsDialog = typeof HTMLDialogElement !== 'undefined' && typeof HTMLDialogElement.prototype.showModal === 'function';
+    root.querySelectorAll('.tc-phone-api__detail-link').forEach((link, index) => {
+      link.addEventListener('click', (event) => {
         const details = root.querySelector(link.hash);
-        if (details) details.open = true;
+        if (!details) return;
+        const sources = details.querySelectorAll('[data-tc-detail]');
+        if (!supportsDialog || !sources.length) { details.open = true; return; }
+        event.preventDefault();
+        const card = link.closest('.tc-phone-api__card');
+        const dialog = document.createElement('dialog');
+        dialog.className = 'tc-tariff-modal';
+        dialog.setAttribute('aria-labelledby', 'tc-tariff-modal-title');
+        const header = document.createElement('header');
+        const title = document.createElement('h2');
+        title.id = 'tc-tariff-modal-title';
+        title.textContent = card.querySelector('.tc-phone-api__identity h3').textContent;
+        const close = document.createElement('button');
+        close.type = 'button'; close.className = 'tc-tariff-modal__close'; close.textContent = '×';
+        close.setAttribute('aria-label', 'Tarifdetails schließen');
+        close.addEventListener('click', () => dialog.close());
+        header.append(title, close);
+        const tabs = document.createElement('div');
+        tabs.className = 'tc-tariff-modal__tabs';
+        tabs.setAttribute('role', 'tablist'); tabs.setAttribute('aria-label', 'Tarifdetails');
+        const content = document.createElement('div'); content.className = 'tc-tariff-modal__content';
+        const panels = []; const buttons = [];
+        sources.forEach((source, panelIndex) => {
+          const panel = source.cloneNode(true);
+          panel.id = 'tc-tariff-panel-' + index + '-' + panelIndex;
+          panel.setAttribute('role', 'tabpanel'); panel.tabIndex = 0;
+          const tab = document.createElement('button');
+          tab.type = 'button'; tab.id = panel.id + '-tab'; tab.setAttribute('role', 'tab');
+          tab.setAttribute('aria-controls', panel.id); panel.setAttribute('aria-labelledby', tab.id);
+          tab.textContent = source.dataset.tcDetail === 'prices' ? 'Preise & Leistungen' : 'Tarifinformationen';
+          buttons.push(tab); panels.push(panel); tabs.append(tab); content.append(panel);
+        });
+        const activate = (active, focus = false) => {
+          buttons.forEach((button, position) => {
+            button.setAttribute('aria-selected', String(position === active));
+            button.tabIndex = position === active ? 0 : -1; panels[position].hidden = position !== active;
+          });
+          if (focus) buttons[active].focus();
+        };
+        buttons.forEach((button, position) => button.addEventListener('click', () => activate(position)));
+        tabs.addEventListener('keydown', (keyEvent) => {
+          if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(keyEvent.key)) return;
+          const current = buttons.indexOf(document.activeElement);
+          if (current < 0) return;
+          keyEvent.preventDefault();
+          const next = keyEvent.key === 'Home' ? 0 : keyEvent.key === 'End' ? buttons.length - 1 : (current + (keyEvent.key === 'ArrowRight' ? 1 : -1) + buttons.length) % buttons.length;
+          activate(next, true);
+        });
+        activate(0);
+        const footer = document.createElement('footer');
+        const offer = card.querySelector('.tc-phone-api__offer');
+        const href = trackedUrl(offer?.href);
+        if (href) {
+          const action = offer.cloneNode(true); action.href = href; action.className = 'tc-tariff-modal__offer';
+          footer.append(action);
+        }
+        dialog.append(header, tabs, content, footer); document.body.append(dialog);
+        dialog.addEventListener('click', (click) => {
+          if (click.target !== dialog) return;
+          const box = dialog.getBoundingClientRect();
+          if (click.clientX < box.left || click.clientX > box.right || click.clientY < box.top || click.clientY > box.bottom) dialog.close();
+        });
+        dialog.addEventListener('close', () => {
+          document.documentElement.classList.remove('tc-tariff-modal-open'); dialog.remove(); link.focus();
+        }, { once: true });
+        document.documentElement.classList.add('tc-tariff-modal-open'); dialog.showModal();
       });
     });
     root.querySelectorAll('.tc-phone-api__visual img').forEach((image) => {
@@ -89,7 +155,7 @@
       root.removeAttribute('aria-busy');
     });
     // Comparison is user-initiated. It reuses the same validated affiliate links.
-    if (typeof HTMLDialogElement === 'undefined' || typeof HTMLDialogElement.prototype.showModal !== 'function') return;
+    if (!supportsDialog) return;
     const checks = Array.from(root.querySelectorAll('.tc-phone-api__compare'));
     const selection = root.querySelector('.tc-phone-api__selection');
     const selectionText = root.querySelector('.tc-phone-api__selection-count');

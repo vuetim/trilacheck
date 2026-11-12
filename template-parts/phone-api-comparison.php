@@ -171,7 +171,7 @@ if ( $is_sim ) {
 				<div class="tc-phone-api__toolbar"><p><strong><?php echo count( $cards ); ?></strong> Angebote auf dieser Seite</p><label for="tc-phone-sort">Sortieren nach:<select id="tc-phone-sort" name="sortierung" form="tc-phone-filters"><option value="effective" <?php selected( $sort, 'effective' ); ?>>Bestes Preisangebot</option><option value="monthly" <?php selected( $sort, 'monthly' ); ?>>Tarif-Grundgebühr</option></select></label></div>
 				<div class="tc-phone-api__selection" hidden><span class="tc-phone-api__selection-count" aria-live="polite"></span><button type="button" class="tc-phone-api__compare-open">Angebote vergleichen</button><button type="button" class="tc-phone-api__compare-clear">Auswahl löschen</button></div>
 				<p class="tc-phone-api__source"><?php echo trilacheck_tariffuxx_icon( 'info' ); ?> <?php if ( 'effective' === $sort ) : ?>Beste Preisangebote zuerst: aufsteigend nach Gesamtkosten über 24 Monate, inklusive Einmalkosten und angerechneter Boni. Die Reihenfolge gilt für deine gewählten Filter.<?php else : ?>Sortiert nach Tarif-Grundgebühr. Wähle „Bestes Preisangebot“, um nach Gesamtkosten inklusive Einmalkosten und angerechneter Boni zu sortieren.<?php endif; ?> Bedingungen und mögliche Preisphasen findest du in den Tarifdetails.</p>
-				<?php foreach ( $cards as $index => $card ) : $offer = $card['offer']; $view = $card['view']; ?>
+				<?php foreach ( $cards as $index => $card ) : $offer = $card['offer']; $view = $card['view']; $benefits = trilacheck_tariffuxx_benefits( $offer ); ?>
 					<article class="tc-phone-api__card">
 						<div class="tc-phone-api__visual<?php echo $is_sim ? ' tc-phone-api__visual--sim' : ''; ?>"><?php if ( $view['image'] ) : ?><img src="<?php echo esc_url( $view['image'] ); ?>" alt="<?php echo esc_attr( $view['phone'] ); ?>" width="130" height="170" loading="lazy"><?php else : ?><span class="tc-phone-api__phone-placeholder" aria-hidden="true"><?php echo trilacheck_tariffuxx_icon( $is_sim ? 'sim' : 'phone' ); ?></span><?php endif; ?></div>
 						<div class="tc-phone-api__identity"><?php if ( 1 === $page && 'effective' === $sort && $index < 3 ) : ?><span class="tc-phone-api__rank<?php echo 0 === $index ? ' tc-phone-api__rank--first' : ''; ?>"><?php echo trilacheck_tariffuxx_icon( 'star' ); ?> <?php echo esc_html( array( 'Bestes Preisangebot', 'Zweitbestes Preisangebot', 'Drittbestes Preisangebot' )[ $index ] ); ?></span><?php endif; ?><h3><?php echo esc_html( $view['phone'] ); ?></h3><p><?php echo esc_html( $is_sim ? $view['provider'] : $view['provider'] . ' · ' . $view['tariff'] ); ?></p><ul class="tc-phone-api__features"><li class="tc-phone-api__network tc-phone-api__network--<?php echo esc_attr( $view['network_code'] ); ?>"><?php echo esc_html( $view['network'] ); ?></li><?php foreach ( array( $view['data'], $view['five_g'] ? '5G' : '', $view['esim'] ? 'eSIM' : '', $view['term'] ) as $feature ) : ?><?php if ( $feature ) : ?><li><?php echo esc_html( $feature ); ?></li><?php endif; ?><?php endforeach; ?></ul></div>
@@ -180,20 +180,35 @@ if ( $is_sim ) {
 							<?php if ( $is_sim ) : ?><div><span>Einmalige Kosten</span><strong><?php echo esc_html( $view['extra_price'] ); ?></strong><small>Details und Bedingungen beachten</small></div><?php else : ?><div><span>Einmaliger Gerätepreis</span><strong><?php echo esc_html( $view['device_price'] ); ?></strong><small>Weitere Einmalkosten: <?php echo esc_html( $view['extra_price'] ); ?></small></div>
 							<?php endif; ?><div class="tc-phone-api__average"><span>Ø pro Monat</span><strong><?php echo esc_html( $view['average'] ); ?></strong><small>inkl. Einmalkosten und angerechneter Vorteile</small></div>
 						</div>
+						<?php if ( $benefits || ! empty( $offer['product_voucher']['code'] ) ) : ?>
+						<div class="tc-phone-api__benefits" aria-label="Boni und Vorteile">
+							<?php foreach ( $benefits as $benefit ) : ?><details><summary><span><?php echo esc_html( $benefit['label'] ); ?></span><strong><?php echo esc_html( $benefit['amount'] ); ?></strong><?php echo trilacheck_tariffuxx_icon( 'info' ); ?></summary><p><?php echo esc_html( $benefit['info'] ); ?></p></details><?php endforeach; ?>
+							<?php if ( ! empty( $offer['product_voucher']['code'] ) ) : ?><details><summary><span>Gutscheincode</span><strong><?php echo esc_html( trilacheck_tariffuxx_text( $offer['product_voucher']['code'] ) ); ?></strong><?php echo trilacheck_tariffuxx_icon( 'info' ); ?></summary><p><?php echo esc_html( trilacheck_tariffuxx_text( ( $offer['product_voucher']['benefit'] ?? '' ) . ' ' . ( $offer['product_voucher']['conditions'] ?? '' ) ) ); ?></p></details><?php endif; ?>
+							<small>Nur bei erfüllten Bedingungen. Im Durchschnitt angerechnete Vorteile sind bereits berücksichtigt.</small>
+						</div>
+						<?php endif; ?>
 						<div class="tc-phone-api__actions">
 							<label class="tc-phone-api__compare-label"><input type="checkbox" class="tc-phone-api__compare" data-offer="<?php echo esc_attr( wp_json_encode( $view ) ); ?>"> Vergleichen</label>
 							<a class="tc-phone-api__detail-link" href="#tc-phone-details-<?php echo esc_attr( $index ); ?>">Tarifdetails</a>
 							<a class="tc-phone-api__offer" href="<?php echo esc_url( $view['link'] ); ?>" target="_blank" rel="sponsored noopener">Zum Angebot <?php echo trilacheck_tariffuxx_icon( 'arrow' ); ?><span class="screen-reader-text"> (öffnet in neuem Tab)</span></a>
 						</div>
 						<details id="tc-phone-details-<?php echo esc_attr( $index ); ?>" class="tc-phone-api__details"><summary>Kosten & Vertragsbedingungen</summary>
-							<p>Gesamtkosten über 24 Monate: <strong><?php echo esc_html( $view['total'] ); ?></strong></p>
-							<?php foreach ( array( 'one_time_product_charges' => 'Einmalige Kosten', 'recurring_product_charges' => 'Laufende Tarifkosten', 'bonus_product_charges' => 'Boni und Vorteile' ) as $field => $label ) : ?>
+							<section class="tc-tariff-detail-panel" data-tc-detail="prices" aria-label="Preise und Leistungen"><p>Gesamtkosten über 24 Monate: <strong><?php echo esc_html( $view['total'] ); ?></strong></p>
+							<?php foreach ( array( 'one_time_product_charges' => 'Einmalige Kosten', 'recurring_product_charges' => 'Laufende Tarifkosten' ) as $field => $label ) : ?>
 								<h4><?php echo esc_html( $label ); ?></h4><ul><?php foreach ( trilacheck_tariffuxx_charges( $offer[ $field ] ?? array() ) as $charge ) : ?><li><?php echo esc_html( trilacheck_tariffuxx_text( $charge['description'] ?? '' ) . ': ' . trilacheck_tariffuxx_money( $charge['value'] ?? 0 ) . ' ' . trilacheck_tariffuxx_text( $charge['period_description'] ?? '' ) ); ?><?php if ( ! empty( $charge['from_period'] ) ) : ?> · ab Periode <?php echo esc_html( $charge['from_period'] ); ?><?php endif; ?><?php if ( ! empty( $charge['to_period'] ) ) : ?> bis <?php echo esc_html( $charge['to_period'] ); ?><?php endif; ?><?php if ( ! empty( $charge['info'] ) ) : ?> — <?php echo esc_html( trilacheck_tariffuxx_text( $charge['info'] ) ); ?><?php endif; ?></li><?php endforeach; ?></ul>
 							<?php endforeach; ?>
+							<?php if ( $benefits ) : ?><h4>Boni und Vorteile</h4><ul><?php foreach ( $benefits as $benefit ) : ?><li><?php echo esc_html( $benefit['label'] . ': ' . $benefit['amount'] . ' — ' . $benefit['info'] ); ?></li><?php endforeach; ?></ul><?php endif; ?>
 							<p>Die Gesamtkosten enthalten auch ausgewählte Geräte- und Optionskosten, die nicht immer Teil der Tarif-Grundgebühr sind. Angerechnete Boni und Cashback gelten nur bei Erfüllung ihrer Bedingungen.</p>
 							<?php if ( ! empty( $offer['warning_info_text'] ) ) : ?><p><?php echo esc_html( trilacheck_tariffuxx_text( $offer['warning_info_text'] ) ); ?></p><?php endif; ?>
 							<?php if ( ! empty( $offer['product_voucher'] ) ) : ?><p>Gutscheincode: <strong><?php echo esc_html( trilacheck_tariffuxx_text( $offer['product_voucher']['code'] ?? '' ) ); ?></strong> — <?php echo esc_html( trilacheck_tariffuxx_text( ( $offer['product_voucher']['benefit'] ?? '' ) . ' ' . ( $offer['product_voucher']['conditions'] ?? '' ) ) ); ?></p><?php endif; ?>
+							</section>
+							<section class="tc-tariff-detail-panel" data-tc-detail="specifications" aria-label="Tarifinformationen">
+								<div class="tc-tariff-specifications">
+								<?php foreach ( trilacheck_tariffuxx_specifications( $offer ) as $group => $rows ) : ?><section><h4><?php echo esc_html( $group ); ?></h4><dl><?php foreach ( $rows as $label => $value ) : ?><div><dt><?php echo esc_html( $label ); ?></dt><dd><?php echo esc_html( $value ); ?></dd></div><?php endforeach; ?></dl></section><?php endforeach; ?>
+								</div>
+								<h4>Dokumente des Anbieters</h4>
 							<?php foreach ( (array) ( $offer['product_documents'] ?? array() ) as $document ) : ?><p><a href="<?php echo esc_url( $document['url'] ?? '' ); ?>" target="_blank" rel="noopener"><?php echo esc_html( trilacheck_tariffuxx_text( $document['description'] ?? 'Produktinformationen' ) ); ?></a></p><?php endforeach; ?>
+							</section>
 						</details>
 					</article>
 				<?php endforeach; ?>

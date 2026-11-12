@@ -152,4 +152,24 @@ foreach ( array( array( 'sortierung' => 'monthly' ), array( 'angebote_seite' => 
  ob_start(); include dirname( __DIR__, 2 ) . '/template-parts/phone-api-comparison.php'; $html = ob_get_clean();
  check( ! str_contains( $html, 'tc-phone-api__rank' ), 'Price ranking badges must not label a different sort or later pages as top three.' );
 }
+$benefit_offer = array_merge( $GLOBALS['response_offers'][0], array(
+ 'bonus_product_charges' => array( array( 'description' => 'Startguthaben', 'value' => 10, 'info' => 'Wird mit der Anschlussgebühr verrechnet.' ), array( 'description' => 'Wechselbonus', 'value' => 10, 'info' => 'Rufnummernmitnahme und Aktivierung erforderlich.' ) ),
+ 'cashback_value' => 5, 'is_esim' => true, 'is_eu_roaming_incl' => false, 'download_speed_mbits' => 50,
+ 'termination_period_text' => '1 Monat', 'sim_card_delivery_time_text' => '24 Stunden',
+ 'product_documents' => array( array( 'description' => 'Produktinformationsblatt', 'url' => 'https://example.test/product.pdf' ) ),
+) );
+$benefits = trilacheck_tariffuxx_benefits( $benefit_offer );
+check( 3 === count( $benefits ) && str_contains( $benefits[0]['info'], 'Anschlussgebühr' ), 'Customer benefits must preserve provider conditions and include separate cashback.' );
+$duplicate_cashback = $benefit_offer;
+$duplicate_cashback['bonus_product_charges'][] = array( 'description' => 'Cashback', 'value' => 5 );
+check( 3 === count( trilacheck_tariffuxx_benefits( $duplicate_cashback ) ), 'Cashback already listed among bonuses must not be added twice.' );
+$specs = trilacheck_tariffuxx_specifications( $benefit_offer );
+check( 'Nein' === $specs['Ausland & Funktionen']['EU-Roaming inklusive'] && ! isset( $specs['Ausland & Funktionen']['VoLTE'] ), 'Missing API flags must not become false claims about a tariff.' );
+check( '50 Mbit/s' === $specs['Internet, Telefonie & SMS']['Download maximal'], 'Speeds must retain their documented units.' );
+$GLOBALS['response_offers'] = array( $benefit_offer );
+$args = array( 'mode' => 'sim' ); $_GET = array();
+ob_start(); include dirname( __DIR__, 2 ) . '/template-parts/phone-api-comparison.php'; $html = ob_get_clean();
+check( str_contains( $html, 'data-tc-detail="prices"' ) && str_contains( $html, 'data-tc-detail="specifications"' ), 'Both popup panels must also be present in server-rendered HTML.' );
+check( str_contains( $html, 'tc-phone-api__benefits' ) && str_contains( $html, 'Rufnummernmitnahme und Aktivierung erforderlich.' ) && str_contains( $html, 'product.pdf' ), 'Visible benefit explanations and provider documents must survive rendering.' );
+check( str_contains( $html, '10,42 €' ), 'Showing benefits must not subtract them again from API-calculated prices.' );
 echo "PASS: API rendering, model and zero-price filters, partner tracking, output safety and legacy fallback.\n";

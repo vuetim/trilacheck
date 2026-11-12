@@ -86,7 +86,7 @@ function trilacheck_tariffuxx_request( $endpoint, $params ) {
 	if ( 'get-by-params' === $endpoint && empty( $params['is_bundle_data_only'] ) ) {
 		// SIM master data: retain only the metadata needed for topic-specific filters.
 		$data['products'] = array_map( static function ( $product ) {
-			return array( 'product_id' => $product['product_id'] ?? 0, 'restricted_customer_group_code' => $product['restricted_customer_group_code'] ?? '', 'internet_data_volume' => $product['internet_data_volume'] ?? '' );
+			return array( 'product_id' => $product['id'] ?? $product['product_id'] ?? 0, 'restricted_customer_group_code' => $product['restricted_customer_group_code'] ?? '', 'internet_data_volume' => $product['internet_data_volume'] ?? '' );
 		}, $data['products'] );
 	} elseif ( 'get-by-params' === $endpoint ) {
 		// Store only model metadata; the full upstream catalogue is several MB.
@@ -267,4 +267,43 @@ function trilacheck_tariffuxx_phone_entry( $brand ) {
 	$device = $slug ? $devices[ $slug ] : null;
 	$query = $slug ? array( 'telefon' => $slug ) : array( 'hersteller' => sanitize_title( $brand ) );
 	return array( 'url' => add_query_arg( $query, home_url( '/handy-mit-vertrag/' ) ) . '#tarifvergleich', 'name' => $device ? $device['name'] : '', 'image' => $device ? $device['image'] : '' );
+}
+
+/** Customer benefits, not publisher commissions; never subtract these twice. */
+function trilacheck_tariffuxx_benefits( $offer ) {
+	$benefits = array();
+	$has_cashback = false;
+	foreach ( trilacheck_tariffuxx_charges( $offer['bonus_product_charges'] ?? array() ) as $charge ) {
+		if ( ! is_numeric( $charge['value'] ?? null ) || (float) $charge['value'] <= 0 ) { continue; }
+		$label = trilacheck_tariffuxx_text( $charge['description'] ?? 'Bonus' );
+		$info = trilacheck_tariffuxx_text( $charge['info'] ?? '' );
+		$has_cashback = $has_cashback || (bool) preg_match( '/cashback/iu', $label );
+		if ( ! $info ) {
+			$info = preg_match( '/wechsel|portier|rufnummer/iu', $label ) ? 'Die Voraussetzungen für den Wechselbonus, mögliche Rufnummernmitnahme und Fristen im Angebot prüfen.' : 'Prüfe im Angebot, wann der Vorteil gutgeschrieben wird und welche Voraussetzungen dafür gelten.';
+		}
+		$benefits[] = array( 'label' => $label, 'amount' => trilacheck_tariffuxx_money( $charge['value'] ), 'info' => $info );
+	}
+	if ( ! $has_cashback && is_numeric( $offer['cashback_value'] ?? null ) && (float) $offer['cashback_value'] > 0 ) {
+		$benefits[] = array( 'label' => 'Cashback', 'amount' => trilacheck_tariffuxx_money( $offer['cashback_value'] ), 'info' => 'Cashback gemäß Angebotsbedingungen. Prüfe Antrag, Nachweise und Fristen beim Abschluss. Im berechneten Durchschnitt bereits berücksichtigt.' );
+	}
+	return $benefits;
+}
+
+/** Render only specifications supplied by the API; missing does not mean "Nein". */
+function trilacheck_tariffuxx_specifications( $offer ) {
+	$groups = array();
+	$add = static function ( $group, $label, $key, $unit = '' ) use ( &$groups, $offer ) {
+		if ( ! array_key_exists( $key, $offer ) || null === $offer[ $key ] || '' === $offer[ $key ] || ! is_scalar( $offer[ $key ] ) ) { return; }
+		$value = is_bool( $offer[ $key ] ) ? ( $offer[ $key ] ? 'Ja' : 'Nein' ) : trilacheck_tariffuxx_text( $offer[ $key ] ) . $unit;
+		$groups[ $group ][ $label ] = $value;
+	};
+	foreach ( array( 'Tarifart' => 'payment_text', 'Mindestlaufzeit' => 'contract_period_text', 'Kündigungsfrist' => 'termination_period_text', 'Vertragsverlängerung' => 'extension_period_text', 'Mobilfunknetz' => 'mobile_network_name', 'Netztechnologie' => 'best_network_technology' ) as $label => $key ) { $add( 'Vertrag & Netz', $label, $key ); }
+	foreach ( array( 'Datenvolumen' => 'internet_data_volume', 'Telefon-Flat in alle deutschen Netze' => 'is_phone_allnet_flat', 'SMS-Flat' => 'is_sms_allnet_flat', 'Datenautomatik' => 'is_data_automatic_fixed' ) as $label => $key ) { $add( 'Internet, Telefonie & SMS', $label, $key ); }
+	$add( 'Internet, Telefonie & SMS', 'Download maximal', 'download_speed_mbits', ' Mbit/s' );
+	$add( 'Internet, Telefonie & SMS', 'Upload maximal', 'upload_speed_mbits', ' Mbit/s' );
+	$add( 'Internet, Telefonie & SMS', 'Nach Drosselung maximal', 'download_throttle_speed_kbits', ' kbit/s' );
+	foreach ( array( 'SIM-Formate' => 'sim_card_text', 'eSIM verfügbar' => 'is_esim', 'Bestellung' => 'sim_card_ordering_text', 'Versand' => 'sim_card_delivery_text', 'Bereitstellung' => 'sim_card_delivery_time_text', 'Rufnummernmitnahme möglich' => 'is_mnp', 'Hinweis zur Rufnummernmitnahme' => 'mnp_info_text' ) as $label => $key ) { $add( 'SIM & Rufnummer', $label, $key ); }
+	foreach ( array( 'EU-Roaming inklusive' => 'is_eu_roaming_incl', 'Datenvolumen im EU-Ausland' => 'eu_roaming_data_volume', 'VoLTE' => 'is_volte_incl', 'Wi-Fi Calling' => 'is_wifi_calling_incl', 'Hotspot / Tethering' => 'is_tethering_incl', 'Multi-SIM verfügbar' => 'is_multi_sim' ) as $label => $key ) { $add( 'Ausland & Funktionen', $label, $key ); }
+	foreach ( array( 'Zielgruppe' => 'restricted_customer_group_info', 'Voraussetzungen' => 'restricted_customer_group_footnote', 'Rufnummernmitnahme' => 'restricted_mnp_providers_text', 'Unlimited on Demand' => 'unlimited_on_demand_info', 'EU-Roaming' => 'eu_roaming_data_volume_footnote', 'Datenvolumen' => 'growing_data_volume_footnote' ) as $label => $key ) { $add( 'Weitere Hinweise', $label, $key ); }
+	return $groups;
 }
