@@ -106,3 +106,16 @@
 .tc-phone-comparison{padding:16px}.tc-phone-comparison h2{font-size:21px}.tc-phone-comparison th,.tc-phone-comparison td{padding:10px;min-width:140px;font-size:12px}
 }
 .tc-phone-api--interactive .tc-phone-api__details:not([open]){display:none}
+.tc-tariff-icon{display:inline-block;width:20px;height:20px;flex-shrink:0;vertical-align:middle}
+.tc-phone-api__tabs a,.tc-phone-api__mobile-controls button,.tc-phone-api__filters>button,.tc-phone-api__offer{align-items:center;justify-content:center;gap:9px}
+.tc-phone-api select{appearance:none;padding-right:36px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23075052' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-size:18px;background-position:right 12px center}
+.tc-phone-api__phone-placeholder .tc-tariff-icon{width:56px;height:76px}
+.tc-phone-api__visual--sim img{width:110px;height:64px;object-fit:contain}
+.tc-comparison-hero.tc-comparison-hero--compact{padding:18px 0 12px;background:#f5f9f9;color:#12373b;min-height:0}
+.tc-comparison-hero--compact h1{margin:0 0 10px;font-size:clamp(24px,3vw,34px);line-height:1.2;max-width:none}
+.tc-compact-trust{display:flex;flex-wrap:wrap;align-items:center;gap:8px 22px;font-size:12px;line-height:1.5;color:#34565b}
+.tc-compact-trust>span{display:inline-flex;align-items:center;gap:6px}
+.tc-compact-trust__stars{display:inline-flex;gap:1px;color:#e3a000}
+.tc-compact-trust__stars .tc-tariff-icon{width:13px;height:13px;fill:currentColor;stroke-width:1}
+.tc-comparison-hero--compact+.tc-contract-widget,.tc-comparison-hero--compact+.tc-mobile-widget{padding-top:12px}
+@media(max-width:767px){.tc-compact-trust{gap:6px 14px;font-size:11px}.tc-comparison-hero.tc-comparison-hero--compact{padding-block:14px 10px}.tc-phone-api__tabs a{font-size:14px}.tc-phone-api__visual--sim img{width:80px;height:48px}}

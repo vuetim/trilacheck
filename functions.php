@@ -92,7 +92,9 @@ function trilacheck_assets() {
 
 	if ( is_page( 'mobilfunk' ) ) {
 		wp_enqueue_style( 'trilacheck-mobilfunk', $theme_uri . '/assets/css/mobilfunk.css', array( 'trilacheck-base' ), $version( '/assets/css/mobilfunk.css' ) );
-		wp_enqueue_script( 'trilacheck-mobile-allgemein', 'https://files.check24.net/widgets/auto/262971/c24pp-mobileservice-iframe/sim-only-iframe.js', array(), null, true );
+		if ( ! trilacheck_tariffuxx_enabled( 'sim' ) ) {
+			wp_enqueue_script( 'trilacheck-mobile-allgemein', 'https://files.check24.net/widgets/auto/262971/c24pp-mobileservice-iframe/sim-only-iframe.js', array(), null, true );
+		}
 	}
 	if ( is_page( array( 'handytarife-5gb', 'handytarife-15gb', 'handytarife-50gb', 'handytarife-unlimited', 'tarife-fur-junge-leute', 'prepaid-tarife' ) ) ) {
 		wp_enqueue_style( 'trilacheck-mobile-detail', $theme_uri . '/assets/css/mobile-detail.css', array( 'trilacheck-base' ), $version( '/assets/css/mobile-detail.css' ) );

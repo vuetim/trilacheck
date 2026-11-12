@@ -5,11 +5,13 @@
  * @package Trilacheck
  */
 
+$tc_sim_api = trilacheck_tariffuxx_enabled( 'sim' );
 get_header();
 ?>
 
 <article class="tc-mobile-page">
-	<header class="tc-mobile-hero tc-comparison-hero">
+	<header class="tc-mobile-hero tc-comparison-hero<?php echo $tc_sim_api ? ' tc-comparison-hero--compact' : ''; ?>">
+<?php if ( $tc_sim_api ) : ?><div class="tc-container"><h1>Handytarife im Vergleich</h1><?php get_template_part( 'template-parts/comparison-compact-trust' ); ?></div><?php else : ?>
 		<div class="tc-container tc-mobile-hero__inner">
 			<div class="tc-mobile-hero__content">
 				<p class="tc-mobile-eyebrow"><?php esc_html_e( 'Mobilfunk', 'trilacheck' ); ?></p>
@@ -27,10 +29,11 @@ get_header();
 			</div>
 		</div>
 	<?php get_template_part( 'template-parts/comparison-trust' ); ?>
+<?php endif; ?>
 	</header>
 
-	<div class="tc-container tc-mobile-widget">
-		<?php get_template_part( 'template-parts/direct-comparison', null, array( 'type' => 'mobile' ) ); ?>
+	<div class="tc-container tc-mobile-widget" id="tarifvergleich">
+		<?php if ( $tc_sim_api ) { get_template_part( 'template-parts/phone-api-comparison', null, array( 'mode' => 'sim' ) ); } else { get_template_part( 'template-parts/direct-comparison', null, array( 'type' => 'mobile' ) ); } ?>
 	</div>
 
 	<section class="tc-container tc-data-shortcuts" aria-labelledby="tc-data-shortcuts-title">
@@ -49,6 +52,7 @@ get_header();
 	</section>
 
 	<div class="tc-container tc-mobile-content">
+<?php if ( $tc_sim_api ) : ?><p>Vergleiche SIM-only-Tarife nach Datenvolumen, Netz, Laufzeit und weiteren Leistungen.</p><ul><li>Tarife verschiedener Mobilfunkanbieter vergleichen</li><li>5G, Laufzeit und Datenvolumen passend auswählen</li><li>Tarifdetails vor dem Abschluss transparent prüfen</li></ul><?php endif; ?>
 		<section>
 			<h2><?php esc_html_e( 'Welcher Handytarif passt zu dir?', 'trilacheck' ); ?></h2>
 			<p><?php esc_html_e( 'Ob Allnet-Flat, 5G, großes Datenvolumen oder ein monatlich kündbarer Tarif: Die passende Auswahl hängt davon ab, wie du dein Smartphone nutzt. Wer hauptsächlich Nachrichten schreibt und gelegentlich unterwegs surft, benötigt meist weniger Daten als Personen, die regelmäßig Videos streamen oder das Smartphone als Hotspot verwenden.', 'trilacheck' ); ?></p>
@@ -84,7 +88,7 @@ get_header();
 
 		<div class="tc-mobile-final-cta">
 			<div><strong><?php esc_html_e( 'Bereit für den Tarifvergleich?', 'trilacheck' ); ?></strong><p><?php esc_html_e( 'Vergleiche jetzt verfügbare SIM-only-Tarife.', 'trilacheck' ); ?></p></div>
-			<a href="#c24pp-mobileservice-iframe"><?php esc_html_e( 'Handytarife vergleichen', 'trilacheck' ); ?><span aria-hidden="true">→</span></a>
+			<a href="#tarifvergleich"><?php esc_html_e( 'Handytarife vergleichen', 'trilacheck' ); ?><span aria-hidden="true">→</span></a>
 		</div>
 	</div>
 </article>

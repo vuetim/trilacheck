@@ -6,10 +6,12 @@
  */
 defined( 'ABSPATH' ) || exit;
 
+$mode = isset( $args['mode'] ) && 'sim' === $args['mode'] ? 'sim' : 'phone';
+$is_sim = 'sim' === $mode;
 $read = static function ( $name ) {
 	return isset( $_GET[ $name ] ) && is_string( $_GET[ $name ] ) ? sanitize_text_field( wp_unslash( $_GET[ $name ] ) ) : '';
 };
-$phone        = $read( 'telefon' );
+$phone        = $is_sim ? '' : $read( 'telefon' );
 $manufacturer = $read( 'hersteller' );
 $network      = $read( 'netz' );
 $data         = $read( 'daten' );
@@ -20,7 +22,7 @@ $sort         = 'monthly' === $read( 'sortierung' ) ? 'monthly' : 'effective';
 $esim         = '1' === $read( 'esim' );
 $five_g       = '1' === $read( '5g' );
 $page         = max( 1, min( 100, absint( $read( 'angebote_seite' ) ) ) );
-$catalogue    = trilacheck_tariffuxx_devices();
+$catalogue    = $is_sim ? array() : trilacheck_tariffuxx_devices();
 $brands       = array();
 foreach ( $catalogue as $device ) {
 	if ( $device['brand'] ) {
@@ -31,7 +33,7 @@ asort( $brands, SORT_NATURAL | SORT_FLAG_CASE );
 if ( ! isset( $brands[ $manufacturer ] ) ) {
 	$manufacturer = '';
 }
-$params = array( 'type' => 1, 'incl_bundles' => 1, 'filter' => 0, 'count' => 12, 'from' => ( $page - 1 ) * 12, 'subid' => 'trilacheck-handy', 'com_only' => 1, 'average_price_calculation_months' => 24 );
+$params = array( 'type' => 1, 'incl_bundles' => $is_sim ? 0 : 1, 'filter' => 0, 'count' => 12, 'from' => ( $page - 1 ) * 12, 'subid' => $is_sim ? 'trilacheck-mobilfunk' : 'trilacheck-handy', 'com_only' => 1, 'average_price_calculation_months' => 24 );
 if ( $phone && preg_match( '/^[a-z0-9-]{1,120}$/', $phone ) && 'simonly' !== $phone ) {
 	$params['phone'] = array( $phone );
 } else {
@@ -57,7 +59,7 @@ if ( isset( $data_choices[ $data ] ) ) {
 	$data = '';
 }
 $upfront_choices = array( '0' => '0 € Gerätepreis', '1' => 'Bis 1 €', '50' => 'Bis 50 €', '100' => 'Bis 100 €', '200' => 'Bis 200 €', '500' => 'Bis 500 €' );
-if ( isset( $upfront_choices[ $upfront ] ) ) {
+if ( ! $is_sim && isset( $upfront_choices[ $upfront ] ) ) {
 	$params['max_phone_price'] = (float) $upfront;
 } else {
 	$upfront = '';
@@ -82,11 +84,13 @@ if ( $esim ) {
 if ( $five_g ) {
 	$params['technologies'] = array( '5g' => 1 );
 }
+$payment = $is_sim ? $read( 'tarifart' ) : '';
+if ( in_array( $payment, array( 'postpaid', 'prepaid' ), true ) ) { $params['payment'] = $payment; }
 $unknown_model = $phone && $catalogue && ! isset( $catalogue[ $phone ] );
 // The upstream silently ignores unknown filter values. Never show unrelated
 // phones as if they matched a removed or mistyped model deep link.
 $offers = $unknown_model ? array() : trilacheck_tariffuxx_request( 'get-offers-by-params', $params );
-$catalogue = trilacheck_tariffuxx_devices( is_array( $offers ) ? $offers : array() );
+$catalogue = $is_sim ? array() : trilacheck_tariffuxx_devices( is_array( $offers ) ? $offers : array() );
 foreach ( $catalogue as $device ) {
 	if ( $device['brand'] ) {
 		$brands[ sanitize_title( $device['brand'] ) ] = $device['brand'];
@@ -96,7 +100,7 @@ asort( $brands, SORT_NATURAL | SORT_FLAG_CASE );
 $cards = array();
 if ( ! is_wp_error( $offers ) ) {
 	foreach ( $offers as $offer ) {
-		$view = trilacheck_tariffuxx_offer( $offer );
+		$view = trilacheck_tariffuxx_offer( $offer, $mode );
 		if ( $view ) {
 			$cards[] = array( 'offer' => $offer, 'view' => $view );
 		}
@@ -110,52 +114,57 @@ $fields = array(
 	'anzahlung' => array( 'label' => 'Einmaliger Gerätepreis', 'all' => 'Alle Gerätepreise', 'choices' => $upfront_choices, 'value' => $upfront ),
 	'laufzeit' => array( 'label' => 'Laufzeit', 'all' => 'Alle Laufzeiten', 'choices' => $duration_choices, 'value' => $duration ),
 );
+if ( $is_sim ) {
+ unset( $fields['hersteller'], $fields['anzahlung'] );
+ $fields['tarifart'] = array( 'label' => 'Tarifart', 'all' => 'Vertrag und Prepaid', 'choices' => array( 'postpaid' => 'Vertrag', 'prepaid' => 'Prepaid' ), 'value' => $payment );
+}
 ?>
-<section class="tc-phone-api" data-api-state="<?php echo is_wp_error( $offers ) ? 'error' : 'ready'; ?>" aria-label="Handys mit Vertrag vergleichen">
+<section class="tc-phone-api" data-api-state="<?php echo is_wp_error( $offers ) ? 'error' : 'ready'; ?>" aria-label="<?php echo $is_sim ? 'SIM-only-Tarife vergleichen' : 'Handys mit Vertrag vergleichen'; ?>">
 	<nav class="tc-phone-api__tabs" aria-label="Vergleich auswählen">
-		<a class="is-current" href="<?php echo esc_url( get_permalink() ); ?>#tarifvergleich" aria-current="page">Handy mit Vertrag</a>
-		<a href="<?php echo esc_url( home_url( '/mobilfunk/' ) ); ?>">Nur SIM</a>
+		<a href="<?php echo esc_url( home_url( '/handy-mit-vertrag/' ) ); ?>#tarifvergleich" <?php if ( ! $is_sim ) : ?>class="is-current" aria-current="page"<?php endif; ?>><?php echo trilacheck_tariffuxx_icon( 'phone' ); ?> Handy mit Vertrag</a>
+		<a href="<?php echo esc_url( home_url( '/mobilfunk/' ) ); ?>#tarifvergleich" <?php if ( $is_sim ) : ?>class="is-current" aria-current="page"<?php endif; ?>><?php echo trilacheck_tariffuxx_icon( 'sim' ); ?> Nur SIM</a>
 	</nav>
 	<?php if ( is_wp_error( $offers ) ) : ?>
-		<div class="tc-phone-api__unavailable" role="status"><h2>Handys mit Vertrag vergleichen</h2><p>Unser eigener Vergleich ist vorübergehend nicht erreichbar. Der bisherige Vergleich steht dir weiterhin zur Verfügung.</p>
+		<div class="tc-phone-api__unavailable" role="status"><h2><?php echo $is_sim ? 'Handytarife vergleichen' : 'Handys mit Vertrag vergleichen'; ?></h2><p>Unser eigener Vergleich ist vorübergehend nicht erreichbar. Der bisherige Vergleich steht dir weiterhin zur Verfügung.</p>
 		<?php if ( current_user_can( 'manage_options' ) ) : ?><p><a href="<?php echo esc_url( admin_url( 'options-reading.php' ) ); ?>">API-Einstellungen prüfen</a> · <?php echo 'tx_config' === $offers->get_error_code() ? 'API-Schlüssel fehlt auf diesem Server.' : 'Die API-Anfrage konnte nicht abgeschlossen werden.'; ?></p><?php endif; ?>
 		</div>
-		<?php echo do_shortcode( '[trilacheck_phone_contract]' ); ?>
+		<?php if ( $is_sim ) { wp_enqueue_script( 'trilacheck-mobile-comparison-fallback', 'https://files.check24.net/widgets/auto/262971/c24pp-mobileservice-iframe/sim-only-iframe.js', array(), null, true ); get_template_part( 'template-parts/direct-comparison', null, array( 'type' => 'mobile' ) ); } else { echo do_shortcode( '[trilacheck_phone_contract]' ); } ?>
 	<?php else : ?>
 		<div class="tc-phone-api__layout">
-			<div class="tc-phone-api__mobile-controls"><button type="button" class="tc-phone-api__filter-toggle" aria-expanded="true" aria-controls="tc-phone-filters"><span aria-hidden="true">☷</span> Filter <span aria-hidden="true">⌄</span></button><button type="button" class="tc-phone-api__sort-toggle">↕ Sortieren</button></div>
+			<div class="tc-phone-api__mobile-controls"><button type="button" class="tc-phone-api__filter-toggle" aria-expanded="true" aria-controls="tc-phone-filters"><?php echo trilacheck_tariffuxx_icon( 'filter' ); ?> Filter <?php echo trilacheck_tariffuxx_icon( 'chevron' ); ?></button><button type="button" class="tc-phone-api__sort-toggle"><?php echo trilacheck_tariffuxx_icon( 'sort' ); ?> Sortieren</button></div>
 			<form id="tc-phone-filters" method="get" action="<?php echo esc_url( get_permalink() ); ?>#tarifvergleich" class="tc-phone-api__filters">
 				<h2 class="screen-reader-text">Dein Wunschhandy und Tarif</h2>
-				<label for="tc-phone-model">Smartphone</label>
+				<?php if ( ! $is_sim ) : ?><label for="tc-phone-model">Smartphone</label>
 				<select id="tc-phone-model" name="telefon"><option value="">Alle Smartphones</option>
 					<?php if ( $phone && ! isset( $catalogue[ $phone ] ) ) : ?><option value="<?php echo esc_attr( $phone ); ?>" selected><?php echo esc_html( ucwords( str_replace( '-', ' ', $phone ) ) ); ?></option><?php endif; ?>
 					<?php foreach ( $catalogue as $slug => $device ) : ?><option value="<?php echo esc_attr( $slug ); ?>" data-brand="<?php echo esc_attr( sanitize_title( $device['brand'] ) ); ?>" <?php selected( $phone, $slug ); ?>><?php echo esc_html( $device['name'] ); ?></option><?php endforeach; ?>
 				</select>
-				<?php foreach ( $fields as $name => $field ) : ?>
+				<?php endif; ?>
+<?php foreach ( $fields as $name => $field ) : ?>
 					<label for="tc-phone-<?php echo esc_attr( $name ); ?>"><?php echo esc_html( $field['label'] ); ?></label>
 					<select id="tc-phone-<?php echo esc_attr( $name ); ?>" name="<?php echo esc_attr( $name ); ?>"><option value=""><?php echo esc_html( $field['all'] ); ?></option><?php foreach ( $field['choices'] as $value => $label ) : ?><option value="<?php echo esc_attr( $value ); ?>" <?php selected( $field['value'], $value ); ?>><?php echo esc_html( $label ); ?></option><?php endforeach; ?></select>
 				<?php endforeach; ?>
 				<details class="tc-phone-api__more"><summary>Weitere Filter</summary><label><input type="checkbox" name="5g" value="1" <?php checked( $five_g ); ?>> Nur 5G-Tarife</label><label><input type="checkbox" name="esim" value="1" <?php checked( $esim ); ?>> eSIM verfügbar</label></details>
-				<button type="submit">Angebote anzeigen <span aria-hidden="true">→</span></button>
+				<button type="submit">Angebote anzeigen <?php echo trilacheck_tariffuxx_icon( 'arrow' ); ?></button>
 				<a class="tc-phone-api__reset" href="<?php echo esc_url( get_permalink() ); ?>#tarifvergleich">Filter zurücksetzen</a>
 			</form>
 			<div class="tc-phone-api__results">
 				<div class="tc-phone-api__toolbar"><p><strong><?php echo count( $cards ); ?></strong> Angebote auf dieser Seite</p><label for="tc-phone-sort">Sortieren nach:<select id="tc-phone-sort" name="sortierung" form="tc-phone-filters"><option value="effective" <?php selected( $sort, 'effective' ); ?>>Ø Gesamtkosten</option><option value="monthly" <?php selected( $sort, 'monthly' ); ?>>Tarif-Grundgebühr</option></select></label></div>
 				<div class="tc-phone-api__selection" hidden><span class="tc-phone-api__selection-count" aria-live="polite"></span><button type="button" class="tc-phone-api__compare-open">Angebote vergleichen</button><button type="button" class="tc-phone-api__compare-clear">Auswahl löschen</button></div>
-				<p class="tc-phone-api__source"><span aria-hidden="true">ⓘ</span> Durchschnittskosten über 24 Monate inklusive Einmalkosten und angerechneter Boni. Bedingungen und mögliche Preisphasen findest du in den Tarifdetails.</p>
+				<p class="tc-phone-api__source"><?php echo trilacheck_tariffuxx_icon( 'info' ); ?> Durchschnittskosten über 24 Monate inklusive Einmalkosten und angerechneter Boni. Bedingungen und mögliche Preisphasen findest du in den Tarifdetails.</p>
 				<?php foreach ( $cards as $index => $card ) : $offer = $card['offer']; $view = $card['view']; ?>
 					<article class="tc-phone-api__card">
-						<div class="tc-phone-api__visual"><?php if ( $view['image'] ) : ?><img src="<?php echo esc_url( $view['image'] ); ?>" alt="<?php echo esc_attr( $view['phone'] ); ?>" width="130" height="170" loading="lazy"><?php else : ?><span class="tc-phone-api__phone-placeholder" aria-hidden="true">▯</span><?php endif; ?></div>
-						<div class="tc-phone-api__identity"><h3><?php echo esc_html( $view['phone'] ); ?></h3><p><?php echo esc_html( $view['provider'] . ' · ' . $view['tariff'] ); ?></p><ul class="tc-phone-api__features"><li class="tc-phone-api__network tc-phone-api__network--<?php echo esc_attr( $view['network_code'] ); ?>"><?php echo esc_html( $view['network'] ); ?></li><?php foreach ( array( $view['data'], $view['five_g'] ? '5G' : '', $view['term'] ) as $feature ) : ?><?php if ( $feature ) : ?><li><?php echo esc_html( $feature ); ?></li><?php endif; ?><?php endforeach; ?></ul></div>
+						<div class="tc-phone-api__visual<?php echo $is_sim ? ' tc-phone-api__visual--sim' : ''; ?>"><?php if ( $view['image'] ) : ?><img src="<?php echo esc_url( $view['image'] ); ?>" alt="<?php echo esc_attr( $view['phone'] ); ?>" width="130" height="170" loading="lazy"><?php else : ?><span class="tc-phone-api__phone-placeholder" aria-hidden="true"><?php echo trilacheck_tariffuxx_icon( $is_sim ? 'sim' : 'phone' ); ?></span><?php endif; ?></div>
+						<div class="tc-phone-api__identity"><h3><?php echo esc_html( $view['phone'] ); ?></h3><p><?php echo esc_html( $is_sim ? $view['provider'] : $view['provider'] . ' · ' . $view['tariff'] ); ?></p><ul class="tc-phone-api__features"><li class="tc-phone-api__network tc-phone-api__network--<?php echo esc_attr( $view['network_code'] ); ?>"><?php echo esc_html( $view['network'] ); ?></li><?php foreach ( array( $view['data'], $view['five_g'] ? '5G' : '', $view['esim'] ? 'eSIM' : '', $view['term'] ) as $feature ) : ?><?php if ( $feature ) : ?><li><?php echo esc_html( $feature ); ?></li><?php endif; ?><?php endforeach; ?></ul></div>
 						<div class="tc-phone-api__price">
 							<div><span>Tarif-Grundgebühr</span><strong><?php echo esc_html( $view['monthly'] ); ?></strong><small><?php echo esc_html( $view['billing'] ); ?><?php if ( $view['phases'] ) : ?> · Preisphasen beachten<?php endif; ?></small></div>
-							<div><span>Einmaliger Gerätepreis</span><strong><?php echo esc_html( $view['device_price'] ); ?></strong><small>Weitere Einmalkosten: <?php echo esc_html( $view['extra_price'] ); ?></small></div>
-							<div class="tc-phone-api__average"><span>Ø pro Monat</span><strong><?php echo esc_html( $view['average'] ); ?></strong><small>inkl. Einmalkosten und angerechneter Vorteile</small></div>
+							<?php if ( $is_sim ) : ?><div><span>Einmalige Kosten</span><strong><?php echo esc_html( $view['extra_price'] ); ?></strong><small>Details und Bedingungen beachten</small></div><?php else : ?><div><span>Einmaliger Gerätepreis</span><strong><?php echo esc_html( $view['device_price'] ); ?></strong><small>Weitere Einmalkosten: <?php echo esc_html( $view['extra_price'] ); ?></small></div>
+							<?php endif; ?><div class="tc-phone-api__average"><span>Ø pro Monat</span><strong><?php echo esc_html( $view['average'] ); ?></strong><small>inkl. Einmalkosten und angerechneter Vorteile</small></div>
 						</div>
 						<div class="tc-phone-api__actions">
 							<label class="tc-phone-api__compare-label"><input type="checkbox" class="tc-phone-api__compare" data-offer="<?php echo esc_attr( wp_json_encode( $view ) ); ?>"> Vergleichen</label>
 							<a class="tc-phone-api__detail-link" href="#tc-phone-details-<?php echo esc_attr( $index ); ?>">Tarifdetails</a>
-							<a class="tc-phone-api__offer" href="<?php echo esc_url( $view['link'] ); ?>" target="_blank" rel="sponsored noopener">Zum Angebot <span aria-hidden="true">→</span><span class="screen-reader-text"> (öffnet in neuem Tab)</span></a>
+							<a class="tc-phone-api__offer" href="<?php echo esc_url( $view['link'] ); ?>" target="_blank" rel="sponsored noopener">Zum Angebot <?php echo trilacheck_tariffuxx_icon( 'arrow' ); ?><span class="screen-reader-text"> (öffnet in neuem Tab)</span></a>
 						</div>
 						<details id="tc-phone-details-<?php echo esc_attr( $index ); ?>" class="tc-phone-api__details"><summary>Kosten & Vertragsbedingungen</summary>
 							<p>Gesamtkosten über 24 Monate: <strong><?php echo esc_html( $view['total'] ); ?></strong></p>
@@ -169,7 +178,7 @@ $fields = array(
 						</details>
 					</article>
 				<?php endforeach; ?>
-				<?php if ( ! $cards ) : ?><div class="tc-phone-api__empty" role="status"><h3>Keine passenden Angebote gefunden</h3><p>Wähle ein anderes Smartphone oder erweitere Gerätepreis, Datenvolumen oder Laufzeit.</p><a href="<?php echo esc_url( get_permalink() ); ?>#tarifvergleich">Alle Angebote anzeigen →</a></div><?php endif; ?>
+				<?php if ( ! $cards ) : ?><div class="tc-phone-api__empty" role="status"><h3>Keine passenden Angebote gefunden</h3><p>Erweitere deine Filter für Netz, Preis, Datenvolumen oder Laufzeit.</p><a href="<?php echo esc_url( get_permalink() ); ?>#tarifvergleich">Alle Angebote anzeigen →</a></div><?php endif; ?>
 				<nav class="tc-phone-api__pagination" aria-label="Angebotsseiten"><?php if ( $page > 1 ) : ?><a href="<?php echo esc_url( add_query_arg( 'angebote_seite', $page - 1 ) . '#tarifvergleich' ); ?>">← Zurück</a><?php endif; ?><?php if ( count( $offers ) >= 12 && $page < 100 ) : ?><a href="<?php echo esc_url( add_query_arg( 'angebote_seite', $page + 1 ) . '#tarifvergleich' ); ?>">Weitere Angebote →</a><?php endif; ?></nav>
 				<p class="tc-phone-api__disclosure">Tarifdaten: TARIFFUXX · Kostenloser Vergleich. Bei einem Vertragsabschluss können wir eine Provision erhalten. Für dich entstehen keine zusätzlichen Gebühren durch Trilacheck.</p>
 			</div>

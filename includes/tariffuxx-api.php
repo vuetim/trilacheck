@@ -7,8 +7,8 @@
 
 defined( 'ABSPATH' ) || exit;
 
-function trilacheck_tariffuxx_enabled() {
-	return 'legacy' !== get_option( 'trilacheck_phone_comparison', 'api' );
+function trilacheck_tariffuxx_enabled( $mode = 'phone' ) {
+	return 'legacy' !== get_option( 'sim' === $mode ? 'trilacheck_mobile_comparison' : 'trilacheck_phone_comparison', 'api' );
 }
 
 add_action( 'admin_init', function () {
@@ -31,6 +31,15 @@ add_action( 'admin_init', function () {
 		$value = get_option( 'trilacheck_phone_comparison', 'api' );
 		?><select name="trilacheck_phone_comparison"><option value="api" <?php selected( $value, 'api' ); ?>>Trilacheck / TARIFFUXX API</option><option value="legacy" <?php selected( $value, 'legacy' ); ?>>Bisheriges TARIFFUXX Widget</option></select><?php
 	}, 'reading' );
+	register_setting( 'reading', 'trilacheck_mobile_comparison', array(
+		'type' => 'string',
+		'sanitize_callback' => function ( $value ) { return 'legacy' === $value ? 'legacy' : 'api'; },
+		'default' => 'api',
+	) );
+	add_settings_field( 'trilacheck_mobile_comparison', 'Mobilfunk / Nur SIM', function () {
+		$value = get_option( 'trilacheck_mobile_comparison', 'api' );
+		?><select name="trilacheck_mobile_comparison"><option value="api" <?php selected( $value, 'api' ); ?>>Trilacheck / TARIFFUXX API</option><option value="legacy" <?php selected( $value, 'legacy' ); ?>>Bisheriger CHECK24-Vergleich</option></select><?php
+	}, 'reading' );
 } );
 
 function trilacheck_tariffuxx_key() {
@@ -38,7 +47,7 @@ function trilacheck_tariffuxx_key() {
 }
 
 add_action( 'wp_enqueue_scripts', function () {
-	if ( is_page( 'handy-mit-vertrag' ) && trilacheck_tariffuxx_enabled() ) {
+	if ( ( is_page( 'handy-mit-vertrag' ) && trilacheck_tariffuxx_enabled() ) || ( is_page( 'mobilfunk' ) && trilacheck_tariffuxx_enabled( 'sim' ) ) ) {
 		wp_enqueue_style( 'trilacheck-phone-api', get_template_directory_uri() . '/assets/css/phone-api.css', array( 'trilacheck-base' ), filemtime( get_template_directory() . '/assets/css/phone-api.css' ) );
 		wp_enqueue_script( 'trilacheck-phone-api', get_template_directory_uri() . '/assets/js/phone-api.js', array(), filemtime( get_template_directory() . '/assets/js/phone-api.js' ), true );
 	}
@@ -168,13 +177,13 @@ function trilacheck_tariffuxx_image( $device ) {
 }
 
 /** Shared validation for display and comparison: no untracked offer is buyable. */
-function trilacheck_tariffuxx_offer( $offer ) {
+function trilacheck_tariffuxx_offer( $offer, $mode = 'phone' ) {
 	$link = trilacheck_tariffuxx_link( $offer['product_link'] ?? '' );
 	$device = $offer['product_hardware_items'] ?? array();
 	if ( isset( $device[0] ) ) {
 		$device = $device[0];
 	}
-	if ( ! $link || empty( $device ) || ! is_numeric( $offer['effective_product_charges'] ?? null ) || ! is_numeric( $offer['total_product_charges'] ?? null ) ) {
+	if ( ! $link || ( 'phone' === $mode && empty( $device ) ) || ! is_numeric( $offer['effective_product_charges'] ?? null ) || ! is_numeric( $offer['total_product_charges'] ?? null ) ) {
 		return false;
 	}
 	$one_time = trilacheck_tariffuxx_charges( $offer['one_time_product_charges'] ?? array() );
@@ -192,9 +201,10 @@ function trilacheck_tariffuxx_offer( $offer ) {
 		}
 	}
 	return array(
+		'kind' => $mode,
 		'link' => $link,
-		'phone' => trilacheck_tariffuxx_text( $device['description'] ?? $device['model'] ?? 'Smartphone' ),
-		'image' => trilacheck_tariffuxx_image( $device ),
+		'phone' => trilacheck_tariffuxx_text( 'sim' === $mode ? ( $offer['name'] ?? 'Mobilfunktarif' ) : ( $device['description'] ?? $device['model'] ?? 'Smartphone' ) ),
+		'image' => 'sim' === $mode ? ( empty( $offer['provider']['logo'] ) ? '' : 'https://assets.tariffuxx.de/img/providers/' . rawurlencode( $offer['provider']['logo'] ) ) : trilacheck_tariffuxx_image( $device ),
 		'provider' => trilacheck_tariffuxx_text( $offer['provider']['name'] ?? '' ),
 		'network' => trilacheck_tariffuxx_text( $offer['mobile_network_name'] ?? '' ),
 		'network_code' => sanitize_title( $offer['network_code'] ?? '' ),
@@ -202,6 +212,7 @@ function trilacheck_tariffuxx_offer( $offer ) {
 		'data' => trilacheck_tariffuxx_text( $offer['internet_data_volume'] ?? '' ),
 		'term' => trilacheck_tariffuxx_text( $offer['contract_period_text'] ?? '' ),
 		'five_g' => ! empty( $offer['is_5g'] ),
+		'esim' => ! empty( $offer['is_esim'] ),
 		'monthly' => isset( $recurring[0]['value'] ) && is_numeric( $recurring[0]['value'] ) ? trilacheck_tariffuxx_money( $recurring[0]['value'] ) : 'Siehe Details',
 		'billing' => trilacheck_tariffuxx_text( $recurring[0]['period_description'] ?? '' ),
 		'phases' => count( $recurring ) > 1,
@@ -210,4 +221,20 @@ function trilacheck_tariffuxx_offer( $offer ) {
 		'average' => trilacheck_tariffuxx_money( $offer['effective_product_charges'] ),
 		'total' => trilacheck_tariffuxx_money( $offer['total_product_charges'] ),
 	);
+}
+
+/** Small, theme-native SVG icons; no font icons or external icon libraries. */
+function trilacheck_tariffuxx_icon( $name ) {
+	$paths = array(
+		'filter' => '<path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="2" fill="white"/><circle cx="15" cy="17" r="2" fill="white"/>',
+		'chevron' => '<path d="m6 9 6 6 6-6"/>',
+		'sort' => '<path d="M8 4v16m-4-4 4 4 4-4M16 20V4m-4 4 4-4 4 4"/>',
+		'shield' => '<path d="m12 3 8 3v6c0 4-4 7-8 9-4-2-8-5-8-9V6l8-3Z"/><path d="m8 12 3 3 5-6"/>',
+		'star' => '<path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3Z"/>',
+		'sim' => '<path d="M7 3h7l5 5v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/><rect x="8" y="10" width="8" height="7" rx="1"/><path d="M12 10v7M8 13.5h8"/>',
+		'phone' => '<rect x="6" y="2" width="12" height="20" rx="3"/><path d="M10 5h4M11 19h2"/>',
+		'arrow' => '<path d="M4 12h16m-6-6 6 6-6 6"/>',
+		'info' => '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7h.01"/>',
+	);
+	return '<svg class="tc-tariff-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">' . ( $paths[ $name ] ?? $paths['info'] ) . '</svg>';
 }

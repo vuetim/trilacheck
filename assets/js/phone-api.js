@@ -69,18 +69,23 @@
         const placeholder = document.createElement('span');
         placeholder.className = 'tc-phone-api__phone-placeholder';
         placeholder.setAttribute('aria-hidden', 'true');
-        placeholder.textContent = '▯';
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('class', 'tc-tariff-icon');
+        svg.setAttribute('fill', 'none'); svg.setAttribute('stroke', 'currentColor'); svg.setAttribute('stroke-width', '1.8');
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', 'M7 3h7l5 5v13H5V3h2M8 10h8v7H8zM12 10v7M8 13h8');
+        svg.append(path); placeholder.append(svg);
         image.parentElement.append(placeholder);
       }, { once: true });
     });
     const submit = form.querySelector('button[type="submit"]');
-    const submitLabel = submit?.textContent;
+    const submitContents = submit ? Array.from(submit.childNodes, (node) => node.cloneNode(true)) : [];
     form.addEventListener('submit', () => {
       if (submit) submit.textContent = 'Angebote werden geladen …';
       root.setAttribute('aria-busy', 'true');
     });
     window.addEventListener('pageshow', () => {
-      if (submit) submit.textContent = submitLabel;
+      if (submit) submit.replaceChildren(...submitContents.map((node) => node.cloneNode(true)));
       root.removeAttribute('aria-busy');
     });
     // Comparison is user-initiated. It reuses the same validated affiliate links.
@@ -121,7 +126,7 @@
       head.append(heading); table.append(head);
       const body = document.createElement('tbody');
       const rows = [['provider', 'Anbieter'], ['tariff', 'Tarif'], ['network', 'Netz'], ['data', 'Datenvolumen'], ['term', 'Laufzeit'], ['monthly', 'Tarif-Grundgebühr*'], ['billing', 'Abrechnungsperiode'], ['device_price', 'Gerätepreis einmalig'], ['extra_price', 'Weitere Einmalkosten'], ['average', 'Ø pro Monat über 24 Monate'], ['total', 'Gesamtkosten über 24 Monate']];
-      rows.forEach(([key, label]) => {
+      rows.filter(([key]) => key !== 'device_price' || offers.some((offer) => offer.kind !== 'sim')).forEach(([key, label]) => {
         const row = document.createElement('tr'); const name = document.createElement('th'); name.scope = 'row'; name.textContent = label; row.append(name);
         offers.forEach((offer) => { const cell = document.createElement('td'); cell.textContent = offer[key] || 'Siehe Tarifdetails'; row.append(cell); });
         body.append(row);

@@ -31,6 +31,8 @@ function checked( $value ) { if ( $value ) { echo 'checked'; } }
 function selected( $a, $b ) { if ( (string) $a === (string) $b ) { echo 'selected'; } }
 function number_format_i18n( $value, $decimals ) { return number_format( $value, $decimals, ',', '.' ); }
 function add_query_arg( $name, $value ) { return get_permalink() . '?' . $name . '=' . $value; }
+function wp_enqueue_script( ...$args ) { $GLOBALS['fallback_script'] = $args[1]; }
+function get_template_part( ...$args ) { echo 'CHECK24_FALLBACK'; }
 function do_shortcode( $value ) { return '<div>LEGACY_FALLBACK</div>'; }
 function wp_remote_get( $url, $options ) {
 	parse_str( parse_url( $url, PHP_URL_QUERY ), $params );
@@ -96,4 +98,29 @@ include dirname( __DIR__, 2 ) . '/template-parts/phone-api-comparison.php';
 $html = ob_get_clean();
 check( str_contains( $html, 'LEGACY_FALLBACK' ), 'API failure must preserve working legacy comparison.' );
 check( ! str_contains( $html, 'id="tc-phone-model"' ), 'API failures must not leave an empty, misleading smartphone picker above the fallback widget.' );
+$GLOBALS['simulate_error'] = false;
+$args = array( 'mode' => 'sim' );
+$_GET = array( 'telefon' => 'ignored-phone', 'anzahlung' => '0', 'esim' => '1', 'tarifart' => 'prepaid' );
+$GLOBALS['response_offers'] = array( array(
+ 'name' => 'SIM Test', 'provider' => array( 'name' => 'Provider', 'logo' => 'provider.png' ),
+ 'product_link' => 'https://www.tariffuxx.de/angebot?r=1111811&tool_id=655&subid=trilacheck-mobilfunk',
+ 'one_time_product_charges' => array( 'description' => 'Anschlussgebühr', 'value' => 9.99 ),
+ 'recurring_product_charges' => array( 'value' => 10, 'period_description' => 'pro Monat' ),
+ 'effective_product_charges' => 10.42, 'total_product_charges' => 249.99, 'is_esim' => true,
+) );
+ob_start();
+include dirname( __DIR__, 2 ) . '/template-parts/phone-api-comparison.php';
+$html = ob_get_clean();
+check( '0' === $GLOBALS['request']['incl_bundles'] && 'trilacheck-mobilfunk' === $GLOBALS['request']['subid'], 'SIM mode must request only SIM offers with its own SubID.' );
+check( ! isset( $GLOBALS['request']['phone'], $GLOBALS['request']['max_phone_price'] ) && 'prepaid' === $GLOBALS['request']['payment'], 'SIM must ignore phone filters and pass payment type.' );
+check( str_contains( $html, 'class="tc-phone-api__card"' ) && str_contains( $html, 'SIM Test' ) && str_contains( $html, '9,99 €' ), 'SIM offers without hardware must render with activation costs.' );
+check( ! str_contains( $html, 'id="tc-phone-model"' ) && ! str_contains( $html, '<span>Einmaliger Gerätepreis</span>' ), 'SIM UI must not display irrelevant device controls or costs.' );
+check( str_contains( $html, 'tool_id=655' ) && str_contains( $html, 'eSIM' ), 'SIM tracking parameters and eSIM availability must survive rendering.' );
+$GLOBALS['simulate_error'] = true;
+ob_start();
+include dirname( __DIR__, 2 ) . '/template-parts/phone-api-comparison.php';
+$html = ob_get_clean();
+check( str_contains( $html, 'CHECK24_FALLBACK' ) && str_contains( $GLOBALS['fallback_script'], '/262971/' ), 'SIM errors must activate CHECK24 with the existing partner ID.' );
+$GLOBALS['options']['trilacheck_mobile_comparison'] = 'legacy';
+check( ! trilacheck_tariffuxx_enabled( 'sim' ) && trilacheck_tariffuxx_enabled(), 'SIM legacy switch must not disable the phone API.' );
 echo "PASS: API rendering, model and zero-price filters, partner tracking, output safety and legacy fallback.\n";
