@@ -4,8 +4,8 @@ const path = require('node:path');
 const vm = require('node:vm');
 const source = fs.readFileSync(path.join(__dirname, '../../assets/js/header.js'), 'utf8');
 
-function createPage({ mobile = true, query = '' } = {}) {
-  const document = { activeElement: null };
+function createPage({ mobile = true, query = '', dataMenu = false } = {}) {
+  const document = { activeElement: null, listeners: {}, addEventListener(type, callback) { this.listeners[type] = callback; } };
   function element(extra = {}) {
     return {
       hidden: false, attributes: {}, listeners: {},
@@ -18,14 +18,24 @@ function createPage({ mobile = true, query = '' } = {}) {
   const input = element({ value: query });
   const toggle = element({ hidden: true });
   const form = element({ querySelector: () => input });
+  const dataToggle = element();
+  const dataPanel = element({ hidden: true });
+  dataToggle.contains = target => target === dataToggle;
+  dataPanel.contains = target => target === dataPanel;
   const header = element({
     classList: new Set(),
-    querySelector(selector) { return selector === '.tc-search-toggle' ? toggle : form; },
+    querySelector(selector) {
+      if (selector === '.tc-search-toggle') return toggle;
+      if (selector === '#tc-header-search') return form;
+      if (dataMenu && selector === '[data-tc-data-toggle]') return dataToggle;
+      if (dataMenu && selector === '#tc-header-data-menu') return dataPanel;
+      return null;
+    },
   });
   const breakpoint = element({ matches: mobile });
   document.querySelector = selector => selector === '[data-tc-header]' ? header : null;
   vm.runInNewContext(source, { document, window: { matchMedia: () => breakpoint } });
-  return { document, input, toggle, form, breakpoint };
+  return { document, input, toggle, form, breakpoint, header, dataToggle, dataPanel };
 }
 
 const page = createPage();
@@ -51,4 +61,20 @@ assert.equal(desktop.document.activeElement, desktop.input);
 desktop.form.listeners.keydown({key:'Escape',preventDefault(){}});
 assert.equal(desktop.form.hidden, true, 'Escape closes desktop search');
 assert.equal(desktop.document.activeElement, desktop.toggle);
+const grouped = createPage({ dataMenu: true });
+assert.equal(grouped.dataPanel.hidden, true, 'Volume links start collapsed');
+assert.equal(grouped.dataToggle.attributes['aria-expanded'], 'false');
+grouped.dataToggle.listeners.click({ preventDefault() {} });
+assert.equal(grouped.dataPanel.hidden, false, 'Volume control reveals the grouped links');
+assert.equal(grouped.dataToggle.attributes['aria-expanded'], 'true');
+grouped.document.listeners.click({ target: grouped.dataPanel });
+assert.equal(grouped.dataPanel.hidden, false, 'A click inside the group does not close it prematurely');
+grouped.header.listeners.keydown({ key: 'Escape' });
+assert.equal(grouped.dataPanel.hidden, true);
+assert.equal(grouped.document.activeElement, grouped.dataToggle, 'Escape restores group control focus');
+grouped.dataToggle.listeners.click({ preventDefault() {} });
+grouped.document.listeners.click({ target: {} });
+assert.equal(grouped.dataPanel.hidden, true, 'Outside click closes the group');
+grouped.toggle.listeners.click();
+assert.equal(grouped.form.hidden, false, 'Search remains independent of the volume menu');
 console.log('PASS: mobile and desktop search toggles, keyboard focus, Escape and existing queries.');
