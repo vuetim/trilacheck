@@ -33,7 +33,7 @@ get_header();
 	</header>
 
 	<div class="tc-container tc-mobile-widget" id="tarifvergleich">
-		<?php if ( $tc_sim_api ) { get_template_part( 'template-parts/phone-api-comparison', null, array( 'mode' => 'sim' ) ); } else { get_template_part( 'template-parts/direct-comparison', null, array( 'type' => 'mobile' ) ); } ?>
+		<?php if ( $tc_sim_api ) { get_template_part( 'template-parts/phone-api-comparison', null, array( 'mode' => 'sim', 'preset' => 'mobilfunk' ) ); } else { get_template_part( 'template-parts/direct-comparison', null, array( 'type' => 'mobile' ) ); } ?>
 	</div>
 
 	<section class="tc-container tc-data-shortcuts" aria-labelledby="tc-data-shortcuts-title">

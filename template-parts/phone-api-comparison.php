@@ -9,7 +9,7 @@ defined( 'ABSPATH' ) || exit;
 $mode = isset( $args['mode'] ) && 'sim' === $args['mode'] ? 'sim' : 'phone';
 $is_sim = 'sim' === $mode;
 $preset = $is_sim ? ( $args['preset'] ?? '' ) : '';
-$defaults = array( '5gb' => array( 'daten' => '5000' ), '15gb' => array( 'daten' => '15000' ), '50gb' => array( 'daten' => '50000' ), 'prepaid' => array( 'tarifart' => 'prepaid' ), 'young' => array( 'zielgruppe' => 'young' ), 'unlimited' => array( 'daten' => 'unlimited' ) );
+$defaults = array( 'mobilfunk' => array( 'daten' => '20000' ), '5gb' => array( 'daten' => '5000' ), '15gb' => array( 'daten' => '15000' ), '50gb' => array( 'daten' => '50000' ), 'prepaid' => array( 'tarifart' => 'prepaid' ), 'young' => array( 'zielgruppe' => 'young' ), 'unlimited' => array( 'daten' => 'unlimited' ) );
 $read = static function ( $name ) use ( $defaults, $preset ) {
 	return isset( $_GET[ $name ] ) && is_string( $_GET[ $name ] ) ? sanitize_text_field( wp_unslash( $_GET[ $name ] ) ) : ( $defaults[ $preset ][ $name ] ?? '' );
 };
@@ -55,7 +55,7 @@ if ( isset( $networks[ $network ] ) ) {
 } else {
 	$network = '';
 }
-$data_choices = array( '5000' => 'Ab 5 GB', '15000' => 'Ab 15 GB', '30000' => 'Ab 30 GB', '50000' => 'Ab 50 GB', '100000' => 'Ab 100 GB', 'unlimited' => 'Unlimited' );
+$data_choices = array( '5000' => 'Ab 5 GB', '15000' => 'Ab 15 GB', '20000' => 'Ab 20 GB', '30000' => 'Ab 30 GB', '50000' => 'Ab 50 GB', '100000' => 'Ab 100 GB', 'unlimited' => 'Unlimited' );
 if ( ! $is_sim ) { unset( $data_choices['unlimited'] ); }
 if ( isset( $data_choices[ $data ] ) ) {
 	if ( 'unlimited' !== $data ) { $params['data_units'] = (int) $data; }
@@ -178,7 +178,7 @@ if ( $is_sim ) {
 						<div class="tc-phone-api__price">
 							<div><span>Tarif-Grundgebühr</span><strong><?php echo esc_html( $view['monthly'] ); ?></strong><small><?php echo esc_html( $view['billing'] ); ?><?php if ( $view['phases'] ) : ?> · Preisphasen beachten<?php endif; ?></small></div>
 							<?php if ( $is_sim ) : ?><div><span>Einmalige Kosten</span><strong><?php echo esc_html( $view['extra_price'] ); ?></strong><small>Details und Bedingungen beachten</small></div><?php else : ?><div><span>Einmaliger Gerätepreis</span><strong><?php echo esc_html( $view['device_price'] ); ?></strong><small>Weitere Einmalkosten: <?php echo esc_html( $view['extra_price'] ); ?></small></div>
-							<?php endif; ?><div class="tc-phone-api__average"><span>Ø pro Monat</span><strong><?php echo esc_html( $view['average'] ); ?></strong><small>inkl. Einmalkosten und angerechneter Vorteile</small></div>
+							<?php endif; ?><div class="tc-phone-api__average"><span><?php echo $is_sim ? 'Ø effektiv nach Boni' : 'Ø pro Monat'; ?></span><strong><?php echo esc_html( $view['average'] ); ?></strong><small>inkl. Einmalkosten und angerechneter Vorteile</small></div>
 						</div>
 						<?php if ( $benefits || ! empty( $offer['product_voucher']['code'] ) ) : ?>
 						<div class="tc-phone-api__benefits" aria-label="Boni und Vorteile">

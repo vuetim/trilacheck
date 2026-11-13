@@ -130,7 +130,7 @@ $GLOBALS['sim_catalogue'] = array(
  array( 'product_id' => 22, 'restricted_customer_group_code' => '', 'internet_data_volume' => 'Unlimited' ),
  array( 'product_id' => 33, 'restricted_customer_group_code' => '', 'internet_data_volume' => '50 GB' ),
 );
-foreach ( array( '5gb' => '5000', '15gb' => '15000', '50gb' => '50000', 'prepaid' => 'prepaid', 'young' => '11', 'unlimited' => '22' ) as $preset => $expected ) {
+foreach ( array( 'mobilfunk' => '20000', '5gb' => '5000', '15gb' => '15000', '50gb' => '50000', 'prepaid' => 'prepaid', 'young' => '11', 'unlimited' => '22' ) as $preset => $expected ) {
  $args = array( 'mode' => 'sim', 'preset' => $preset ); $_GET = array();
  ob_start(); include dirname( __DIR__, 2 ) . '/template-parts/phone-api-comparison.php'; ob_end_clean();
  $actual = in_array( $preset, array( 'young', 'unlimited' ), true ) ? ( $GLOBALS['request']['products'][0] ?? '' ) : ( 'prepaid' === $preset ? $GLOBALS['request']['payment'] : $GLOBALS['request']['data_units'] );
