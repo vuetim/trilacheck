@@ -1176,3 +1176,6 @@
     .tc-phone-api__visual--sim > img { width: 82px; height: 40px; }
     .tc-phone-api__sim-meta { font-size: 10px; gap: 5px; }
 }
+.tc-phone-api__promotion { grid-column: 2; margin: 0; padding: 8px 10px; background: #fff4bc; border-radius: 6px; font-size: 12px; line-height: 1.5; }
+@media (min-width: 1101px) { .tc-phone-api__card:has(.tc-phone-api__promotion) .tc-phone-api__promotion { grid-column: 2; grid-row: 2; } .tc-phone-api__card:has(.tc-phone-api__promotion) .tc-phone-api__benefits { grid-row: 3; } .tc-phone-api__card:has(.tc-phone-api__promotion) .tc-phone-api__actions { grid-row: 4; } }
+@media (max-width: 767px) { .tc-phone-api__promotion { grid-column: 1 / -1; } }

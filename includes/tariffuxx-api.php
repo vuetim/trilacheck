@@ -51,9 +51,24 @@ function trilacheck_tariffuxx_key() {
 	return defined( 'TRILACHECK_TARIFFUXX_PUBLIC_KEY' ) ? TRILACHECK_TARIFFUXX_PUBLIC_KEY : ( getenv( 'TRILACHECK_TARIFFUXX_PUBLIC_KEY' ) ?: get_option( 'trilacheck_tariffuxx_public_key', '' ) );
 }
 
+/** One comparison per article, using the same validated affiliate links and cache. */
+function trilacheck_mobile_deals_shortcode() {
+	static $rendered = false;
+	if ( $rendered ) { return ''; }
+	$rendered = true;
+	ob_start();
+	echo '<div id="tarifvergleich">';
+	get_template_part( 'template-parts/phone-api-comparison', null, array( 'mode' => 'sim', 'preset' => 'mobilfunk', 'special_offers' => true ) );
+	echo '</div>';
+	return ob_get_clean();
+}
+add_shortcode( 'trilacheck_mobile_deals', 'trilacheck_mobile_deals_shortcode' );
+
 add_action( 'wp_enqueue_scripts', function () {
 	$is_detail = is_page( array( 'handytarife-5gb', 'handytarife-15gb', 'handytarife-50gb', 'handytarife-unlimited', 'tarife-fur-junge-leute', 'prepaid-tarife' ) );
 	$uses_api = ( is_page( 'handy-mit-vertrag' ) && trilacheck_tariffuxx_enabled() ) || ( is_page( array( 'mobilfunk', 'handytarife-5gb', 'handytarife-15gb', 'handytarife-50gb', 'prepaid-tarife' ) ) && trilacheck_tariffuxx_enabled( 'sim' ) );
+	$post = get_queried_object();
+	$uses_api = $uses_api || ( is_singular() && has_shortcode( $post->post_content ?? '', 'trilacheck_mobile_deals' ) );
 	if ( $is_detail || $uses_api ) {
 		wp_enqueue_style( 'trilacheck-phone-api', get_template_directory_uri() . '/assets/css/phone-api.css', array( 'trilacheck-base' ), filemtime( get_template_directory() . '/assets/css/phone-api.css' ) );
 	}

@@ -7,6 +7,7 @@ define( 'MINUTE_IN_SECONDS', 60 );
 define( 'TRILACHECK_TARIFFUXX_PUBLIC_KEY', 'test-server-only-key' );
 class WP_Error { public function get_error_code() { return 'tx_unavailable'; } }
 function add_action( ...$args ) {}
+function add_shortcode( ...$args ) {}
 function wp_next_scheduled( $hook ) { return true; }
 function get_option( $key, $default = false ) { return $GLOBALS['options'][ $key ] ?? $default; }
 function get_transient( $key ) { return false; }
@@ -180,4 +181,10 @@ ob_start(); include dirname( __DIR__, 2 ) . '/template-parts/phone-api-compariso
 check( str_contains( $html, 'data-tc-detail="prices"' ) && str_contains( $html, 'data-tc-detail="specifications"' ), 'Both popup panels must also be present in server-rendered HTML.' );
 check( str_contains( $html, 'tc-phone-api__benefits' ) && str_contains( $html, 'Rufnummernmitnahme und Aktivierung erforderlich.' ) && str_contains( $html, 'product.pdf' ), 'Visible benefit explanations and provider documents must survive rendering.' );
 check( str_contains( $html, '10,42 €' ), 'Showing benefits must not subtract them again from API-calculated prices.' );
+$args = array( 'mode' => 'sim', 'preset' => 'mobilfunk', 'special_offers' => true ); $_GET = array();
+$GLOBALS['response_offers'][0]['promotion_text'] = 'Black Week: Aktion <script>unsafe</script>';
+ob_start(); include dirname( __DIR__, 2 ) . '/template-parts/phone-api-comparison.php'; $html = ob_get_clean();
+check( '1' === $GLOBALS['request']['special_offers_req'] && '0' === $GLOBALS['request']['incl_bundles'] && '1' === $GLOBALS['request']['com_only'], 'Article comparison must request only SIM promotions with affiliate links.' );
+check( 'trilacheck-mobile-deals' === $GLOBALS['request']['subid'] && '20000' === $GLOBALS['request']['data_units'], 'Article promotion request must retain attribution and the initial 20 GB filter.' );
+check( str_contains( $html, 'Black Week: Aktion' ) && ! str_contains( $html, '<script>unsafe' ), 'API promotion text must render safely in the article.' );
 echo "PASS: API rendering, model and zero-price filters, partner tracking, output safety and legacy fallback.\n";
