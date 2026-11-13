@@ -1165,3 +1165,12 @@
     .tc-phone-api__average strong { font-size: 23px; }
     .tc-phone-api__actions .tc-phone-api__offer { width: 100%; }
 }
+.tc-phone-api__sim-meta { display: grid; gap: 8px; color: var(--tx-muted); font-size: 12px; text-align: center; }
+.tc-phone-api__visual--sim > img { width: 115px; height: 55px; }
+@media (min-width: 1101px) {
+    .tc-phone-api__visual--sim { padding-top: 25px; gap: 22px; }
+}
+@media (max-width: 767px) {
+    .tc-phone-api__visual--sim > img { width: 82px; height: 40px; }
+    .tc-phone-api__sim-meta { font-size: 10px; gap: 5px; }
+}

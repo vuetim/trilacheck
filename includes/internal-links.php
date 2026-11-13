@@ -150,7 +150,7 @@ function trilacheck_phone_quick_links( $items, $args ) {
 		'Handy mit Vertrag' => home_url( '/handy-mit-vertrag/' ),
 		'iPhone' => $iphone['url'],
 		'Samsung' => $samsung['url'],
-		'eSIM' => home_url( '/mobilfunk/?esim=1#tarifvergleich' ),
+		'Handytarife' => home_url( '/mobilfunk/' ),
 		'DSL' => home_url( '/dsl/' ),
 	);
 	// Remove old standalone volume links before adding their grouped control.
@@ -158,6 +158,8 @@ function trilacheck_phone_quick_links( $items, $args ) {
 		$url = home_url( '/handytarife-' . $volume . '/' );
 		$items = preg_replace( '~<li\b[^>]*>\s*<a\b[^>]*href=[\'"]' . preg_quote( esc_url( $url ), '~' ) . '[\'"][^>]*>.*?</a>\s*</li>~is', '', $items );
 	}
+	$old_esim = home_url( '/mobilfunk/?esim=1#tarifvergleich' );
+	$items = preg_replace( '~<li\b[^>]*>\s*<a\b[^>]*href=[\'" ]' . preg_quote( esc_url( $old_esim ), '~' ) . '[\'"][^>]*>.*?</a>\s*</li>~is', '', $items );
 	$prefix = '';
 	foreach ( $links as $label => $url ) {
 		$items = preg_replace( '~<li\b[^>]*>\s*<a\b[^>]*href=[\'"]' . preg_quote( esc_url( $url ), '~' ) . '[\'"][^>]*>.*?</a>\s*</li>~is', '', $items );
