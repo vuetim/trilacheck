@@ -1179,3 +1179,32 @@
 .tc-phone-api__promotion { grid-column: 2; margin: 0; padding: 8px 10px; background: #fff4bc; border-radius: 6px; font-size: 12px; line-height: 1.5; }
 @media (min-width: 1101px) { .tc-phone-api__card:has(.tc-phone-api__promotion) .tc-phone-api__promotion { grid-column: 2; grid-row: 2; } .tc-phone-api__card:has(.tc-phone-api__promotion) .tc-phone-api__benefits { grid-row: 3; } .tc-phone-api__card:has(.tc-phone-api__promotion) .tc-phone-api__actions { grid-row: 4; } }
 @media (max-width: 767px) { .tc-phone-api__promotion { grid-column: 1 / -1; } }
+
+/* Article comparisons respond to their column, not the browser viewport. */
+.tc-mobile-deals { container: tc-article-deals / inline-size; min-width: 0; }
+.tc-mobile-deals .tc-phone-api__layout { grid-template-columns: 190px minmax(0, 1fr); gap: 18px; }
+.tc-mobile-deals .tc-phone-api__filters { padding: 14px; }
+.tc-mobile-deals .tc-phone-api__card { grid-template-columns: 88px minmax(0, 1fr); gap: 14px; padding: 16px; }
+.tc-mobile-deals .tc-phone-api__visual { grid-column: 1; grid-row: 1; padding: 0; border: 0; }
+.tc-mobile-deals .tc-phone-api__identity { grid-column: 2; grid-row: auto; }
+.tc-mobile-deals .tc-phone-api__identity h3 { font-size: 18px; overflow-wrap: break-word; }
+.tc-mobile-deals .tc-phone-api__price { grid-column: 1 / -1; grid-row: auto; display: grid; grid-template-columns: minmax(0, 1fr); padding: 10px 0 0; border-left: 0; border-top: 1px solid var(--tx-line); gap: 6px; }
+.tc-mobile-deals .tc-phone-api__price > div { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 3px 10px; padding: 7px; border-left: 0; }
+.tc-mobile-deals .tc-phone-api__price strong { font-size: 21px; white-space: nowrap; }
+.tc-mobile-deals .tc-phone-api__price small { grid-column: 1 / -1; }
+.tc-mobile-deals .tc-phone-api__card .tc-phone-api__promotion,
+.tc-mobile-deals .tc-phone-api__card .tc-phone-api__benefits,
+.tc-mobile-deals .tc-phone-api__card .tc-phone-api__actions { grid-column: 1 / -1; grid-row: auto; }
+.tc-mobile-deals .tc-phone-api__actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.tc-mobile-deals .tc-phone-api__actions .tc-phone-api__offer { grid-column: 1 / -1; grid-row: 1; min-width: 0; width: 100%; }
+.tc-mobile-deals .tc-phone-api__detail-link { margin-left: 0; justify-self: end; }
+.tc-mobile-deals .tc-phone-api__toolbar { flex-wrap: wrap; gap: 10px; }
+.tc-mobile-deals .tc-phone-api__rank { max-width: 100%; }
+@container tc-article-deals (max-width: 620px) {
+    .tc-mobile-deals .tc-phone-api__layout { grid-template-columns: minmax(0, 1fr); }
+    .tc-mobile-deals .tc-phone-api__toolbar { align-items: stretch; flex-direction: column; }
+    .tc-mobile-deals .tc-phone-api__toolbar label { justify-content: space-between; }
+}
+@media (max-width: 767px) {
+    .tc-mobile-deals .tc-phone-api__layout { grid-template-columns: minmax(0, 1fr); }
+}

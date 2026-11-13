@@ -57,7 +57,7 @@ function trilacheck_mobile_deals_shortcode() {
 	if ( $rendered ) { return ''; }
 	$rendered = true;
 	ob_start();
-	echo '<div id="tarifvergleich">';
+	echo '<div id="tarifvergleich" class="tc-mobile-deals">';
 	get_template_part( 'template-parts/phone-api-comparison', null, array( 'mode' => 'sim', 'preset' => 'deals', 'special_offers' => true ) );
 	echo '</div>';
 	return ob_get_clean();
