@@ -18,6 +18,10 @@ $manufacturer = $read( 'hersteller' );
 $network      = $read( 'netz' );
 $data         = $read( 'daten' );
 $upfront      = $read( 'anzahlung' );
+// Quick buttons submit the existing filters and override only the device price.
+if ( ! $is_sim && isset( $_GET['geraetepreis'] ) && is_string( $_GET['geraetepreis'] ) && in_array( $_GET['geraetepreis'], array( '', '0', '1', '50' ), true ) ) {
+	$upfront = $_GET['geraetepreis'];
+}
 $budget       = $read( 'budget' );
 $duration     = $read( 'laufzeit' );
 $sort         = 'monthly' === $read( 'sortierung' ) ? 'monthly' : 'effective';
@@ -168,6 +172,14 @@ if ( $is_sim ) {
 				<a class="tc-phone-api__reset" href="<?php echo esc_url( get_permalink() ); ?>#tarifvergleich">Filter zurücksetzen</a>
 			</form>
 			<div class="tc-phone-api__results">
+				<?php if ( ! $is_sim ) : ?>
+				<div class="tc-phone-api__price-shortcuts" role="group" aria-label="Einmaliger Gerätepreis">
+					<span>Gerätepreis:</span>
+					<?php foreach ( array( '' => 'Alle', '0' => '0 €', '1' => 'Bis 1 €', '50' => 'Bis 50 €' ) as $value => $label ) : ?>
+						<button type="submit" form="tc-phone-filters" name="geraetepreis" value="<?php echo esc_attr( $value ); ?>" aria-pressed="<?php echo (string) $value === $upfront ? 'true' : 'false'; ?>"><?php echo esc_html( $label ); ?></button>
+					<?php endforeach; ?>
+				</div>
+				<?php endif; ?>
 				<div class="tc-phone-api__toolbar"><p><strong><?php echo count( $cards ); ?></strong> Angebote auf dieser Seite</p><label for="tc-phone-sort">Sortieren nach:<select id="tc-phone-sort" name="sortierung" form="tc-phone-filters"><option value="effective" <?php selected( $sort, 'effective' ); ?>>Bestes Preisangebot</option><option value="monthly" <?php selected( $sort, 'monthly' ); ?>>Tarif-Grundgebühr</option></select></label></div>
 				<div class="tc-phone-api__selection" hidden><span class="tc-phone-api__selection-count" aria-live="polite"></span><button type="button" class="tc-phone-api__compare-open">Angebote vergleichen</button><button type="button" class="tc-phone-api__compare-clear">Auswahl löschen</button></div>
 				<p class="tc-phone-api__source"><?php echo trilacheck_tariffuxx_icon( 'info' ); ?> <?php if ( 'effective' === $sort ) : ?>Beste Preisangebote zuerst: aufsteigend nach Gesamtkosten über 24 Monate, inklusive Einmalkosten und angerechneter Boni. Die Reihenfolge gilt für deine gewählten Filter.<?php else : ?>Sortiert nach Tarif-Grundgebühr. Wähle „Bestes Preisangebot“, um nach Gesamtkosten inklusive Einmalkosten und angerechneter Boni zu sortieren.<?php endif; ?> Bedingungen und mögliche Preisphasen findest du in den Tarifdetails.</p>

@@ -70,6 +70,14 @@ check( str_contains( $html, '21,99 €' ) && str_contains( $html, '23,65 €' ),
 check( '' === trilacheck_tariffuxx_link( 'https://evil.example/?r=1111811' ), 'Off-domain links must be excluded.' );
 check( '' === trilacheck_tariffuxx_link( 'https://www.tariffuxx.de/untracked' ), 'Untracked links must be excluded.' );
 check( '720' === $GLOBALS['request']['contract_period'], 'Contract duration filter must reach upstream.' );
+foreach ( array( '0', '1', '50', '' ) as $quick_price ) {
+ $_GET['geraetepreis'] = $quick_price;
+ ob_start(); include dirname( __DIR__, 2 ) . '/template-parts/phone-api-comparison.php'; $quick_html = ob_get_clean();
+ check( '' === $quick_price ? ! isset( $GLOBALS['request']['max_phone_price'] ) : (float) $quick_price === (float) $GLOBALS['request']['max_phone_price'], 'Quick device prices must override the dropdown, including zero and clearing the limit.' );
+ check( '15000' === $GLOBALS['request']['data_units'] && array( 'samsung-galaxy-a17-5g' ) === $GLOBALS['request']['phone'], 'Quick device prices must preserve other filters.' );
+ check( str_contains( $quick_html, 'name="geraetepreis" value="' . $quick_price . '" aria-pressed="true"' ), 'Selected quick device price must be marked active.' );
+}
+unset( $_GET['geraetepreis'] );
 check( '' === trilacheck_tariffuxx_link( 'https://www.tariffuxx.de/angebot?r=999&r=1111811' ), 'Ambiguous duplicate partner IDs must be excluded.' );
 $tracked = 'https://www.tariffuxx.de/handytarife/angebot/123?phi%5B%5D=1188&r=1111811&subid=trilacheck-handy';
 check( $tracked === trilacheck_tariffuxx_link( $tracked ), 'Selected phone, partner, SubID and all upstream tracking parameters must remain unchanged.' );

@@ -1096,3 +1096,31 @@
 .tc-tariff-modal button:focus-visible,.tc-tariff-modal a:focus-visible{outline:3px solid #e3b600;outline-offset:2px}
 @media(max-width:1100px){.tc-phone-api__benefits{grid-column:1 / -1}}
 @media(max-width:767px){.tc-tariff-modal>header{padding:14px;gap:10px}.tc-tariff-modal h2{font-size:17px}.tc-tariff-modal__tabs{padding:12px 14px 0}.tc-tariff-modal__tabs button{font-size:12px}.tc-tariff-modal__content{padding:16px 14px}.tc-tariff-specifications{grid-template-columns:minmax(0,1fr);gap:20px}.tc-tariff-modal>footer{padding:12px 14px}.tc-tariff-modal__offer{width:100%}}
+
+.tc-phone-api__price-shortcuts {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 14px;
+    font-size: 13px;
+}
+.tc-phone-api__price-shortcuts > span { font-weight: 700; margin-right: 3px; }
+.tc-phone-api__price-shortcuts button {
+    min-height: 36px;
+    padding: 7px 12px;
+    border: 0;
+    border-radius: 6px;
+    background: #e5eff0;
+    color: #075052;
+    font: inherit;
+    font-weight: 750;
+    cursor: pointer;
+}
+.tc-phone-api__price-shortcuts button:hover { background: #cddfe0; }
+.tc-phone-api__price-shortcuts button[aria-pressed="true"] { background: #ffdf00; color: #12383d; }
+.tc-phone-api__price-shortcuts button:focus-visible { outline: 2px solid #075052; outline-offset: 3px; }
+@media (max-width: 767px) {
+    .tc-phone-api__price-shortcuts { gap: 6px; font-size: 12px; margin-bottom: 10px; }
+    .tc-phone-api__price-shortcuts button { min-height: 34px; padding: 7px 10px; }
+}
