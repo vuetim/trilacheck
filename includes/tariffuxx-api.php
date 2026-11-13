@@ -58,7 +58,7 @@ function trilacheck_mobile_deals_shortcode() {
 	$rendered = true;
 	ob_start();
 	echo '<div id="tarifvergleich">';
-	get_template_part( 'template-parts/phone-api-comparison', null, array( 'mode' => 'sim', 'preset' => 'mobilfunk', 'special_offers' => true ) );
+	get_template_part( 'template-parts/phone-api-comparison', null, array( 'mode' => 'sim', 'preset' => 'deals', 'special_offers' => true ) );
 	echo '</div>';
 	return ob_get_clean();
 }

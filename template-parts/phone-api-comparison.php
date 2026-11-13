@@ -9,7 +9,7 @@ defined( 'ABSPATH' ) || exit;
 $mode = isset( $args['mode'] ) && 'sim' === $args['mode'] ? 'sim' : 'phone';
 $is_sim = 'sim' === $mode;
 $preset = $is_sim ? ( $args['preset'] ?? '' ) : '';
-$defaults = array( 'mobilfunk' => array( 'daten' => '20000' ), '5gb' => array( 'daten' => '5000' ), '15gb' => array( 'daten' => '15000' ), '50gb' => array( 'daten' => '50000' ), 'prepaid' => array( 'tarifart' => 'prepaid' ), 'young' => array( 'zielgruppe' => 'young' ), 'unlimited' => array( 'daten' => 'unlimited' ) );
+$defaults = array( 'deals' => array( 'daten' => '10000' ), 'mobilfunk' => array( 'daten' => '20000' ), '5gb' => array( 'daten' => '5000' ), '15gb' => array( 'daten' => '15000' ), '50gb' => array( 'daten' => '50000' ), 'prepaid' => array( 'tarifart' => 'prepaid' ), 'young' => array( 'zielgruppe' => 'young' ), 'unlimited' => array( 'daten' => 'unlimited' ) );
 $read = static function ( $name ) use ( $defaults, $preset ) {
 	return isset( $_GET[ $name ] ) && is_string( $_GET[ $name ] ) ? sanitize_text_field( wp_unslash( $_GET[ $name ] ) ) : ( $defaults[ $preset ][ $name ] ?? '' );
 };
@@ -64,6 +64,7 @@ if ( isset( $networks[ $network ] ) ) {
 	$network = '';
 }
 $data_choices = array( '5000' => 'Ab 5 GB', '15000' => 'Ab 15 GB', '20000' => 'Ab 20 GB', '30000' => 'Ab 30 GB', '50000' => 'Ab 50 GB', '100000' => 'Ab 100 GB', 'unlimited' => 'Unlimited' );
+if ( $is_sim && ! empty( $args['special_offers'] ) ) { $data_choices = array( '10000' => 'Ab 10 GB' ) + $data_choices; }
 if ( ! $is_sim ) { unset( $data_choices['unlimited'] ); }
 if ( isset( $data_choices[ $data ] ) ) {
 	if ( 'unlimited' !== $data ) { $params['data_units'] = (int) $data; }
@@ -147,10 +148,14 @@ if ( $is_sim ) {
 }
 ?>
 <section class="tc-phone-api" data-api-state="<?php echo is_wp_error( $offers ) ? 'error' : 'ready'; ?>" aria-label="<?php echo $is_sim ? 'SIM-only-Tarife vergleichen' : 'Handys mit Vertrag vergleichen'; ?>">
+	<?php if ( empty( $args['special_offers'] ) ) : ?>
 	<nav class="tc-phone-api__tabs" aria-label="Vergleich auswählen">
 		<a href="<?php echo esc_url( home_url( '/handy-mit-vertrag/' ) ); ?>#tarifvergleich" <?php if ( ! $is_sim ) : ?>class="is-current" aria-current="page"<?php endif; ?>><?php echo trilacheck_tariffuxx_icon( 'phone' ); ?> Handy mit Vertrag</a>
 		<a href="<?php echo esc_url( home_url( '/mobilfunk/' ) ); ?>#tarifvergleich" <?php if ( $is_sim ) : ?>class="is-current" aria-current="page"<?php endif; ?>><?php echo trilacheck_tariffuxx_icon( 'sim' ); ?> Nur SIM</a>
 	</nav>
+	<?php else : ?>
+	<p class="tc-phone-api__source">Aktuelle Mobilfunk-Aktionen: Nicht jedes hier gelistete Aktionsangebot ist ausdrücklich ein Black-Friday- oder Black-Week-Angebot. Beachte den Aktionshinweis und die Bedingungen des jeweiligen Anbieters.</p>
+	<?php endif; ?>
 	<?php if ( is_wp_error( $offers ) ) : ?>
 		<div class="tc-phone-api__unavailable" role="status"><h2><?php echo $is_sim ? 'Handytarife vergleichen' : 'Handys mit Vertrag vergleichen'; ?></h2><p>Unser eigener Vergleich ist vorübergehend nicht erreichbar. Der bisherige Vergleich steht dir weiterhin zur Verfügung.</p>
 		<?php if ( current_user_can( 'manage_options' ) ) : ?><p><a href="<?php echo esc_url( admin_url( 'options-reading.php' ) ); ?>">API-Einstellungen prüfen</a> · <?php echo 'tx_config' === $offers->get_error_code() ? 'API-Schlüssel fehlt auf diesem Server.' : 'Die API-Anfrage konnte nicht abgeschlossen werden.'; ?></p><?php endif; ?>
