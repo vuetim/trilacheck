@@ -21,6 +21,13 @@
 					<?php if ( has_custom_logo() ) : ?><?php the_custom_logo(); ?><?php else : ?><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">trila<span>check</span></a><?php endif; ?>
 				</div>
 				<h2><?php esc_html_e( 'Wir sind TrilaCheck.de', 'trilacheck' ); ?></h2>
+				<p><a href="mailto:kontakt@trilacheck.de">kontakt@trilacheck.de</a></p>
+				<?php foreach ( array( 'ueber-uns' => 'Über uns', 'kontakt' => 'Kontakt' ) as $contact_slug => $contact_label ) : ?>
+					<?php $contact_page = get_page_by_path( $contact_slug ); ?>
+					<?php if ( $contact_page && 'publish' === get_post_status( $contact_page ) ) : ?>
+						<p><a href="<?php echo esc_url( get_permalink( $contact_page ) ); ?>"><?php echo esc_html( $contact_label ); ?></a></p>
+					<?php endif; ?>
+				<?php endforeach; ?>
 				<p>TRILA GROUP L.L.C<br>Jahnallee 14, 04109 Leipzig<br><a href="tel:+4915207415547">+49 1520 7415547</a></p>
 				<p class="tc-footer-brand__claim"><?php esc_html_e( 'Vergleichen. Wechseln. Clever sparen.', 'trilacheck' ); ?></p>
 				<p><?php esc_html_e( 'Vergleiche Tarife für Strom, Gas, Internet, Mobilfunk, Reisen, Mietwagen, Konten und Versicherungen – übersichtlich an einem Ort.', 'trilacheck' ); ?></p>

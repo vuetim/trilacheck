@@ -99,6 +99,7 @@ function trilacheck_schema_legal_publisher( $organization ) {
 	if ( is_array( $organization ) ) {
 		$organization['legalName'] = 'TRILA GROUP L.L.C';
 		$organization['telephone'] = '+4915207415547';
+		$organization['email'] = 'kontakt@trilacheck.de';
 		$organization['address'] = array(
 			'@type'           => 'PostalAddress',
 			'streetAddress'   => 'Jahnallee 14',
