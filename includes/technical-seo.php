@@ -98,7 +98,33 @@ add_filter( 'wpseo_schema_person', 'trilacheck_schema_author_profiles' );
 function trilacheck_schema_legal_publisher( $organization ) {
 	if ( is_array( $organization ) ) {
 		$organization['legalName'] = 'TRILA GROUP L.L.C';
+		$organization['telephone'] = '+4915207415547';
+		$organization['address'] = array(
+			'@type'           => 'PostalAddress',
+			'streetAddress'   => 'Jahnallee 14',
+			'postalCode'      => '04109',
+			'addressLocality' => 'Leipzig',
+		);
 	}
 	return $organization;
 }
 add_filter( 'wpseo_schema_organization', 'trilacheck_schema_legal_publisher' );
+
+/** Declare content-use preferences without changing existing crawl rules. */
+function trilacheck_content_signals( $output, $public ) {
+	if ( ! $public || false !== stripos( $output, 'Content-Signal:' ) ) {
+		return $output;
+	}
+	return $output . "\n\n# Content use preferences\nUser-agent: *\nContent-Signal: search=yes, ai-train=no\n";
+}
+add_filter( 'robots_txt', 'trilacheck_content_signals', 99, 2 );
+
+/** Advertise the existing Yoast resource; never replace the HTML homepage. */
+function trilacheck_resource_link_header( $headers ) {
+	if ( is_front_page() ) {
+		$link = '<' . home_url( '/llms.txt' ) . '>; rel="describedby"; type="text/plain"';
+		$headers['Link'] = empty( $headers['Link'] ) ? $link : $headers['Link'] . ', ' . $link;
+	}
+	return $headers;
+}
+add_filter( 'wp_headers', 'trilacheck_resource_link_header' );
