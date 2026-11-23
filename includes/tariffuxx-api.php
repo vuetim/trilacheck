@@ -62,6 +62,15 @@ function trilacheck_mobile_deals_shortcode( $attributes = array() ) {
 	if ( is_array( $attributes ) && 'simon-mobile' === ( $attributes['anbieter'] ?? '' ) ) {
 		$settings['provider_name'] = 'simonmobile';
 	}
+	if ( is_array( $attributes ) && 'unlimited-mobile' === ( $attributes['anbieter'] ?? '' ) && 'advanced' === ( $attributes['angebot'] ?? '' ) ) {
+		$settings['provider_name']  = 'unlimitedmobile';
+		$settings['product_ids']    = array( 60180, 60182 );
+		$settings['product_names']  = array( 'Unlimited Advanced', 'Unlimited Advanced Flex' );
+		$settings['special_offers'] = false;
+		$settings['article_offers'] = true;
+		$settings['preset']         = 'editorial';
+		$settings['subid']          = 'trilacheck-unlimited-advanced';
+	}
 	get_template_part( 'template-parts/phone-api-comparison', null, $settings );
 	echo '</div>';
 	return ob_get_clean();

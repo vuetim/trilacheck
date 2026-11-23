@@ -129,7 +129,10 @@ if ( $provider_filter ) {
 		}
 	}
 	$params['providers'] = array_values( array_unique( $provider_ids ) );
-	$params['subid'] = 'trilacheck-simon-mobile-deals';
+	$params['subid'] = $args['subid'] ?? 'trilacheck-simon-mobile-deals';
+}
+if ( $is_sim && ! empty( $args['product_ids'] ) ) {
+	$params['products'] = array_values( array_map( 'absint', $args['product_ids'] ) );
 }
 // The upstream silently ignores unknown filter values. Never show unrelated
 // phones as if they matched a removed or mistyped model deep link.
@@ -148,6 +151,7 @@ $cards = array();
 if ( ! is_wp_error( $offers ) ) {
 	foreach ( $offers as $offer ) {
 		if ( $provider_filter && $provider_filter !== strtolower( preg_replace( '/[^a-z0-9]/i', '', $offer['provider']['name'] ?? '' ) ) ) { continue; }
+		if ( ! empty( $args['product_names'] ) && ! in_array( $offer['name'] ?? '', $args['product_names'], true ) ) { continue; }
 		$view = trilacheck_tariffuxx_offer( $offer, $mode );
 		if ( $view ) {
 			$cards[] = array( 'offer' => $offer, 'view' => $view );
@@ -169,7 +173,7 @@ if ( $is_sim ) {
 }
 ?>
 <section class="tc-phone-api" data-api-state="<?php echo is_wp_error( $offers ) ? 'error' : 'ready'; ?>" aria-label="<?php echo $is_sim ? 'SIM-only-Tarife vergleichen' : 'Handys mit Vertrag vergleichen'; ?>">
-	<?php if ( empty( $args['special_offers'] ) ) : ?>
+	<?php if ( empty( $args['special_offers'] ) && empty( $args['article_offers'] ) ) : ?>
 	<nav class="tc-phone-api__tabs" aria-label="Vergleich auswählen">
 		<a href="<?php echo esc_url( home_url( '/handy-mit-vertrag/' ) ); ?>#tarifvergleich" <?php if ( ! $is_sim ) : ?>class="is-current" aria-current="page"<?php endif; ?>><?php echo trilacheck_tariffuxx_icon( 'phone' ); ?> Handy mit Vertrag</a>
 		<a href="<?php echo esc_url( home_url( '/mobilfunk/' ) ); ?>#tarifvergleich" <?php if ( $is_sim ) : ?>class="is-current" aria-current="page"<?php endif; ?>><?php echo trilacheck_tariffuxx_icon( 'sim' ); ?> Nur SIM</a>
