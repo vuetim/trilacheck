@@ -114,9 +114,29 @@ if ( $is_sim && ( 'unlimited' === $data || $audience ) ) {
 	}
 }
 $unknown_model = $phone && $catalogue && ! isset( $catalogue[ $phone ] );
+$provider_filter = $is_sim ? ( $args['provider_name'] ?? '' ) : '';
+if ( $provider_filter ) {
+	// Resolve the upstream identifier from the catalogue, never guess a slug.
+	$provider_catalogue = trilacheck_tariffuxx_request( 'get-by-params', array( 'type' => 1 ) );
+	$provider_ids = array();
+	if ( ! is_wp_error( $provider_catalogue ) ) {
+		foreach ( $provider_catalogue as $product ) {
+			$name = strtolower( preg_replace( '/[^a-z0-9]/i', '', $product['provider']['name'] ?? '' ) );
+			$id = $product['provider']['linkname'] ?? '';
+			if ( $provider_filter === $name && preg_match( '/^[a-z0-9]+$/', $id ) ) {
+				$provider_ids[] = $id;
+			}
+		}
+	}
+	$params['providers'] = array_values( array_unique( $provider_ids ) );
+	$params['subid'] = 'trilacheck-simon-mobile-deals';
+}
 // The upstream silently ignores unknown filter values. Never show unrelated
 // phones as if they matched a removed or mistyped model deep link.
-$offers = isset( $master ) && is_wp_error( $master ) ? $master : ( $unknown_brand || $unknown_model || array() === $topic_ids ? array() : trilacheck_tariffuxx_request( 'get-offers-by-params', $params ) );
+$offers = isset( $master ) && is_wp_error( $master ) ? $master : ( $unknown_brand || $unknown_model || array() === $topic_ids || ( $provider_filter && empty( $provider_ids ) ) ? array() : trilacheck_tariffuxx_request( 'get-offers-by-params', $params ) );
+if ( $provider_filter && empty( $provider_ids ) ) {
+	$offers = is_wp_error( $provider_catalogue ) ? $provider_catalogue : array();
+}
 $catalogue = $is_sim ? array() : trilacheck_tariffuxx_devices( is_array( $offers ) ? $offers : array() );
 foreach ( $catalogue as $device ) {
 	if ( $device['brand'] ) {
@@ -127,6 +147,7 @@ asort( $brands, SORT_NATURAL | SORT_FLAG_CASE );
 $cards = array();
 if ( ! is_wp_error( $offers ) ) {
 	foreach ( $offers as $offer ) {
+		if ( $provider_filter && $provider_filter !== strtolower( preg_replace( '/[^a-z0-9]/i', '', $offer['provider']['name'] ?? '' ) ) ) { continue; }
 		$view = trilacheck_tariffuxx_offer( $offer, $mode );
 		if ( $view ) {
 			$cards[] = array( 'offer' => $offer, 'view' => $view );

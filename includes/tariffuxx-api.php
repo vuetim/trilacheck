@@ -52,13 +52,17 @@ function trilacheck_tariffuxx_key() {
 }
 
 /** One comparison per article, using the same validated affiliate links and cache. */
-function trilacheck_mobile_deals_shortcode() {
+function trilacheck_mobile_deals_shortcode( $attributes = array() ) {
 	static $rendered = false;
 	if ( $rendered ) { return ''; }
 	$rendered = true;
 	ob_start();
 	echo '<div id="tarifvergleich" class="tc-mobile-deals">';
-	get_template_part( 'template-parts/phone-api-comparison', null, array( 'mode' => 'sim', 'preset' => 'deals', 'special_offers' => true ) );
+	$settings = array( 'mode' => 'sim', 'preset' => 'deals', 'special_offers' => true );
+	if ( is_array( $attributes ) && 'simon-mobile' === ( $attributes['anbieter'] ?? '' ) ) {
+		$settings['provider_name'] = 'simonmobile';
+	}
+	get_template_part( 'template-parts/phone-api-comparison', null, $settings );
 	echo '</div>';
 	return ob_get_clean();
 }
@@ -83,7 +87,7 @@ function trilacheck_tariffuxx_request( $endpoint, $params ) {
 	if ( ! $key ) {
 		return new WP_Error( 'tx_config', 'API nicht eingerichtet.' );
 	}
-	$cache_key = 'tc_tx_' . md5( $endpoint . wp_json_encode( $params ) . $key );
+	$cache_key = 'tc_tx_v2_' . md5( $endpoint . wp_json_encode( $params ) . $key );
 	$cached = get_transient( $cache_key );
 	if ( false !== $cached ) {
 		return $cached;
@@ -101,7 +105,7 @@ function trilacheck_tariffuxx_request( $endpoint, $params ) {
 	if ( 'get-by-params' === $endpoint && empty( $params['is_bundle_data_only'] ) ) {
 		// SIM master data: retain only the metadata needed for topic-specific filters.
 		$data['products'] = array_map( static function ( $product ) {
-			return array( 'product_id' => $product['id'] ?? $product['product_id'] ?? 0, 'restricted_customer_group_code' => $product['restricted_customer_group_code'] ?? '', 'internet_data_volume' => $product['internet_data_volume'] ?? '' );
+			return array( 'product_id' => $product['id'] ?? $product['product_id'] ?? 0, 'provider' => array( 'name' => $product['provider']['name'] ?? '', 'linkname' => $product['provider']['linkname'] ?? '' ), 'restricted_customer_group_code' => $product['restricted_customer_group_code'] ?? '', 'internet_data_volume' => $product['internet_data_volume'] ?? '' );
 		}, $data['products'] );
 	} elseif ( 'get-by-params' === $endpoint ) {
 		// Store only model metadata; the full upstream catalogue is several MB.
