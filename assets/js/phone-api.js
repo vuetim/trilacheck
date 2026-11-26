@@ -12,6 +12,32 @@
     });
     return url.href;
   };
+  // Observe genuine offer activations, including links created inside dialogs.
+  // The existing Google tag controls consent; never load another tag or delay navigation.
+  const reportAffiliateClick = (event) => {
+    if (!event.isTrusted || (event.type === 'auxclick' ? event.button !== 1 : event.button !== 0)) return;
+    const link = event.target.closest?.('.tc-phone-api__offer, .tc-tariff-modal__offer, .tc-phone-comparison a');
+    if (!link || typeof window.gtag !== 'function') return;
+    const href = trackedUrl(link.href);
+    if (!href) return;
+    const url = new URL(href);
+    const offerId = url.pathname.match(/^\/handytarife\/angebot\/(\d+)\/?$/)?.[1];
+    if (!offerId) return;
+    try {
+      window.gtag('event', 'affiliate_click', {
+        send_to: 'G-N896D2N41P',
+        affiliate_partner: 'tariffuxx',
+        partner_id: '1111811',
+        offer_id: offerId,
+        affiliate_subid: url.searchParams.get('subid') || '',
+        source_page: window.location.pathname,
+        click_placement: link.closest('.tc-tariff-modal') ? 'tariff_details' : link.closest('.tc-phone-comparison') ? 'offer_comparison' : 'offer_card',
+        transport_type: 'beacon'
+      });
+    } catch { /* Analytics must never prevent access to an offer. */ }
+  };
+  document.addEventListener('click', reportAffiliateClick);
+  document.addEventListener('auxclick', reportAffiliateClick);
   document.querySelectorAll('.tc-phone-api[data-api-state="ready"]').forEach((root) => {
     const form = root.querySelector('.tc-phone-api__filters');
     const filterToggle = root.querySelector('.tc-phone-api__filter-toggle');
